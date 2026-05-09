@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node --watch app.js",
     "migrate": "npx prisma migrate dev",
+    "generate": "npx prisma generate",
     "test": "npx jest"
   },
   "dependencies": {
