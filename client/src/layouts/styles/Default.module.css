@@ -1,0 +1,21 @@
+.default header,
+.default footer {
+  text-align: center;
+  background-color: var(--color-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.default h1 {
+  font-size: var(--font-size-100);
+  cursor: pointer;
+}
+
+.default main {
+  background-color: var(--color-primary-dark);
+  box-shadow: inset 0px 2px 2px black;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}

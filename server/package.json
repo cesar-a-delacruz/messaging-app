@@ -1,0 +1,36 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node --watch app.js",
+    "migrate": "npx prisma migrate dev",
+    "test": "npx jest"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.8.0",
+    "@types/multer": "^2.1.0",
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.10.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.6",
+    "@types/express-validator": "^3.0.2",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/passport-jwt": "^4.0.1",
+    "jest": "^30.4.1",
+    "prisma": "^7.8.0",
+    "supertest": "^7.2.2"
+  }
+}

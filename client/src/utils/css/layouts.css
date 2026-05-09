@@ -1,0 +1,12 @@
+@import url("vars.css");
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
+  & * {
+    color: var(--color-primary-light);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+}
