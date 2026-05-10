@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -10,4 +5,62 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id               String        @id @default(uuid(7))
+  username         String        @unique @db.VarChar(20)
+  fullname         String        @db.VarChar(40)
+  password         String        @db.Char(60)
+  bio              String?       @db.VarChar(100)
+  image            String?       @db.Text
+  senderMessages   Message[]     @relation(name: "message_sender")
+  receiverMessages Message[]     @relation(name: "message_receiver")
+  groupMembers     GroupMember[] @relation(name: "user_group_member")
+
+  @@map("user")
+}
+
+model Message {
+  id         String   @id @default(uuid(7))
+  content    String   @db.VarChar(200)
+  attachment String?  @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  sender     User     @relation(fields: [senderId], references: [id], name: "message_sender", onDelete: Cascade)
+  senderId   String   @map("sender_id")
+  receiver   User?    @relation(fields: [receiverId], references: [id], name: "message_receiver", onDelete: SetNull)
+  receiverId String?  @map("receiver_id")
+
+  @@map("message")
+}
+
+model Group {
+  id           String        @id @default(uuid(7))
+  name         String        @unique @db.VarChar(20)
+  info         String?       @db.VarChar(100)
+  image        String?       @db.Text
+  createdAt    DateTime      @default(now()) @map("created_at")
+  groupMembers GroupMember[] @relation(name: "group_group_member")
+
+  @@map("group")
+}
+
+model GroupMember {
+  id        String    @id @default(uuid(7))
+  role      GroupRole @default(MEMBER)
+  createdAt DateTime  @default(now()) @map("created_at")
+  user      User      @relation(fields: [userId], references: [id], name: "user_group_member", onDelete: Cascade)
+  userId    String    @map("user_id")
+  group     Group     @relation(fields: [groupId], references: [id], name: "group_group_member", onDelete: Cascade)
+  groupId   String    @map("group_id")
+
+  @@map("group_member")
+}
+
+enum GroupRole {
+  ADMIN  @map("admin")
+  MEMBER @map("member")
+
+  @@map("group_role")
 }
