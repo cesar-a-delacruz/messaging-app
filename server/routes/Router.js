@@ -14,27 +14,27 @@ module.exports = class Router {
 
   routeREST = (middleware) => {
     this.router.get(
-      `${this.basePath}/`,
+      `/${this.basePath}/`,
       middleware ? middleware : this.#emptyMiddleware,
       this.controller.findAll,
     );
     this.router.get(
-      `${this.basePath}/:id`,
+      `/${this.basePath}/:id`,
       middleware ? middleware : this.#emptyMiddleware,
       this.controller.findOne,
     );
     this.router.post(
-      `${this.basePath}/`,
+      `/${this.basePath}/`,
       middleware ? middleware : this.#emptyMiddleware,
       this.controller.create,
     );
     this.router.put(
-      `${this.basePath}/:id`,
+      `/${this.basePath}/:id`,
       middleware ? middleware : this.#emptyMiddleware,
       this.controller.update,
     );
     this.router.delete(
-      `${this.basePath}/:id`,
+      `/${this.basePath}/:id`,
       middleware ? middleware : this.#emptyMiddleware,
       this.controller.delete,
     );
@@ -42,7 +42,7 @@ module.exports = class Router {
   };
   route = (method, path, controllerMethod, middleware) => {
     this.router[method](
-      `${this.basePath}/${path ? path : ""}`,
+      `/${this.basePath}/${path ? path : ""}`,
       middleware ? middleware : this.#emptyMiddleware,
       this.controller[controllerMethod],
     );

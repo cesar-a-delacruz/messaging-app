@@ -16,7 +16,7 @@ app.post("/auth", authenticate);
 app.get("/refresh/:id", refresh);
 
 for (const route in routes) {
-  app.use("/", routes[route]);
+  app.use(routes[route].router);
 }
 
 app.listen(process.env.APP_PORT, (error) => {
