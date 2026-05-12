@@ -45,5 +45,6 @@ module.exports = checkSchema({
         max: 100,
       }),
     },
+    optional: true,
   },
 });
