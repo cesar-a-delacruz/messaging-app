@@ -4,7 +4,7 @@ module.exports = class Controller {
   /**
    * Handles incoming request, validates input values (if any) and return responses
    * @param {Repository} repository The repository to perform database operations.
-   * @param {Validator} validator The validator to validate request data with express-validator.
+   * @param {RunnableValidationChains} validator The validator to validate request data with express-validator.
    */
   constructor(repository, validator) {
     this.repository = repository;
