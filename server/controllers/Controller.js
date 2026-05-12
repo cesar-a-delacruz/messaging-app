@@ -44,7 +44,9 @@ module.exports = class Controller {
     }
   };
   create = [
-    this.validator,
+    async (req, res) => {
+      this.validator.run(req);
+    },
     validationMiddleware,
     async (req, res) => {
       try {
@@ -64,7 +66,9 @@ module.exports = class Controller {
     },
   ];
   update = [
-    this.validator,
+    async (req, res) => {
+      this.validator.run(req);
+    },
     validationMiddleware,
     async (req, res) => {
       try {
