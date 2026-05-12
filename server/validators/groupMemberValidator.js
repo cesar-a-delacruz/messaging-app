@@ -4,6 +4,7 @@ module.exports = checkSchema({
   role: {
     isEmpty: {
       negated: true,
+      errorMessage: formatValidationError("empty", "role"),
     },
   },
 });
