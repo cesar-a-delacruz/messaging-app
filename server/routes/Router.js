@@ -38,6 +38,7 @@ module.exports = class Router {
       middleware ? middleware : this.#emptyMiddleware,
       this.controller.delete,
     );
+    return this;
   };
   route = (method, path, controllerMethod, middleware) => {
     this.router[method](
@@ -45,6 +46,7 @@ module.exports = class Router {
       middleware ? middleware : this.#emptyMiddleware,
       this.controller[controllerMethod],
     );
+    return this;
   };
 
   #emptyMiddleware = (req, res, next) => {
