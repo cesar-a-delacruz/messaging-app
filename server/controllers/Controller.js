@@ -8,7 +8,7 @@ module.exports = class Controller {
    */
   constructor(repository, validator) {
     this.repository = repository;
-    this.validator = validator;
+    this.validator = validationMiddleware.bind(null, validator);
   }
 
   findAll = async (req, res) => {
@@ -44,10 +44,7 @@ module.exports = class Controller {
     }
   };
   create = [
-    async (req, res) => {
-      this.validator.run(req);
-    },
-    validationMiddleware,
+    async (req, res, next) => await this.validator(req, res, next),
     async (req, res) => {
       try {
         const row = await this.repository.create(req.body);
@@ -66,10 +63,7 @@ module.exports = class Controller {
     },
   ];
   update = [
-    async (req, res) => {
-      this.validator.run(req);
-    },
-    validationMiddleware,
+    async (req, res, next) => await this.validator(req, res, next),
     async (req, res) => {
       try {
         const row = await this.repository.update(req.params.id, req.body);
