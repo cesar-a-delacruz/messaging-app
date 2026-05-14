@@ -1,12 +1,11 @@
 const express = require("express");
-const dotenv = require("dotenv");
 const cors = require("cors");
 const passport = require("passport");
 const authConfig = require("./configs/authConfig.js");
 const { authenticate, refresh } = require("./middlewares/jwtMiddlewares.js");
 const routes = require("./routes/index.js");
+require("dotenv").config();
 
-dotenv.config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: process.env.CLIENT }));

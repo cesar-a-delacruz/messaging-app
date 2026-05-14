@@ -1,8 +1,6 @@
 const { Strategy, ExtractJwt } = require("passport-jwt");
-const dotenv = require("dotenv");
 const { PrismaClient } = require("../generated/prisma");
-
-dotenv.config();
+require("dotenv").config();
 
 module.exports = {
   strategy: new Strategy(

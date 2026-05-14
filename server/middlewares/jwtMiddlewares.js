@@ -1,9 +1,7 @@
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
 const { compare } = require("bcryptjs");
 const { PrismaClient } = require("../generated/prisma");
-
-dotenv.config();
+require("dotenv").config();
 
 module.exports = {
   authenticate: async (req, res) => {
