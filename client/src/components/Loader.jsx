@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./styles/Loader.module.css";
 
-export default function Loader(text) {
+export default function Loader({ text }) {
   const [message, setMessage] = useState(text);
 
   useEffect(() => {

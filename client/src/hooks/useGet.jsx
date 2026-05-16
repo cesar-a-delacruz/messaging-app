@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
  * @returns {[Object, SetStateAction]}
  */
 export default function useGet(endpoint) {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
 
   useEffect(() => {
     (async () => {
