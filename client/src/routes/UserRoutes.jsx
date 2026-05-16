@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Default from "@/layouts/Default";
+import Main from "@/layouts/Main";
 
 export default function UserRoutes() {
   return (
@@ -8,7 +9,7 @@ export default function UserRoutes() {
         <Route path="login" />
         <Route path="register" />
       </Route>
-      <Route path="/">
+      <Route path="/" element={<Main />}>
         <Route index />
         <Route path="chat/:userId" />
         <Route path="profile/:userId?" />
