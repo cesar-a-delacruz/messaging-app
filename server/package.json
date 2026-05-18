@@ -6,6 +6,7 @@
     "start": "node --watch app.js",
     "migrate": "npx prisma migrate dev",
     "reset": "npx prisma migrate reset",
+    "seed": "npx prisma db seed",
     "generate": "npx prisma generate",
     "test": "npx jest"
   },
