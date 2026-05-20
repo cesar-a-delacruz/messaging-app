@@ -1,13 +1,7 @@
-const { PrismaPg } = require("@prisma/adapter-pg");
-const { PrismaClient } = require("../generated/prisma/index.js");
-require("dotenv").config();
-
-const prisma = new PrismaClient({
-  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
-});
+const dbConfig = require("../configs/dbConfig.js");
 
 (async function main() {
-  const users = await prisma.user.createManyAndReturn({
+  const users = await dbConfig.user.createManyAndReturn({
     data: [
       {
         username: "fakeuser1",
@@ -29,7 +23,7 @@ const prisma = new PrismaClient({
       },
     ],
   });
-  const messages = await prisma.message.createManyAndReturn({
+  const messages = await dbConfig.message.createManyAndReturn({
     data: [
       {
         content: "fake content 1",
@@ -66,8 +60,8 @@ const prisma = new PrismaClient({
     ],
   });
 })()
-  .then(async () => await prisma.$disconnect())
+  .then(async () => await dbConfig.$disconnect())
   .catch(async (error) => {
     console.error(error);
-    await prisma.$disconnect();
+    await dbConfig.$disconnect();
   });

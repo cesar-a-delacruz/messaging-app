@@ -1,5 +1,5 @@
 const { Strategy, ExtractJwt } = require("passport-jwt");
-const { PrismaClient } = require("../generated/prisma");
+const dbConfig = require("../configs/dbConfig.js");
 require("dotenv").config();
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
     },
     async (payload, done) => {
       try {
-        const user = await new PrismaClient().user.findFirst({
+        const user = await dbConfig.user.findFirst({
           where: { id: payload.id },
         });
 
