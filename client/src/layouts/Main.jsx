@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import "@/utils/css/layouts.css";
 import styles from "./styles/Main.module.css";
+import sessionHandler from "@/handlers/sessionHandler";
 
 export default function Main() {
   return (
@@ -14,6 +15,7 @@ export default function Main() {
           <a href="/groups">Groups</a>
         </nav>
         <footer>
+          <button onClick={() => sessionHandler.logout()}>Logout</button>
           <p>
             Developed by{" "}
             <a href="https://github.com/cesar-a-delacruz">César De La Cruz</a>
