@@ -1,20 +1,38 @@
 const jwt = require("jsonwebtoken");
 const { compare } = require("bcryptjs");
-const { PrismaClient } = require("../generated/prisma");
+const dbConfig = require("../configs/dbConfig.js");
 require("dotenv").config();
 
 module.exports = {
   authenticate: async (req, res) => {
     const { username, password } = req.body;
 
-    const user = await new PrismaClient().user.findFirst({
+    const user = await dbConfig.user.findFirst({
       where: {
         username: username,
       },
+      select: {
+        password: true,
+      },
     });
-
-    const match = await compare(password, user.password);
-    if (!match) return res.sendStatus(401);
+    if (user === null)
+      return res
+        .status(404)
+        .json({
+          message: "Failed authentication",
+          error: "Wrong username",
+        })
+        .end();
+    // const match = await compare(password, user.password);
+    const match = password === user.password.trim();
+    if (!match)
+      return res
+        .status(401)
+        .json({
+          message: "Failed authentication",
+          error: "Wrong password",
+        })
+        .end();
 
     const token = jwt.sign(
       {
@@ -42,7 +60,7 @@ module.exports = {
     });
   },
   refresh: async (req, res) => {
-    const user = await new PrismaClient().user.findFirst({
+    const user = await dbConfig.user.findFirst({
       where: { id: Number(req.params.id) },
     });
     if (!user) return res.sendStatus(401);
