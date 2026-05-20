@@ -1,4 +1,5 @@
 import { jwtDecode } from "jwt-decode";
+import formatErrors from "@/utils/js/formatErrors.js";
 
 /**
  * Handles requests related to the user's jwt sessions
