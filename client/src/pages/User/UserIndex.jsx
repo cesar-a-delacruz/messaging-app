@@ -16,7 +16,7 @@ export default function UserIndex() {
           id: user.id,
           image: user.image,
           name: user.username,
-          message: "some text",
+          message: user.message,
         }))}
       />
     </div>
