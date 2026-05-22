@@ -13,7 +13,7 @@ export const allFields = [
   {
     id: "fullname",
     value: "",
-    label: "Fullname",
+    label: "Full name",
     type: "text",
   },
   {
@@ -30,10 +30,23 @@ export const allFields = [
   },
   {
     id: "image",
-    value: "",
     label: "Image",
     type: "file",
   },
 ];
 
 export const loginFields = [allFields[1], allFields[3]];
+
+export const registerFields = [
+  allFields[1],
+  allFields[2],
+  allFields[3],
+  {
+    id: "confirm",
+    value: "",
+    label: "Confirm password",
+    type: "password",
+  },
+  allFields[4],
+  allFields[5],
+];
