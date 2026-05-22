@@ -1,4 +1,5 @@
 import { useState } from "react";
+import FormField from "./FormField";
 
 export default function Form({ fields, submit = { text, handler } }) {
   const [data, setData] = useState(
@@ -11,26 +12,25 @@ export default function Form({ fields, submit = { text, handler } }) {
   return (
     <form onSubmit={submitHandler}>
       {fields.map((field) => (
-        <div className={`field ${field.type}`}>
-          {field.label && <label htmlFor={field.id}>{field.label}:</label>}
-          <input
-            type={field.type}
-            id={field.id}
-            value={data[field.id]}
-            onChange={(e) =>
-              setData({
-                ...data,
-                [e.currentTarget.id]: e.currentTarget.value,
-              })
-            }
-          />
-        </div>
+        <FormField
+          properties={field}
+          value={data[field.id]}
+          changeHandler={changeHandler}
+          key={field.id}
+        />
       ))}
       <button type="submit">{submit.text}</button>
     </form>
   );
 
+  async function changeHandler(id, value) {
+    setData({
+      ...data,
+      [id]: value,
+    });
+  }
   async function submitHandler(event) {
+    console.log(data);
     event.preventDefault();
     submit.handler(data);
   }
