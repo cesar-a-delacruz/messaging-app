@@ -17,9 +17,9 @@ module.exports = checkSchema({
   },
   info: {
     isLength: {
-      options: { min: 1, max: 100 },
+      options: { min: 0, max: 100 },
       errorMessage: formatValidationError("length", "info", {
-        min: 1,
+        min: 0,
         max: 100,
       }),
     },

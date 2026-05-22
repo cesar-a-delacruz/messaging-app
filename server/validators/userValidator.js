@@ -39,9 +39,9 @@ module.exports = checkSchema({
   },
   bio: {
     isLength: {
-      options: { min: 1, max: 100 },
+      options: { max: 100 },
       errorMessage: formatValidationError("length", "bio", {
-        min: 1,
+        min: 0,
         max: 100,
       }),
     },
