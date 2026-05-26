@@ -12,6 +12,8 @@ module.exports = {
         username: username,
       },
       select: {
+        id: true,
+        username: true,
         password: true,
       },
     });
