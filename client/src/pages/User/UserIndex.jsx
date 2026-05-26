@@ -24,7 +24,7 @@ export default function UserIndex() {
         }))}
         clickHandler={(userId) => setCurrentUser(userId)}
       />
-      {currentUser && (
+      {currentUser && sessionHandler.user() && (
         <Chat senderId={sessionHandler.user().id} receiverId={currentUser} />
       )}
     </div>
