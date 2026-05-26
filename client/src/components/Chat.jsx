@@ -40,7 +40,7 @@ export default function Chat({ senderId, receiverId }) {
       <div className="messages">
         <div className="receiver">
           {messages.receiver.map((message) => (
-            <div className="message">
+            <div className="message" key={message.id}>
               <span>{message.createdAt}</span>
               {message.content && <p>{message.content}</p>}
               {message.attachment && <img src={message.attachment} />}
@@ -49,7 +49,7 @@ export default function Chat({ senderId, receiverId }) {
         </div>
         <div className="sender">
           {messages.sender.map((message) => (
-            <div className="message">
+            <div className="message" key={message.id}>
               <span>{message.createdAt}</span>
               {message.content && <p>{message.content}</p>}
               {message.attachment && <img src={message.attachment} />}

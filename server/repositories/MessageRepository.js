@@ -33,6 +33,7 @@ module.exports = class MessageRepository extends Repository {
         createdAt: "desc",
       },
       select: {
+        id: true,
         content: true,
         attachment: true,
         createdAt: true,
