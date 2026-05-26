@@ -5,26 +5,23 @@
  * @returns {Object}
  */
 module.exports = function (data, schema) {
-  let parsedData = {};
+  const parsedData = {};
   for (const field in data) {
-    if (schema.hasOwnProperty(field) && data[field]) {
-      switch (schema[field]) {
-        case "string":
-          parsedData[field] = String(data[field]);
-          break;
-        case "number":
-          parsedData[field] = Number(data[field]);
-          break;
-        case "date":
-          parsedData[field] = new Date(data[field]);
-          break;
-        case "json":
-          parsedData[field] = JSON.parse(data[field]);
-          break;
-        default:
-          parsedData[field] = null;
-          break;
-      }
+    if (!schema.hasOwnProperty(field) && !data[field]) continue;
+
+    switch (schema[field]) {
+      case "string":
+        parsedData[field] = String(data[field]);
+        break;
+      case "number":
+        parsedData[field] = Number(data[field]);
+        break;
+      case "date":
+        parsedData[field] = new Date(data[field]);
+        break;
+      case "json":
+        parsedData[field] = JSON.parse(data[field]);
+        break;
     }
   }
   return parsedData;
