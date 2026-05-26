@@ -1,9 +1,11 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import "@/utils/css/layouts.css";
 import styles from "./styles/Main.module.css";
 import sessionHandler from "@/handlers/sessionHandler";
 
 export default function Main() {
+  if (!sessionHandler.user()) return <Navigate to={"/login"} />;
+
   return (
     <div className={`layout ${styles.main}`}>
       <aside>

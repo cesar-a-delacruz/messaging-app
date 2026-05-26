@@ -21,7 +21,7 @@ export default {
   },
   logout: () => {
     localStorage.removeItem("jwt");
-    location.replace("/");
+    location.reload();
   },
   refresh: async (id) => {
     const response = await fetch(
