@@ -1,20 +1,14 @@
 const Controller = require("./Controller.js");
-const { upload } = require("../configs/fileConfig.js");
+const uploadMiddleware = require("../middlewares/uploadMiddleware.js");
 
 module.exports = class UserController extends Controller {
+  constructor(repository, validator) {
+    super(repository, validator);
+    this.uploader = uploadMiddleware.bind(null, "image");
+  }
+
   create = [
-    async (req, res, next) => {
-      upload.single("image")(req, res, (error) => {
-        if (error) {
-          console.error(error);
-          return res
-            .status(500)
-            .json({ message: "Failed to create item", error })
-            .end();
-        }
-        next();
-      });
-    },
+    async (req, res, next) => await this.uploader(req, res, next),
     async (req, res, next) => await this.validator(req, res, next),
     async (req, res) => {
       try {
