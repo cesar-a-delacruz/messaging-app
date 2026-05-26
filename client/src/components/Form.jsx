@@ -30,7 +30,6 @@ export default function Form({ fields, submit = { text, handler } }) {
     });
   }
   async function submitHandler(event) {
-    console.log(data);
     event.preventDefault();
     submit.handler(data);
   }

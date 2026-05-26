@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import requestHandler from "@/handlers/requestHandler";
 
-export default function ChatList({ chats }) {
+export default function ChatList({ chats, clickHandler }) {
   const [list, setList] = useState(chats);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ export default function ChatList({ chats }) {
   return (
     <div onLoad={loadHandler}>
       {list.map((item) => (
-        <div key={item.id}>
+        <div key={item.id} onClick={() => clickHandler(item.id)}>
           <img src={item.image} alt={`${item.name} picture`} />
           <div>
             <h3>{item.name}</h3>
@@ -28,7 +28,7 @@ export default function ChatList({ chats }) {
     for (const item of list) {
       const message = await requestHandler.get(`message/latest/${item.id}`);
       if (message.error) listWithMessages.push({ ...item, message: "" });
-      listWithMessages.push({ ...item, message: message.data.content });
+      else listWithMessages.push({ ...item, message: message.data.content });
     }
 
     setList(listWithMessages);
