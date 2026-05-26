@@ -31,7 +31,10 @@ export default function Chat({ senderId, receiverId }) {
     <div>
       <div className="user">
         {user.data && (
-          <div className="data">
+          <div
+            className="data"
+            onClick={() => location.assign(`profile/${receiverId}`)}
+          >
             <img src={user.data.image} alt={`${user.data.fullname} picture`} />
             <h3>{user.data.fullname}</h3>
           </div>

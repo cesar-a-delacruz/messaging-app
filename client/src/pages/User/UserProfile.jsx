@@ -1,21 +1,23 @@
-import { useEffect } from "react";
 import useGet from "@/hooks/useGet";
 import Loader from "@/components/Loader";
+import { useParams } from "react-router-dom";
+import sessionHandler from "@/handlers/sessionHandler";
 
 export default function UserProfile() {
-  const [user, setUser] = useGet("user");
+  const userId = useParams().userId;
+  const [user, setUser] = useGet(
+    `user/${userId ? userId : sessionHandler.user().id}`,
+  );
 
-  useEffect(() => {
-    setTimeout(() => setUser({ data: "data" }), 2000);
-  }, []);
-
-  if (!user)
+  if (!user.data)
     return <Loader text={!user.error ? "Getting user..." : user.error} />;
 
   return (
     <div className="page">
-      <h2>User</h2>
-      {user.data}
+      <img src={user.data.image} alt={`${user.data.fullname} picture`} />
+      <h2>{user.data.fullname}</h2>
+      <span>{user.data.username}</span>
+      <p>{user.data.bio}</p>
     </div>
   );
 }
