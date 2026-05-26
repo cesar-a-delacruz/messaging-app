@@ -17,4 +17,23 @@ module.exports = class MessageController extends Controller {
         .end();
     }
   };
+  findChat = async (req, res) => {
+    try {
+      const rows = await this.repository.findChat(
+        req.params.senderId,
+        req.params.receiverId,
+      );
+      console.info(rows);
+      return res
+        .status(200)
+        .json({ message: "Items found successfully", data: rows })
+        .end();
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "Failed to find items", error })
+        .end();
+    }
+  };
 };

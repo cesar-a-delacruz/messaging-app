@@ -26,4 +26,20 @@ module.exports = class MessageRepository extends Repository {
 
     return result;
   };
+  findChat = async (senderId, receiverId) => {
+    const result = await this.entity.model.findMany({
+      where: { AND: [{ senderId: senderId, receiverId: receiverId }] },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        content: true,
+        attachment: true,
+        createdAt: true,
+      },
+    });
+    if (!result.length) throw new Error("No matching rows were found");
+
+    return result;
+  };
 };
