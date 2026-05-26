@@ -17,17 +17,4 @@ module.exports = {
     senderId: "string",
     receiverId: "string",
   }),
-  group: new Entity(dbConfig.group, {
-    name: "string",
-    info: "string",
-    image: "string",
-    createdAt: "date",
-  }),
-  groupMember: new Entity(dbConfig.groupMember, {
-    role: "string",
-    createdAt: "date",
-    updatedAt: "date",
-    userId: "string",
-    groupId: "string",
-  }),
 };

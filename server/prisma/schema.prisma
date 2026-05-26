@@ -8,15 +8,14 @@ datasource db {
 }
 
 model User {
-  id               String        @id @default(uuid(7))
-  username         String        @unique @db.VarChar(20)
-  fullname         String        @db.VarChar(40)
-  password         String        @db.Char(60)
-  bio              String?       @db.VarChar(100)
-  image            String?       @db.Text
-  senderMessages   Message[]     @relation(name: "message_sender")
-  receiverMessages Message[]     @relation(name: "message_receiver")
-  groupMembers     GroupMember[] @relation(name: "user_group_member")
+  id               String    @id @default(uuid(7))
+  username         String    @unique @db.VarChar(20)
+  fullname         String    @db.VarChar(40)
+  password         String    @db.Char(60)
+  bio              String?   @db.VarChar(100)
+  image            String?   @db.Text
+  senderMessages   Message[] @relation(name: "message_sender")
+  receiverMessages Message[] @relation(name: "message_receiver")
 
   @@map("user")
 }
@@ -33,34 +32,4 @@ model Message {
   receiverId String?  @map("receiver_id")
 
   @@map("message")
-}
-
-model Group {
-  id           String        @id @default(uuid(7))
-  name         String        @unique @db.VarChar(20)
-  info         String?       @db.VarChar(100)
-  image        String?       @db.Text
-  createdAt    DateTime      @default(now()) @map("created_at")
-  groupMembers GroupMember[] @relation(name: "group_group_member")
-
-  @@map("group")
-}
-
-model GroupMember {
-  id        String    @id @default(uuid(7))
-  role      GroupRole @default(MEMBER)
-  createdAt DateTime  @default(now()) @map("created_at")
-  user      User      @relation(fields: [userId], references: [id], name: "user_group_member", onDelete: Cascade)
-  userId    String    @map("user_id")
-  group     Group     @relation(fields: [groupId], references: [id], name: "group_group_member", onDelete: Cascade)
-  groupId   String    @map("group_id")
-
-  @@map("group_member")
-}
-
-enum GroupRole {
-  ADMIN  @map("admin")
-  MEMBER @map("member")
-
-  @@map("group_role")
 }

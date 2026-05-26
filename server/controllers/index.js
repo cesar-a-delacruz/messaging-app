@@ -7,6 +7,4 @@ const validators = require("../validators/index.js");
 module.exports = {
   user: new UserController(repositories.user, validators.user),
   message: new MessageController(repositories.message, validators.message),
-  group: new Controller(repositories.group, validators.group),
-  groupMember: new Controller(repositories.groupMember, validators.groupMember),
 };
