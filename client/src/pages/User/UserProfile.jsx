@@ -1,7 +1,7 @@
-import useGet from "@/hooks/useGet";
-import Loader from "@/components/Loader";
 import { useParams } from "react-router-dom";
+import useGet from "@/hooks/useGet";
 import sessionHandler from "@/handlers/sessionHandler";
+import Loader from "@/components/Loader";
 
 export default function UserProfile() {
   const userId = useParams().userId;
@@ -15,9 +15,37 @@ export default function UserProfile() {
   return (
     <div className="page">
       <img src={user.data.image} alt={`${user.data.fullname} picture`} />
-      <h2>{user.data.fullname}</h2>
-      <span>{user.data.username}</span>
-      <p>{user.data.bio}</p>
+      <h2
+        contentEditable={`${userId === undefined}`}
+        onInput={inputHandler}
+        id="fullname"
+      >
+        {user.data.fullname}
+      </h2>
+      <span
+        contentEditable={`${userId === undefined}`}
+        onInput={inputHandler}
+        id="username"
+      >
+        {user.data.username}
+      </span>
+      <p
+        contentEditable={`${userId === undefined}`}
+        onInput={inputHandler}
+        id="bio"
+      >
+        {user.data.bio}
+      </p>
     </div>
   );
+
+  function inputHandler(event) {
+    const key = event.currentTarget.id;
+    const value = event.currentTarget.innerHTML;
+
+    setUser((prev) => {
+      prev.data[key] = value;
+      return prev;
+    });
+  }
 }
