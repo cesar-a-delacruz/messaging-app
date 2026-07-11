@@ -51,7 +51,6 @@ export default {
     );
 
     if (!response.ok) return formatErrors(response);
-    return await response.json();
   },
   delete: async (id, path) => {
     const response = await fetch(
@@ -65,6 +64,5 @@ export default {
     );
 
     if (!response.ok) return formatErrors(response);
-    return await response.json();
   },
 };
