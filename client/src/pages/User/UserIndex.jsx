@@ -14,18 +14,18 @@ export default function UserIndex() {
 
   return (
     <div className="page">
-      <h2>Users</h2>
-      <ChatList
-        chats={users.data.map((user) => ({
-          id: user.id,
-          image: user.image,
-          name: user.username,
-          message: user.message,
-        }))}
-        clickHandler={(userId) => setCurrentUser(userId)}
-      />
-      {currentUser && sessionHandler.user() && (
+      {currentUser && sessionHandler.user() ? (
         <Chat senderId={sessionHandler.user().id} receiverId={currentUser} />
+      ) : (
+        <ChatList
+          chats={users.data.map((user) => ({
+            id: user.id,
+            image: user.image,
+            name: user.username,
+            message: user.message,
+          }))}
+          clickHandler={(userId) => setCurrentUser(userId)}
+        />
       )}
     </div>
   );
