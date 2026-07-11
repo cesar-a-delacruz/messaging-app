@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 import useGet from "@/hooks/useGet";
 import sessionHandler from "@/handlers/sessionHandler";
+import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader";
 
 export default function UserProfile() {
@@ -8,6 +10,7 @@ export default function UserProfile() {
   const [user, setUser] = useGet(
     `user/${userId ? userId : sessionHandler.user().id}`,
   );
+  const [edit, setEdit] = useState(false);
 
   if (!user.data)
     return <Loader text={!user.error ? "Getting user..." : user.error} />;
@@ -36,6 +39,14 @@ export default function UserProfile() {
       >
         {user.data.bio}
       </p>
+      {userId === undefined && (
+        <button
+          disabled={!edit}
+          onClick={async () => await requestHandler.put(user.data, "user")}
+        >
+          Edit
+        </button>
+      )}
     </div>
   );
 
@@ -47,5 +58,6 @@ export default function UserProfile() {
       prev.data[key] = value;
       return prev;
     });
+    setEdit(true);
   }
 }
