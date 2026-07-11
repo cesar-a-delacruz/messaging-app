@@ -1,0 +1,16 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chat {
+  display: flex;
+  background-color: grey;
+  gap: 10px;
+
+  img {
+    width: 100px;
+    height: auto;
+  }
+}

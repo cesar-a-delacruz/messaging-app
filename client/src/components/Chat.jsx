@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
+import styles from "./styles/Chat.module.css";
 
 export default function Chat({ senderId, receiverId }) {
   const [user, setUser] = useGet(`user/${receiverId}`);
@@ -28,11 +29,11 @@ export default function Chat({ senderId, receiverId }) {
   }, [receiverId]);
 
   return (
-    <div>
-      <div className="user">
+    <div className={styles.chat}>
+      <div className={styles.header}>
         {user.data && (
           <div
-            className="data"
+            className={styles.data}
             onClick={() => location.assign(`profile/${receiverId}`)}
           >
             <img src={user.data.image} alt={`${user.data.fullname} picture`} />
@@ -40,19 +41,19 @@ export default function Chat({ senderId, receiverId }) {
           </div>
         )}
       </div>
-      <div className="messages">
-        <div className="receiver">
+      <div className={styles.messages}>
+        <div className={styles.side}>
           {messages.receiver.map((message) => (
-            <div className="message" key={message.id}>
+            <div className={styles.message} key={message.id}>
               <span>{message.createdAt}</span>
               {message.content && <p>{message.content}</p>}
               {message.attachment && <img src={message.attachment} />}
             </div>
           ))}
         </div>
-        <div className="sender">
+        <div className={styles.chat}>
           {messages.sender.map((message) => (
-            <div className="message" key={message.id}>
+            <div className={styles.message} key={message.id}>
               <span>{message.createdAt}</span>
               {message.content && <p>{message.content}</p>}
               {message.attachment && <img src={message.attachment} />}

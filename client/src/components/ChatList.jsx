@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import requestHandler from "@/handlers/requestHandler";
+import styles from "./styles/ChatList.module.css";
 
 export default function ChatList({ chats, clickHandler }) {
   const [list, setList] = useState(chats);
@@ -9,11 +10,15 @@ export default function ChatList({ chats, clickHandler }) {
   }, [chats]);
 
   return (
-    <div onLoad={loadHandler}>
+    <div onLoad={loadHandler} className={styles.list}>
       {list.map((item) => (
-        <div key={item.id} onClick={() => clickHandler(item.id)}>
+        <div
+          key={item.id}
+          onClick={() => clickHandler(item.id)}
+          className={styles.chat}
+        >
           <img src={item.image} alt={`${item.name} picture`} />
-          <div>
+          <div className={styles.text}>
             <h3>{item.name}</h3>
             <p>{item.message}</p>
           </div>

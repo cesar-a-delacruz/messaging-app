@@ -1,0 +1,12 @@
+.header {
+  background-color: grey;
+
+  .data {
+    display: flex;
+  }
+}
+
+.messages {
+  display: flex;
+  background-color: rgb(74, 74, 74);
+}
