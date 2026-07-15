@@ -3,10 +3,15 @@ import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
 import styles from "./styles/Chat.module.css";
 import sessionHandler from "@/handlers/sessionHandler";
+import Form from "./Form";
+import { allFields } from "@/schemas/messageSchema";
 
 export default function Chat({ senderId, receiverId }) {
   const [user, setUser] = useGet(`user/${receiverId}`);
   const [messages, setMessages] = useState([]);
+
+  allFields[2].value = senderId;
+  allFields[3].value = receiverId;
 
   useEffect(() => {
     (async () => {
@@ -53,6 +58,18 @@ export default function Chat({ senderId, receiverId }) {
           </div>
         ))}
       </div>
+      <div className={styles.footer}>
+        <Form
+          fields={allFields}
+          submit={{ text: "Send", handler: submitHandler }}
+        />
+      </div>
     </div>
   );
+
+  async function submitHandler(messageData) {
+    const send = await requestHandler.postFile(messageData, "message");
+    if (send.error) return alert(send.error);
+    setMessages([...messages, send.data]);
+  }
 }
