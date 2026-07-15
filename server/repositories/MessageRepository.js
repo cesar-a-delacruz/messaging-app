@@ -27,7 +27,7 @@ module.exports = class MessageRepository extends Repository {
         ],
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: "asc",
       },
       select: {
         id: true,
