@@ -37,6 +37,7 @@ module.exports = class MessageRepository extends Repository {
         content: true,
         attachment: true,
         createdAt: true,
+        senderId: true,
       },
     });
     if (!result.length) throw new Error("No matching rows were found");
