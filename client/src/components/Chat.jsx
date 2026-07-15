@@ -2,13 +2,11 @@ import { useState, useEffect } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
 import styles from "./styles/Chat.module.css";
+import sessionHandler from "@/handlers/sessionHandler";
 
 export default function Chat({ senderId, receiverId }) {
   const [user, setUser] = useGet(`user/${receiverId}`);
-  const [messages, setMessages] = useState({
-    sender: [],
-    receiver: [],
-  });
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -21,10 +19,9 @@ export default function Chat({ senderId, receiverId }) {
       if (senderMessages.error) senderMessages.data = [];
       if (receiverMessages.error) receiverMessages.data = [];
 
-      setMessages({
-        sender: senderMessages.data,
-        receiver: receiverMessages.data,
-      });
+      const allMessages = [...senderMessages.data, ...receiverMessages.data];
+      allMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setMessages(allMessages);
     })();
   }, [receiverId]);
 
@@ -42,24 +39,22 @@ export default function Chat({ senderId, receiverId }) {
         )}
       </div>
       <div className={styles.messages}>
-        <div className={styles.side}>
-          {messages.receiver.map((message) => (
-            <div className={styles.message} key={message.id}>
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={styles.messageContainer}
+            style={{
+              justifyContent:
+                message.senderId === sessionHandler.user().id ? "end" : "start",
+            }}
+          >
+            <div>
               <span>{message.createdAt}</span>
               {message.content && <p>{message.content}</p>}
               {message.attachment && <img src={message.attachment} />}
             </div>
-          ))}
-        </div>
-        <div className={styles.chat}>
-          {messages.sender.map((message) => (
-            <div className={styles.message} key={message.id}>
-              <span>{message.createdAt}</span>
-              {message.content && <p>{message.content}</p>}
-              {message.attachment && <img src={message.attachment} />}
-            </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

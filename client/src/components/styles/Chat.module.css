@@ -8,5 +8,9 @@
 
 .messages {
   display: flex;
+  flex-direction: column;
   background-color: rgb(74, 74, 74);
+}
+.messageContainer {
+  display: flex;
 }
