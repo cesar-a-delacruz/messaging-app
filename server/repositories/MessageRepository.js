@@ -28,7 +28,12 @@ module.exports = class MessageRepository extends Repository {
   };
   findChat = async (senderId, receiverId) => {
     const result = await this.entity.model.findMany({
-      where: { AND: [{ senderId: senderId, receiverId: receiverId }] },
+      where: {
+        OR: [
+          { AND: { senderId: senderId, receiverId: receiverId } },
+          { AND: { senderId: receiverId, receiverId: senderId } },
+        ],
+      },
       orderBy: {
         createdAt: "desc",
       },
