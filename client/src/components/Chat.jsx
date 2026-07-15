@@ -20,7 +20,8 @@ export default function Chat({ senderId, receiverId }) {
       );
       if (allMessages.error) allMessages.data = [];
       allMessages.data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       );
 
       setMessages(allMessages.data);
