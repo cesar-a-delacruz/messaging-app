@@ -10,18 +10,15 @@ export default function Chat({ senderId, receiverId }) {
 
   useEffect(() => {
     (async () => {
-      let senderMessages = await requestHandler.get(
+      const allMessages = await requestHandler.get(
         `message/sender/${senderId}/receiver/${receiverId}`,
       );
-      let receiverMessages = await requestHandler.get(
-        `message/sender/${receiverId}/receiver/${senderId}`,
+      if (allMessages.error) allMessages.data = [];
+      allMessages.data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
       );
-      if (senderMessages.error) senderMessages.data = [];
-      if (receiverMessages.error) receiverMessages.data = [];
 
-      const allMessages = [...senderMessages.data, ...receiverMessages.data];
-      allMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      setMessages(allMessages);
+      setMessages(allMessages.data);
     })();
   }, [receiverId]);
 
