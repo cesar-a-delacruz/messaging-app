@@ -4,11 +4,13 @@ import useGet from "@/hooks/useGet";
 import styles from "./styles/Chat.module.css";
 import sessionHandler from "@/handlers/sessionHandler";
 import Form from "./Form";
+import Menu from "./Menu";
 import { allFields } from "@/schemas/messageSchema";
 
 export default function Chat({ senderId, receiverId }) {
   const [user, setUser] = useGet(`user/${receiverId}`);
   const [messages, setMessages] = useState([]);
+  const [selectedMessage, setSelectedMessage] = useState({});
 
   allFields[2].value = senderId;
   allFields[3].value = receiverId;
@@ -29,7 +31,7 @@ export default function Chat({ senderId, receiverId }) {
   }, [receiverId]);
 
   return (
-    <div className={styles.chat}>
+    <div className={styles.chat} onClick={() => setSelectedMessage({})}>
       <div className={styles.header}>
         {user.data && (
           <div
@@ -50,7 +52,21 @@ export default function Chat({ senderId, receiverId }) {
               justifyContent:
                 message.senderId === sessionHandler.user().id ? "end" : "start",
             }}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              if (message.senderId === sessionHandler.user().id)
+                setSelectedMessage(message);
+            }}
           >
+            {selectedMessage.id === message.id && (
+              <Menu
+                options={[
+                  { text: "Edit", handler: editHandler },
+                  { text: "Delete", handler: deleteHandler },
+                ]}
+                message={message}
+              />
+            )}
             <div>
               <span>{message.createdAt}</span>
               {message.content && <p>{message.content}</p>}
@@ -72,5 +88,11 @@ export default function Chat({ senderId, receiverId }) {
     const send = await requestHandler.postFile(messageData, "message");
     if (send.error) return alert(send.error);
     setMessages([...messages, send.data]);
+  }
+  async function editHandler(message) {}
+  async function deleteHandler(message) {
+    const removed = await requestHandler.delete(message.id, "message");
+    if (removed) return alert(removed.error);
+    setMessages(messages.filter((m) => m.id !== message.id));
   }
 }
