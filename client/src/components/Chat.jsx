@@ -1,16 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
 import styles from "./styles/Chat.module.css";
 import sessionHandler from "@/handlers/sessionHandler";
+import { allFields } from "@/schemas/messageSchema";
 import Form from "./Form";
 import Menu from "./Menu";
-import { allFields } from "@/schemas/messageSchema";
+import Dialog from "./Dialog";
 
 export default function Chat({ senderId, receiverId }) {
   const [user, setUser] = useGet(`user/${receiverId}`);
   const [messages, setMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState({});
+  const editDialog = useRef(null);
 
   allFields[2].value = senderId;
   allFields[3].value = receiverId;
@@ -31,7 +33,7 @@ export default function Chat({ senderId, receiverId }) {
   }, [receiverId]);
 
   return (
-    <div className={styles.chat} onClick={() => setSelectedMessage({})}>
+    <div className={styles.chat}>
       <div className={styles.header}>
         {user.data && (
           <div
@@ -61,7 +63,10 @@ export default function Chat({ senderId, receiverId }) {
             {selectedMessage.id === message.id && (
               <Menu
                 options={[
-                  { text: "Edit", handler: editHandler },
+                  {
+                    text: "Edit",
+                    handler: () => editDialog.current.showModal(),
+                  },
                   { text: "Delete", handler: deleteHandler },
                 ]}
                 message={message}
@@ -74,10 +79,22 @@ export default function Chat({ senderId, receiverId }) {
             </div>
           </div>
         ))}
+        <Dialog ref={editDialog}>
+          <input
+            type="text"
+            id="content"
+            value={selectedMessage.content}
+            onChange={(e) => {
+              const newContent = e.currentTarget.value;
+              setSelectedMessage({ ...selectedMessage, content: newContent });
+            }}
+          />
+          <button onClick={() => editHandler(selectedMessage)}>Edit</button>
+        </Dialog>
       </div>
       <div className={styles.footer}>
         <Form
-          fields={allFields}
+          fields={allFields.filter((field) => field.id !== "id")}
           submit={{ text: "Send", handler: submitHandler }}
         />
       </div>
@@ -89,7 +106,17 @@ export default function Chat({ senderId, receiverId }) {
     if (send.error) return alert(send.error);
     setMessages([...messages, send.data]);
   }
-  async function editHandler(message) {}
+  async function editHandler(message) {
+    const messageContent = { id: message.id, content: message.content };
+    const edited = await requestHandler.put(messageContent, "message");
+    if (edited) return alert(edited.error);
+    setMessages(
+      messages.map((m) => {
+        if (m.id == messageContent.id) m.content = messageContent.content;
+        return m;
+      }),
+    );
+  }
   async function deleteHandler(message) {
     const removed = await requestHandler.delete(message.id, "message");
     if (removed) return alert(removed.error);

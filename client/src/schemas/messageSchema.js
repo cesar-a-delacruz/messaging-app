@@ -18,4 +18,9 @@ export const allFields = [
     value: "",
     type: "hidden",
   },
+  {
+    id: "id",
+    value: "",
+    type: "hidden",
+  },
 ];
