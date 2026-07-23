@@ -23,39 +23,51 @@ const dbConfig = require("../configs/dbConfig.js");
       },
     ],
   });
+  const chats = await dbConfig.chat.createManyAndReturn({
+    data: [
+      {
+        firstUserId: users[0].id,
+        secondUserId: users[1].id,
+      },
+      {
+        firstUserId: users[0].id,
+        secondUserId: users[2].id,
+      },
+    ],
+  });
   const messages = await dbConfig.message.createManyAndReturn({
     data: [
       {
         content: "fake content 1",
-        senderId: users[0].id,
-        receiverId: users[1].id,
+        chatId: chats[0].id,
+        authorId: users[0].id,
       },
       {
         content: "fake content 2",
-        senderId: users[0].id,
-        receiverId: users[1].id,
+        chatId: chats[0].id,
+        authorId: users[1].id,
       },
       {
         content: "fake content 3",
         attachment: "/user.webp",
-        senderId: users[1].id,
-        receiverId: users[0].id,
+        chatId: chats[0].id,
+        authorId: users[0].id,
       },
       {
         content: "",
         attachment: "/user.webp",
-        senderId: users[1].id,
-        receiverId: users[0].id,
+        chatId: chats[1].id,
+        authorId: users[0].id,
       },
       {
         content: "fake content 4",
-        senderId: users[1].id,
-        receiverId: users[2].id,
+        chatId: chats[1].id,
+        authorId: users[2].id,
       },
       {
         content: "fake content 5",
-        senderId: users[2].id,
-        receiverId: users[1].id,
+        chatId: chats[1].id,
+        authorId: users[2].id,
       },
     ],
   });
