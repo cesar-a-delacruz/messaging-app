@@ -73,7 +73,7 @@ module.exports = class Controller {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to create item", error })
+          .json({ message: "Failed to update item", error })
           .end();
       }
     },
@@ -87,7 +87,7 @@ module.exports = class Controller {
       console.error(error);
       return res
         .status(500)
-        .json({ message: "Failed to create item", error })
+        .json({ message: "Failed to delete item", error })
         .end();
     }
   };

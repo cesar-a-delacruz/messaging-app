@@ -14,8 +14,8 @@ module.exports = {
     attachment: "string",
     createdAt: "date",
     updatedAt: "date",
-    senderId: "string",
-    receiverId: "string",
+    chatId: "string",
+    authorId: "string",
   }),
   chat: new Entity(dbConfig.chat, {
     firstUserId: "string",
