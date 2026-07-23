@@ -30,6 +30,7 @@ module.exports = class ChatRepository extends Repository {
           select: {
             content: true,
             attachment: true,
+            createdAt: true,
           },
         },
       },
