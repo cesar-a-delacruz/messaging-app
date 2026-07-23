@@ -1,10 +1,10 @@
 const Controller = require("./Controller.js");
 const uploadMiddleware = require("../middlewares/uploadMiddleware.js");
 
-module.exports = class UserController extends Controller {
-  constructor(repository, validator) {
+module.exports = class FileController extends Controller {
+  constructor(repository, validator, fileField) {
     super(repository, validator);
-    this.uploader = uploadMiddleware.bind(null, "image");
+    this.uploader = uploadMiddleware.bind(null, fileField);
   }
 
   create = [
