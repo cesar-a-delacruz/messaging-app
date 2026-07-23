@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import requestHandler from "@/handlers/requestHandler";
 import styles from "./styles/ChatList.module.css";
 
 export default function ChatList({ chats, clickHandler }) {
@@ -10,32 +9,24 @@ export default function ChatList({ chats, clickHandler }) {
   }, [chats]);
 
   return (
-    <div onLoad={loadHandler} className={styles.list}>
+    <div className={styles.list}>
       {list.map((item) => (
         <div
           key={item.id}
-          onClick={() => clickHandler(item.id)}
+          onClick={() => clickHandler(item)}
           className={styles.chat}
         >
-          <img src={item.image} alt={`${item.name} picture`} />
+          <img src={item.image} alt={`${item.username} picture`} />
           <div className={styles.text}>
-            <h3>{item.name}</h3>
-            <p>{item.message}</p>
+            <h3>{item.username}</h3>
+            <p>
+              {item.message.content
+                ? item.message.content
+                : item.message.attachment}
+            </p>
           </div>
         </div>
       ))}
     </div>
   );
-
-  async function loadHandler() {
-    const listWithMessages = [];
-
-    for (const item of list) {
-      const message = await requestHandler.get(`message/latest/${item.id}`);
-      if (message.error) listWithMessages.push({ ...item, message: "" });
-      else listWithMessages.push({ ...item, message: message.data.content });
-    }
-
-    setList(listWithMessages);
-  }
 }

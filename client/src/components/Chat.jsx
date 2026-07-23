@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
 import styles from "./styles/Chat.module.css";
@@ -8,82 +8,68 @@ import Form from "./Form";
 import Menu from "./Menu";
 import Dialog from "./Dialog";
 
-export default function Chat({ senderId, receiverId }) {
-  const [user, setUser] = useGet(`user/${receiverId}`);
-  const [messages, setMessages] = useState([]);
+export default function Chat({ data }) {
+  const [messages, setMessages] = useGet(`message/chat/${data.id}`);
   const [selectedMessage, setSelectedMessage] = useState({});
   const editDialog = useRef(null);
 
-  allFields[2].value = senderId;
-  allFields[3].value = receiverId;
-
-  useEffect(() => {
-    (async () => {
-      const allMessages = await requestHandler.get(
-        `message/sender/${senderId}/receiver/${receiverId}`,
-      );
-      if (allMessages.error) allMessages.data = [];
-      allMessages.data.sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      );
-
-      setMessages(allMessages.data);
-    })();
-  }, [receiverId]);
+  allFields[2].value = sessionHandler.user().id;
+  allFields[3].value = data.id;
 
   return (
     <div className={styles.chat}>
       <div className={styles.header}>
-        {user.data && (
+        {data && (
           <div
             className={styles.data}
-            onClick={() => location.assign(`profile/${receiverId}`)}
+            onClick={() => location.assign(`profile/${data.user.id}`)}
           >
-            <img src={user.data.image} alt={`${user.data.fullname} picture`} />
-            <h3>{user.data.fullname}</h3>
+            <img src={data.user.image} alt={`${data.user.fullname} picture`} />
+            <h3>{data.user.fullname}</h3>
           </div>
         )}
       </div>
       <div className={styles.messages}>
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={styles.messageContainer}
-            style={{
-              justifyContent:
-                message.senderId === sessionHandler.user().id ? "end" : "start",
-            }}
-            onContextMenu={(e) => {
-              e.preventDefault();
-              if (message.senderId === sessionHandler.user().id)
-                setSelectedMessage(message);
-            }}
-          >
-            {selectedMessage.id === message.id && (
-              <Menu
-                options={[
-                  {
-                    text: "Edit",
-                    handler: () => editDialog.current.showModal(),
-                  },
-                  { text: "Delete", handler: deleteHandler },
-                ]}
-                message={message}
-              />
-            )}
-            <div>
-              <span>{message.createdAt}</span>
-              {message.content && <p>{message.content}</p>}
-              {message.attachment && <img src={message.attachment} />}
+        {messages.data &&
+          messages.data.map((message) => (
+            <div
+              key={message.id}
+              className={styles.messageContainer}
+              style={{
+                justifyContent:
+                  message.authorId === sessionHandler.user().id
+                    ? "end"
+                    : "start",
+              }}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                if (message.authorId === sessionHandler.user().id)
+                  setSelectedMessage(message);
+              }}
+            >
+              {selectedMessage.id === message.id && (
+                <Menu
+                  options={[
+                    {
+                      text: "Edit",
+                      handler: () => editDialog.current.showModal(),
+                    },
+                    { text: "Delete", handler: () => deleteHandler(message) },
+                  ]}
+                />
+              )}
+              <div>
+                <span>{message.createdAt}</span>
+                {message.content && <p>{message.content}</p>}
+                {message.attachment && <img src={message.attachment} />}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         <Dialog ref={editDialog}>
           <input
             type="text"
             id="content"
-            value={selectedMessage.content}
+            value={selectedMessage.content || ""}
             onChange={(e) => {
               const newContent = e.currentTarget.value;
               setSelectedMessage({ ...selectedMessage, content: newContent });
@@ -101,25 +87,33 @@ export default function Chat({ senderId, receiverId }) {
     </div>
   );
 
-  async function submitHandler(messageData) {
-    const send = await requestHandler.postFile(messageData, "message");
+  async function submitHandler(message) {
+    const send = await requestHandler.postFile(message, "message");
     if (send.error) return alert(send.error);
-    setMessages([...messages, send.data]);
+
+    setMessages({ ...messages, data: [...messages.data, send.data] });
   }
   async function editHandler(message) {
     const messageContent = { id: message.id, content: message.content };
     const edited = await requestHandler.put(messageContent, "message");
     if (edited) return alert(edited.error);
-    setMessages(
-      messages.map((m) => {
+
+    setMessages({
+      ...messages,
+      data: messages.data.map((m) => {
         if (m.id == messageContent.id) m.content = messageContent.content;
         return m;
       }),
-    );
+    });
+    editDialog.current.close();
   }
   async function deleteHandler(message) {
     const removed = await requestHandler.delete(message.id, "message");
     if (removed) return alert(removed.error);
-    setMessages(messages.filter((m) => m.id !== message.id));
+
+    setMessages({
+      ...messages,
+      data: messages.data.filter((m) => m.id !== message.id),
+    });
   }
 }

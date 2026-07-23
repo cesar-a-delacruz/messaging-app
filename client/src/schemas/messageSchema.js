@@ -9,12 +9,12 @@ export const allFields = [
     type: "file",
   },
   {
-    id: "senderId",
+    id: "authorId",
     value: "",
     type: "hidden",
   },
   {
-    id: "receiverId",
+    id: "chatId",
     value: "",
     type: "hidden",
   },

@@ -6,25 +6,32 @@ import Chat from "@/components/Chat";
 import sessionHandler from "@/handlers/sessionHandler";
 
 export default function UserIndex() {
-  const [users, setUsers] = useGet("user");
-  const [currentUser, setCurrentUser] = useState(null);
+  const [chats, setChat] = useGet(`chat/user/${sessionHandler.user().id}`);
+  const [currentChat, setCurrentChat] = useState(null);
 
-  if (!users.data)
-    return <Loader text={!users.error ? "Getting users..." : users.error} />;
+  if (!chats.data)
+    return <Loader text={!chats.error ? "Getting users..." : chats.error} />;
 
   return (
     <div className="page">
-      {currentUser && sessionHandler.user() ? (
-        <Chat senderId={sessionHandler.user().id} receiverId={currentUser} />
+      {currentChat && sessionHandler.user() ? (
+        <Chat data={currentChat} />
       ) : (
         <ChatList
-          chats={users.data.map((user) => ({
-            id: user.id,
-            image: user.image,
-            name: user.username,
-            message: user.message,
-          }))}
-          clickHandler={(userId) => setCurrentUser(userId)}
+          chats={chats.data.map((chat) => {
+            let user = {};
+            if (chat.firstUser.id !== sessionHandler.user().id)
+              user = chat.firstUser;
+            else if (chat.secondUser.id !== sessionHandler.user().id)
+              user = chat.secondUser;
+
+            return {
+              id: chat.id,
+              user: user,
+              message: chat.messages[0],
+            };
+          })}
+          clickHandler={(chat) => setCurrentChat(chat)}
         />
       )}
     </div>
