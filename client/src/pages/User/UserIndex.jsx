@@ -1,12 +1,12 @@
-import useGet from "@/hooks/useGet";
 import { useState } from "react";
+import useChatList from "@/hooks/useChatList";
+import sessionHandler from "@/handlers/sessionHandler";
 import Loader from "@/components/Loader";
 import ChatList from "@/components/ChatList";
 import Chat from "@/components/Chat";
-import sessionHandler from "@/handlers/sessionHandler";
 
 export default function UserIndex() {
-  const [chats, setChat] = useGet(`chat/user/${sessionHandler.user().id}`);
+  const [chats, setChats] = useChatList();
   const [currentChat, setCurrentChat] = useState(null);
 
   if (!chats.data)
