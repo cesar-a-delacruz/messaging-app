@@ -12,6 +12,7 @@ export default function Chat({ data }) {
   const [messages, setMessages] = useGet(`message/chat/${data.id}`);
   const [selectedMessage, setSelectedMessage] = useState({});
   const editDialog = useRef(null);
+  const deleteDialog = useRef(null);
 
   allFields[2].value = sessionHandler.user().id;
   allFields[3].value = data.id;
@@ -54,7 +55,10 @@ export default function Chat({ data }) {
                       text: "Edit",
                       handler: () => editDialog.current.showModal(),
                     },
-                    { text: "Delete", handler: () => deleteHandler(message) },
+                    {
+                      text: "Delete",
+                      handler: () => deleteDialog.current.showModal(),
+                    },
                   ]}
                 />
               )}
@@ -76,6 +80,11 @@ export default function Chat({ data }) {
             }}
           />
           <button onClick={() => editHandler(selectedMessage)}>Edit</button>
+        </Dialog>
+        <Dialog ref={deleteDialog}>
+          <p>Are you sure you want to delete this message?</p>
+          <input type="hidden" id="id" value={selectedMessage.id || ""} />
+          <button onClick={() => deleteHandler(selectedMessage)}>Yes</button>
         </Dialog>
       </div>
       <div className={styles.footer}>
@@ -115,5 +124,6 @@ export default function Chat({ data }) {
       ...messages,
       data: messages.data.filter((m) => m.id !== message.id),
     });
+    deleteDialog.current.close();
   }
 }
