@@ -17,4 +17,8 @@ module.exports = {
     senderId: "string",
     receiverId: "string",
   }),
+  chat: new Entity(dbConfig.chat, {
+    firstUserId: "string",
+    secondUserId: "string",
+  }),
 };

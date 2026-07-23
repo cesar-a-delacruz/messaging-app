@@ -5,6 +5,8 @@ module.exports = {
   user: new Router("user", controllers.user).routeREST(),
   message: new Router("message", controllers.message)
     .routeREST()
-    .route("get", "latest/:userId", "findLatest")
-    .route("get", "sender/:senderId/receiver/:receiverId", "findChat"),
+    .route("get", "chat/:chatId", "findOneByChat"),
+  chat: new Router("chat", controllers.chat)
+    .routeREST()
+    .route("get", "user/:userId", "findAllByUser"),
 };
