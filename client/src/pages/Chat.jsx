@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
-import useGet from "@/hooks/useGet";
 import styles from "./styles/Chat.module.css";
 import sessionHandler from "@/handlers/sessionHandler";
 import { allFields } from "@/schemas/messageSchema";
@@ -8,6 +7,7 @@ import Form from "@/components/Form";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
 import Loader from "@/components/Loader";
+import Image from "@/components/Image";
 import { useLocation } from "react-router-dom";
 import useMessages from "@/hooks/useMessages";
 
@@ -48,11 +48,6 @@ export default function Chat() {
               justifyContent:
                 message.authorId === sessionHandler.user().id ? "end" : "start",
             }}
-            onContextMenu={(e) => {
-              e.preventDefault();
-              if (message.authorId === sessionHandler.user().id)
-                setSelectedMessage(message);
-            }}
           >
             {selectedMessage.id === message.id && (
               <Menu
@@ -68,10 +63,16 @@ export default function Chat() {
                 ]}
               />
             )}
-            <div>
+            <div
+              onContextMenu={(e) => {
+                e.preventDefault();
+                if (message.authorId === sessionHandler.user().id)
+                  setSelectedMessage(message);
+              }}
+            >
               <span>{message.createdAt}</span>
               {message.content && <p>{message.content}</p>}
-              {message.attachment && <img src={message.attachment} />}
+              {message.attachment && <Image src={message.attachment} />}
             </div>
           </div>
         ))}

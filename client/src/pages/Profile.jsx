@@ -4,6 +4,7 @@ import useGet from "@/hooks/useGet";
 import sessionHandler from "@/handlers/sessionHandler";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader";
+import Image from "@/components/Image";
 
 export default function Profile() {
   const userId = useParams().userId;
@@ -17,7 +18,7 @@ export default function Profile() {
 
   return (
     <div className="page">
-      <img src={user.data.image} alt={`${user.data.fullname} picture`} />
+      <Image src={user.data.image} alt={`${user.data.fullname} picture`} />
       <h2
         contentEditable={`${userId === undefined}`}
         onInput={inputHandler}
