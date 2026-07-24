@@ -14,6 +14,7 @@ export default function Main() {
         </h1>
         <nav>
           <a href="/">Friends</a>
+          <a href="/users">Users</a>
           <a href="/groups">Groups</a>
         </nav>
         <footer>

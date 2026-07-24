@@ -2,7 +2,7 @@ import { useState } from "react";
 import useChatList from "@/hooks/useChatList";
 import sessionHandler from "@/handlers/sessionHandler";
 import Loader from "@/components/Loader";
-import ChatList from "@/components/ChatList";
+import List from "@/components/List";
 import Chat from "@/components/Chat";
 
 export default function Friends() {
@@ -17,8 +17,8 @@ export default function Friends() {
       {currentChat && sessionHandler.user() ? (
         <Chat data={currentChat} />
       ) : (
-        <ChatList
-          chats={chats.data.map((chat) => {
+        <List
+          items={chats.data.map((chat) => {
             let user = {};
             if (chat.firstUser.id !== sessionHandler.user().id)
               user = chat.firstUser;
@@ -27,8 +27,12 @@ export default function Friends() {
 
             return {
               id: chat.id,
-              user: user,
-              message: chat.messages[0],
+              image: user.image,
+              title: user.username,
+              content: chat.messages[0].content
+                ? chat.messages[0].content
+                : "attachment",
+              userId: user.id,
             };
           })}
           clickHandler={(chat) => setCurrentChat(chat)}

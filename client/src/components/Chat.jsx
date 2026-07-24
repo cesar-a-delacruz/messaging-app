@@ -20,18 +20,16 @@ export default function Chat({ data }) {
   return (
     <div className={styles.chat}>
       <div className={styles.header}>
-        {data && (
-          <div
-            className={styles.data}
-            onClick={() => location.assign(`profile/${data.user.id}`)}
-          >
-            <img src={data.user.image} alt={`${data.user.fullname} picture`} />
-            <h3>{data.user.fullname}</h3>
-          </div>
-        )}
+        <div
+          className={styles.data}
+          onClick={() => location.assign(`profile/${data.userId}`)}
+        >
+          <img src={data.image} alt={`${data.title} picture`} />
+          <h3>{data.title}</h3>
+        </div>
       </div>
       <div className={styles.messages}>
-        {messages.data &&
+        {messages.data ? (
           messages.data.map((message) => (
             <div
               key={message.id}
@@ -68,7 +66,10 @@ export default function Chat({ data }) {
                 {message.attachment && <img src={message.attachment} />}
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <div>Start the converstion ;)</div>
+        )}
         <Dialog ref={editDialog}>
           <input
             type="text"
