@@ -15,6 +15,8 @@ export default function useChatList() {
         `chat/user/${sessionHandler.user().id}`,
       );
 
+      if (response.error) return setChats(response);
+
       response.data.sort(
         (a, b) =>
           new Date(b.messages[0].createdAt).getTime() -

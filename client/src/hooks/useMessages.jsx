@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
  * @returns {[Object, SetStateAction]}
  */
 export default function useMessages(chatId, userId) {
-  const [chats, setChats] = useState({});
+  const [messages, setMessages] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -23,9 +23,9 @@ export default function useMessages(chatId, userId) {
         } else response.data = response.data.messages;
       }
 
-      setChats(response);
+      setMessages(response);
     })();
   }, []);
 
-  return [chats, setChats];
+  return [messages, setMessages];
 }
