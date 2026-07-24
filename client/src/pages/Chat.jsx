@@ -4,28 +4,30 @@ import useGet from "@/hooks/useGet";
 import styles from "./styles/Chat.module.css";
 import sessionHandler from "@/handlers/sessionHandler";
 import { allFields } from "@/schemas/messageSchema";
-import Form from "./Form";
-import Menu from "./Menu";
-import Dialog from "./Dialog";
+import Form from "@/components/Form";
+import Menu from "@/components/Menu";
+import Dialog from "@/components/Dialog";
+import { useLocation } from "react-router-dom";
 
-export default function Chat({ data }) {
-  const [messages, setMessages] = useGet(`message/chat/${data.id}`);
+export default function Chat() {
+  const location = useLocation().state;
+  const [messages, setMessages] = useGet(`message/chat/${location.id}`);
   const [selectedMessage, setSelectedMessage] = useState({});
   const editDialog = useRef(null);
   const deleteDialog = useRef(null);
 
   allFields[2].value = sessionHandler.user().id;
-  allFields[3].value = data.id;
+  allFields[3].value = location.id;
 
   return (
     <div className={styles.chat}>
       <div className={styles.header}>
         <div
           className={styles.data}
-          onClick={() => location.assign(`profile/${data.userId}`)}
+          onClick={() => location.assign(`profile/${location.userId}`)}
         >
-          <img src={data.image} alt={`${data.title} picture`} />
-          <h3>{data.title}</h3>
+          <img src={location.image} alt={`${location.title} picture`} />
+          <h3>{location.title}</h3>
         </div>
       </div>
       <div className={styles.messages}>
@@ -98,6 +100,15 @@ export default function Chat({ data }) {
   );
 
   async function submitHandler(message) {
+    let chat = {};
+    if (!location.id) {
+      const newChat = {
+        firstUser: sessionHandler.user().id,
+        secondUser: location.userId,
+      };
+      chat = await requestHandler.post(newChat, "chat");
+      message.chatId = chat.data.id;
+    }
     const send = await requestHandler.postFile(message, "message");
     if (send.error) return alert(send.error);
 

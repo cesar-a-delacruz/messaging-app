@@ -2,10 +2,11 @@ import { useState } from "react";
 import sessionHandler from "@/handlers/sessionHandler";
 import Loader from "@/components/Loader";
 import List from "@/components/List";
-import Chat from "@/components/Chat";
 import useGet from "@/hooks/useGet";
+import { useNavigate } from "react-router-dom";
 
 export default function Users() {
+  const navigate = useNavigate();
   const [users, setUsers] = useGet("user");
   const [currentChat, setCurrentChat] = useState(null);
 
@@ -25,7 +26,9 @@ export default function Users() {
             content: "",
           }))}
           clickHandler={(user) =>
-            setCurrentChat({ ...user, id: "", userId: user.id })
+            navigate(`/chat/new`, {
+              state: { ...user, id: "", userId: user.id },
+            })
           }
         />
       )}
