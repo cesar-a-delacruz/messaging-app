@@ -2,7 +2,7 @@ import sessionHandler from "@/handlers/sessionHandler";
 import { loginFields } from "@/schemas/userSchema";
 import Form from "@/components/Form";
 
-export default function UserLogin() {
+export default function Login() {
   return (
     <div className="page">
       <h2>Login</h2>

@@ -5,7 +5,7 @@ import Loader from "@/components/Loader";
 import ChatList from "@/components/ChatList";
 import Chat from "@/components/Chat";
 
-export default function UserIndex() {
+export default function Friends() {
   const [chats, setChats] = useChatList();
   const [currentChat, setCurrentChat] = useState(null);
 

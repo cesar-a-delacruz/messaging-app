@@ -5,7 +5,7 @@ import sessionHandler from "@/handlers/sessionHandler";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader";
 
-export default function UserProfile() {
+export default function Profile() {
   const userId = useParams().userId;
   const [user, setUser] = useGet(
     `user/${userId ? userId : sessionHandler.user().id}`,

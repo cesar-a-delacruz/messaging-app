@@ -13,7 +13,7 @@ export default function Main() {
           {import.meta.env.VITE_TITLE}
         </h1>
         <nav>
-          <a href="/">Users</a>
+          <a href="/">Friends</a>
           <a href="/groups">Groups</a>
         </nav>
         <footer>

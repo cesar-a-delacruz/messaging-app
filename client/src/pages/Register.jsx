@@ -2,7 +2,7 @@ import requestHandler from "@/handlers/requestHandler";
 import { registerFields } from "@/schemas/userSchema";
 import Form from "@/components/Form";
 
-export default function UserRegister() {
+export default function Register() {
   return (
     <div className="page">
       <h2>Register</h2>
