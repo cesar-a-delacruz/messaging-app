@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
  * Gets and sorts all the chats of the logged user
  * @returns {[Object, SetStateAction]}
  */
-export default function useGet() {
+export default function useChatList() {
   const [chats, setChats] = useState({});
 
   useEffect(() => {
