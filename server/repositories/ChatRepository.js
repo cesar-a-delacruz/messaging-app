@@ -39,4 +39,30 @@ module.exports = class ChatRepository extends Repository {
 
     return result;
   };
+  findOneByUsers = async (loggedUserId, otherUserId) => {
+    const result = await this.entity.model.findFirst({
+      where: {
+        OR: [
+          { AND: { firstUserId: loggedUserId, secondUserId: otherUserId } },
+          { AND: { firstUserId: otherUserId, secondUserId: loggedUserId } },
+        ],
+      },
+      select: {
+        id: true,
+        messages: {
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            content: true,
+            attachment: true,
+            createdAt: true,
+            authorId: true,
+          },
+        },
+      },
+    });
+    if (!result) throw new Error("No matching rows were found");
+
+    return result;
+  };
 };

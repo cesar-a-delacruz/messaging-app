@@ -17,4 +17,23 @@ module.exports = class ChatController extends Controller {
         .end();
     }
   };
+  findOneByUsers = async (req, res) => {
+    try {
+      const rows = await this.repository.findOneByUsers(
+        req.params.loggedUserId,
+        req.params.otherUserId,
+      );
+      console.info(rows);
+      return res
+        .status(200)
+        .json({ message: "Items found successfully", data: rows })
+        .end();
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "Failed to find items", error })
+        .end();
+    }
+  };
 };
