@@ -19,7 +19,7 @@ export default function Index() {
         <Route index element={<Friends />} />
         <Route path="users" element={<Users />} />
         <Route path="profile/:userId?" element={<Profile />} />
-        <Route path="chat/:chatId" element={<Chat />} />
+        <Route path="chat/:chatId?" element={<Chat />} />
       </Route>
     </Routes>
   );

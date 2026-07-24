@@ -7,17 +7,26 @@ import { allFields } from "@/schemas/messageSchema";
 import Form from "@/components/Form";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
+import Loader from "@/components/Loader";
 import { useLocation } from "react-router-dom";
+import useMessages from "@/hooks/useMessages";
 
 export default function Chat() {
   const location = useLocation().state;
-  const [messages, setMessages] = useGet(`message/chat/${location.id}`);
+  const [messages, setMessages] = useMessages(location.id, location.userId);
   const [selectedMessage, setSelectedMessage] = useState({});
   const editDialog = useRef(null);
   const deleteDialog = useRef(null);
 
   allFields[2].value = sessionHandler.user().id;
   allFields[3].value = location.id;
+
+  if (!messages.data)
+    return (
+      <Loader text={!messages.error ? "Getting messages..." : messages.error} />
+    );
+
+  if (messages.data.length === 0) return <div>{messages.message}</div>;
 
   return (
     <div className={styles.chat}>
@@ -31,47 +40,41 @@ export default function Chat() {
         </div>
       </div>
       <div className={styles.messages}>
-        {messages.data ? (
-          messages.data.map((message) => (
-            <div
-              key={message.id}
-              className={styles.messageContainer}
-              style={{
-                justifyContent:
-                  message.authorId === sessionHandler.user().id
-                    ? "end"
-                    : "start",
-              }}
-              onContextMenu={(e) => {
-                e.preventDefault();
-                if (message.authorId === sessionHandler.user().id)
-                  setSelectedMessage(message);
-              }}
-            >
-              {selectedMessage.id === message.id && (
-                <Menu
-                  options={[
-                    {
-                      text: "Edit",
-                      handler: () => editDialog.current.showModal(),
-                    },
-                    {
-                      text: "Delete",
-                      handler: () => deleteDialog.current.showModal(),
-                    },
-                  ]}
-                />
-              )}
-              <div>
-                <span>{message.createdAt}</span>
-                {message.content && <p>{message.content}</p>}
-                {message.attachment && <img src={message.attachment} />}
-              </div>
+        {messages.data.map((message) => (
+          <div
+            key={message.id}
+            className={styles.messageContainer}
+            style={{
+              justifyContent:
+                message.authorId === sessionHandler.user().id ? "end" : "start",
+            }}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              if (message.authorId === sessionHandler.user().id)
+                setSelectedMessage(message);
+            }}
+          >
+            {selectedMessage.id === message.id && (
+              <Menu
+                options={[
+                  {
+                    text: "Edit",
+                    handler: () => editDialog.current.showModal(),
+                  },
+                  {
+                    text: "Delete",
+                    handler: () => deleteDialog.current.showModal(),
+                  },
+                ]}
+              />
+            )}
+            <div>
+              <span>{message.createdAt}</span>
+              {message.content && <p>{message.content}</p>}
+              {message.attachment && <img src={message.attachment} />}
             </div>
-          ))
-        ) : (
-          <div>Start the converstion ;)</div>
-        )}
+          </div>
+        ))}
         <Dialog ref={editDialog}>
           <input
             type="text"
