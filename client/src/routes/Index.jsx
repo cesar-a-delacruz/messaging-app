@@ -4,9 +4,10 @@ import Main from "@/layouts/Main";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Friends from "@/pages/Friends";
+import Users from "@/pages/Users";
 import Profile from "@/pages/Profile";
 
-export default function Routes() {
+export default function Index() {
   return (
     <Routes>
       <Route path="/" element={<Default />}>
@@ -15,6 +16,7 @@ export default function Routes() {
       </Route>
       <Route path="/" element={<Main />}>
         <Route index element={<Friends />} />
+        <Route path="users" element={<Users />} />
         <Route path="profile/:userId?" element={<Profile />} />
       </Route>
     </Routes>
