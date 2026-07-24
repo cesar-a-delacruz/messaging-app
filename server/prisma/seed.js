@@ -23,16 +23,26 @@ const dbConfig = require("../configs/dbConfig.js");
       },
     ],
   });
-  const chats = await dbConfig.chat.createManyAndReturn({
+  const groups = await dbConfig.group.createManyAndReturn({
     data: [
-      {
-        firstUserId: users[0].id,
-        secondUserId: users[1].id,
-      },
-      {
-        firstUserId: users[0].id,
-        secondUserId: users[2].id,
-      },
+      { name: "fake group 1", info: "fake info 1", image: "" },
+      { name: "fake group 2", info: "fake info 2", image: "/user.webp" },
+    ],
+  });
+  const chats = await dbConfig.chat.createManyAndReturn({
+    data: [{}, {}, { groupId: groups[0].id }, { groupId: groups[1].id }],
+  });
+  const chatMembers = await dbConfig.chatMember.createManyAndReturn({
+    data: [
+      { userId: users[0].id, chatId: chats[0].id },
+      { userId: users[1].id, chatId: chats[0].id },
+      { userId: users[0].id, chatId: chats[1].id },
+      { userId: users[2].id, chatId: chats[1].id },
+      { userId: users[0].id, chatId: chats[2].id },
+      { userId: users[1].id, chatId: chats[2].id },
+      { userId: users[2].id, chatId: chats[2].id },
+      { userId: users[0].id, chatId: chats[3].id },
+      { userId: users[2].id, chatId: chats[3].id },
     ],
   });
   const messages = await dbConfig.message.createManyAndReturn({
@@ -67,6 +77,38 @@ const dbConfig = require("../configs/dbConfig.js");
       {
         content: "fake content 5",
         chatId: chats[1].id,
+        authorId: users[2].id,
+      },
+      {
+        content: "fake content 6",
+        chatId: chats[2].id,
+        authorId: users[0].id,
+      },
+      {
+        content: "fake content 7",
+        chatId: chats[2].id,
+        authorId: users[1].id,
+      },
+      {
+        content: "fake content 8",
+        attachment: "/user.webp",
+        chatId: chats[2].id,
+        authorId: users[0].id,
+      },
+      {
+        content: "",
+        attachment: "/user.webp",
+        chatId: chats[3].id,
+        authorId: users[0].id,
+      },
+      {
+        content: "fake content 9",
+        chatId: chats[3].id,
+        authorId: users[2].id,
+      },
+      {
+        content: "fake content 10",
+        chatId: chats[3].id,
         authorId: users[2].id,
       },
     ],

@@ -8,28 +8,46 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(uuid(7))
-  username       String    @unique @db.VarChar(20)
-  fullname       String    @db.VarChar(40)
-  password       String    @db.Char(60)
-  bio            String?   @db.VarChar(100)
-  image          String?   @db.Text
-  firstUserChat  Chat[]    @relation(name: "first_user_chat")
-  secondUserChat Chat[]    @relation(name: "second_user_chat")
-  messages       Message[] @relation(name: "message_author")
+  id         String       @id @default(uuid(7))
+  username   String       @unique @db.VarChar(20)
+  fullname   String       @db.VarChar(40)
+  password   String       @db.Char(60)
+  bio        String?      @db.VarChar(100)
+  image      String?      @db.Text
+  messages   Message[]    @relation(name: "message_author")
+  chatMember ChatMember[] @relation(name: "chat_member_user")
 
   @@map("user")
 }
 
+model Group {
+  id    String  @id @default(uuid(7))
+  name  String  @db.VarChar(40)
+  info  String? @db.VarChar(100)
+  image String? @db.Text
+  chats Chat[]  @relation(name: "group_chat")
+
+  @@map("group")
+}
+
 model Chat {
-  id           String    @id @default(uuid(7))
-  firstUser    User      @relation(fields: [firstUserId], references: [id], name: "first_user_chat", onDelete: Cascade)
-  firstUserId  String    @map("first_user_id")
-  secondUser   User      @relation(fields: [secondUserId], references: [id], name: "second_user_chat", onDelete: Cascade)
-  secondUserId String    @map("second_user_id")
-  messages     Message[] @relation(name: "chat_message")
+  id          String       @id @default(uuid(7))
+  messages    Message[]    @relation(name: "chat_message")
+  chatMembers ChatMember[] @relation(name: "chat_member_chat")
+  group       Group?       @relation(fields: [groupId], references: [id], name: "group_chat", onDelete: Cascade)
+  groupId     String?      @map("group_id")
 
   @@map("chat")
+}
+
+model ChatMember {
+  id     String @id @default(uuid(7))
+  user   User   @relation(fields: [userId], references: [id], name: "chat_member_user", onDelete: Cascade)
+  userId String @map("user_id")
+  chat   Chat   @relation(fields: [chatId], references: [id], name: "chat_member_chat", onDelete: Cascade)
+  chatId String @map("chat_id")
+
+  @@map("chat_member")
 }
 
 model Message {
