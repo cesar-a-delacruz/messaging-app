@@ -1,7 +1,7 @@
 const Repository = require("./Repository.js");
 
 module.exports = class MessageRepository extends Repository {
-  findOneByChat = async (chatId) => {
+  findAllByChat = async (chatId) => {
     const result = await this.entity.model.findMany({
       where: { chatId },
       orderBy: {

@@ -2,9 +2,9 @@ const FileController = require("./FileController.js");
 const uploadMiddleware = require("../middlewares/uploadMiddleware.js");
 
 module.exports = class MessageController extends FileController {
-  findOneByChat = async (req, res) => {
+  findAllByChat = async (req, res) => {
     try {
-      const rows = await this.repository.findOneByChat(req.params.chatId);
+      const rows = await this.repository.findAllByChat(req.params.chatId);
       console.info(rows);
       return res
         .status(200)
