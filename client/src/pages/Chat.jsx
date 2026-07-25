@@ -13,7 +13,7 @@ import useMessages from "@/hooks/useMessages";
 
 export default function Chat() {
   const location = useLocation().state;
-  const [messages, setMessages] = useMessages(location.id, location.userId);
+  const [messages, setMessages] = useMessages(location.item);
   const [selectedMessage, setSelectedMessage] = useState({});
   const editDialog = useRef(null);
   const deleteDialog = useRef(null);
@@ -33,7 +33,7 @@ export default function Chat() {
       <div className={styles.header}>
         <div
           className={styles.data}
-          onClick={() => location.assign(`profile/${location.userId}`)}
+          onClick={() => location.assign(`profile/${location.itemId}`)}
         >
           <img src={location.image} alt={`${location.title} picture`} />
           <h3>{location.title}</h3>
@@ -105,14 +105,10 @@ export default function Chat() {
 
   async function submitHandler(message) {
     let chat = {};
-    if (!location.id) {
-      const newChat = {
-        firstUser: sessionHandler.user().id,
-        secondUser: location.userId,
-      };
-      chat = await requestHandler.post(newChat, "chat");
+    if (!location.id && !messages.data.length) {
+      chat = await requestHandler.post({}, "chat");
       message.chatId = chat.data.id;
-    }
+    } else if (!location.id) message.chatId = messages.chatId;
     const send = await requestHandler.postFile(message, "message");
     if (send.error) return alert(send.error);
 

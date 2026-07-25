@@ -15,24 +15,29 @@ export default function Friends() {
     <div className="page">
       <List
         items={chats.data.map((chat) => {
-          let user = {};
-
-          for (const chatMember of chat.chatMembers) {
-            if (chatMember.user.id !== sessionHandler.user().id)
-              user = chatMember.user;
+          let item = {};
+          if (chat.group) item = chat.group;
+          else {
+            for (const chatMember of chat.chatMembers) {
+              if (chatMember.user.id !== sessionHandler.user().id)
+                item = chatMember.user;
+            }
           }
 
           return {
             id: chat.id,
-            image: user.image,
-            title: user.username,
+            image: item.image,
+            title: item.username ? item.username : item.name,
             content: chat.messages[0].content
               ? chat.messages[0].content
               : "attachment",
-            userId: user.id,
           };
         })}
-        clickHandler={(chat) => navigate(`/chat/${chat.id}`, { state: chat })}
+        clickHandler={(chat) =>
+          navigate(`/chat/${chat.id}`, {
+            state: { ...chat, item: { id: chat.id, type: "chat" } },
+          })
+        }
       />
     </div>
   );
