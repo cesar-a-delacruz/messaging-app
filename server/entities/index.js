@@ -18,7 +18,15 @@ module.exports = {
     authorId: "string",
   }),
   chat: new Entity(dbConfig.chat, {
-    firstUserId: "string",
-    secondUserId: "string",
+    groupId: "string",
+  }),
+  chatMember: new Entity(dbConfig.chatMember, {
+    userId: "string",
+    chatId: "string",
+  }),
+  group: new Entity(dbConfig.group, {
+    name: "string",
+    info: "string",
+    image: "string",
   }),
 };

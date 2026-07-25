@@ -1,27 +1,31 @@
+const { group } = require("../configs/dbConfig.js");
 const Repository = require("./Repository.js");
 
 module.exports = class ChatRepository extends Repository {
   findAllByUser = async (userId) => {
+    console.log(userId);
     const result = await this.entity.model.findMany({
       where: {
-        OR: [{ firstUserId: userId }, { secondUserId: userId }],
-      },
-      select: {
-        id: true,
-        firstUser: {
-          select: {
-            id: true,
-            fullname: true,
-            username: true,
-            image: true,
+        chatMembers: {
+          some: {
+            userId: userId,
           },
         },
-        secondUser: {
+      },
+      distinct: ["id"],
+      select: {
+        id: true,
+        chatMembers: {
           select: {
             id: true,
-            fullname: true,
-            username: true,
-            image: true,
+            user: {
+              select: {
+                id: true,
+                fullname: true,
+                username: true,
+                image: true,
+              },
+            },
           },
         },
         messages: {
@@ -35,6 +39,7 @@ module.exports = class ChatRepository extends Repository {
         },
       },
     });
+    console.log(result);
     if (!result.length) throw new Error("No matching rows were found");
 
     return result;
@@ -42,11 +47,25 @@ module.exports = class ChatRepository extends Repository {
   findOneByUsers = async (loggedUserId, otherUserId) => {
     const result = await this.entity.model.findFirst({
       where: {
-        OR: [
-          { AND: { firstUserId: loggedUserId, secondUserId: otherUserId } },
-          { AND: { firstUserId: otherUserId, secondUserId: loggedUserId } },
+        AND: [
+          {
+            chatMembers: {
+              some: {
+                userId: loggedUserId,
+              },
+            },
+          },
+          {
+            chatMembers: {
+              some: {
+                userId: otherUserId,
+              },
+            },
+          },
+          { groupId: null },
         ],
       },
+      distinct: ["id"],
       select: {
         id: true,
         messages: {

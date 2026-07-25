@@ -16,10 +16,11 @@ export default function Friends() {
       <List
         items={chats.data.map((chat) => {
           let user = {};
-          if (chat.firstUser.id !== sessionHandler.user().id)
-            user = chat.firstUser;
-          else if (chat.secondUser.id !== sessionHandler.user().id)
-            user = chat.secondUser;
+
+          for (const chatMember of chat.chatMembers) {
+            if (chatMember.user.id !== sessionHandler.user().id)
+              user = chatMember.user;
+          }
 
           return {
             id: chat.id,
