@@ -65,7 +65,38 @@ module.exports = class ChatRepository extends Repository {
           { groupId: null },
         ],
       },
-      distinct: ["id"],
+      select: {
+        id: true,
+        messages: {
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            content: true,
+            attachment: true,
+            createdAt: true,
+            authorId: true,
+          },
+        },
+      },
+    });
+    if (!result) throw new Error("No matching rows were found");
+
+    return result;
+  };
+  findOneByUserAndGroup = async (userId, groupId) => {
+    const result = await this.entity.model.findFirst({
+      where: {
+        AND: [
+          {
+            chatMembers: {
+              some: {
+                userId: userId,
+              },
+            },
+          },
+          { groupId: groupId },
+        ],
+      },
       select: {
         id: true,
         messages: {
