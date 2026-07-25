@@ -7,6 +7,7 @@ import Friends from "@/pages/Friends";
 import Users from "@/pages/Users";
 import Profile from "@/pages/Profile";
 import Chat from "@/pages/Chat";
+import Groups from "@/pages/Groups";
 
 export default function Index() {
   return (
@@ -18,6 +19,7 @@ export default function Index() {
       <Route path="/" element={<Main />}>
         <Route index element={<Friends />} />
         <Route path="users" element={<Users />} />
+        <Route path="groups" element={<Groups />} />
         <Route path="profile/:userId?" element={<Profile />} />
         <Route path="chat/:chatId?" element={<Chat />} />
       </Route>
