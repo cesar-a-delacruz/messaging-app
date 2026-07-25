@@ -15,5 +15,7 @@ module.exports = {
       "get",
       "loggedUser/:loggedUserId/otherUser/:otherUserId",
       "findOneByUsers",
-    ),
+    )
+    .route("get", "user/:userId/group/:groupId", "findOneByUserAndGroup"),
+  group: new Router("group", controllers.group).routeREST(),
 };
