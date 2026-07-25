@@ -2,10 +2,11 @@ import Loader from "@/components/Loader";
 import List from "@/components/List";
 import useGet from "@/hooks/useGet";
 import { useNavigate } from "react-router-dom";
+import sessionHandler from "@/handlers/sessionHandler";
 
 export default function Users() {
   const navigate = useNavigate();
-  const [users, setUsers] = useGet("user");
+  const [users, setUsers] = useGet(`user/not/${sessionHandler.user().id}`);
 
   if (!users.data)
     return <Loader text={!users.error ? "Getting users..." : users.error} />;

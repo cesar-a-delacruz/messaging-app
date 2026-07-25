@@ -2,7 +2,9 @@ const Router = require("./Router.js");
 const controllers = require("../controllers/index.js");
 
 module.exports = {
-  user: new Router("user", controllers.user).routeREST(),
+  user: new Router("user", controllers.user)
+    .routeREST()
+    .route("get", "not/:userId", "findAll"),
   message: new Router("message", controllers.message)
     .routeREST()
     .route("get", "chat/:chatId", "findAllByChat"),
