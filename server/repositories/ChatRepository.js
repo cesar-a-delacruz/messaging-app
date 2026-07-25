@@ -37,6 +37,13 @@ module.exports = class ChatRepository extends Repository {
             createdAt: true,
           },
         },
+        group: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          },
+        },
       },
     });
     console.log(result);
