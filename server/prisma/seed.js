@@ -25,7 +25,7 @@ const dbConfig = require("../configs/dbConfig.js");
   });
   const groups = await dbConfig.group.createManyAndReturn({
     data: [
-      { name: "fake group 1", info: "fake info 1", image: "" },
+      { name: "fake group 1", info: "fake info 1" },
       { name: "fake group 2", info: "fake info 2", image: "/user.webp" },
     ],
   });
