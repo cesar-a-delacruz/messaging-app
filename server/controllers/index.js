@@ -13,6 +13,6 @@ module.exports = {
     validators.message,
     "attachment",
   ),
-  chat: new ChatController(repositories.chat, validators.chat),
+  chat: new ChatController(repositories.chat, { run: (req) => req }),
   group: new FileController(repositories.group, validators.group, "image"),
 };
