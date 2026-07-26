@@ -34,10 +34,17 @@ const dbConfig = require("../configs/dbConfig.js");
     data: [
       { name: "fake group 1", info: "fake info 1" },
       { name: "fake group 2", info: "fake info 2", image: "/user.webp" },
+      { name: "fake group 3", info: "fake info 3" },
     ],
   });
   const chats = await dbConfig.chat.createManyAndReturn({
-    data: [{}, {}, { groupId: groups[0].id }, { groupId: groups[1].id }],
+    data: [
+      {},
+      {},
+      { groupId: groups[0].id },
+      { groupId: groups[1].id },
+      { groupId: groups[2].id },
+    ],
   });
   const chatMembers = await dbConfig.chatMember.createManyAndReturn({
     data: [
@@ -46,10 +53,12 @@ const dbConfig = require("../configs/dbConfig.js");
       { userId: users[0].id, chatId: chats[1].id },
       { userId: users[2].id, chatId: chats[1].id },
       { userId: users[0].id, chatId: chats[2].id },
-      { userId: users[1].id, chatId: chats[2].id },
+      { userId: users[1].id, chatId: chats[2].id, role: "ADMIN" },
       { userId: users[2].id, chatId: chats[2].id },
       { userId: users[0].id, chatId: chats[3].id },
-      { userId: users[2].id, chatId: chats[3].id },
+      { userId: users[2].id, chatId: chats[3].id, role: "ADMIN" },
+      { userId: users[0].id, chatId: chats[4].id, role: "ADMIN" },
+      { userId: users[3].id, chatId: chats[4].id },
     ],
   });
   const messages = await dbConfig.message.createManyAndReturn({
@@ -117,6 +126,16 @@ const dbConfig = require("../configs/dbConfig.js");
         content: "fake content 10",
         chatId: chats[3].id,
         authorId: users[2].id,
+      },
+      {
+        content: "fake content 11",
+        chatId: chats[4].id,
+        authorId: users[0].id,
+      },
+      {
+        content: "fake content 12",
+        chatId: chats[4].id,
+        authorId: users[3].id,
       },
     ],
   });

@@ -42,6 +42,7 @@ model Chat {
 
 model ChatMember {
   id     String @id @default(uuid(7))
+  role   Role   @default(NONE)
   user   User   @relation(fields: [userId], references: [id], name: "chat_member_user", onDelete: Cascade)
   userId String @map("user_id")
   chat   Chat   @relation(fields: [chatId], references: [id], name: "chat_member_chat", onDelete: Cascade)
@@ -62,4 +63,9 @@ model Message {
   authorId   String   @map("author_id")
 
   @@map("message")
+}
+
+enum Role {
+  NONE
+  ADMIN
 }
