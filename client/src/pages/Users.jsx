@@ -19,6 +19,7 @@ export default function Users() {
           image: user.image,
           title: user.username,
           content: user.bio,
+          profile: { type: "user", id: user.id },
         }))}
         clickHandler={(user) =>
           navigate(`/chat`, {

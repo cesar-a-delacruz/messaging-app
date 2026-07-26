@@ -17,6 +17,7 @@ export default function Groups() {
           image: group.image,
           title: group.name,
           content: group.info,
+          profile: { type: "group", id: group.id },
         }))}
         clickHandler={(group) =>
           navigate(`/chat`, {

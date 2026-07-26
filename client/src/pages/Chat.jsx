@@ -12,14 +12,14 @@ import { useLocation } from "react-router-dom";
 import useMessages from "@/hooks/useMessages";
 
 export default function Chat() {
-  const location = useLocation().state;
-  const [messages, setMessages] = useMessages(location.item);
+  const locationState = useLocation().state;
+  const [messages, setMessages] = useMessages(locationState.item);
   const [selectedMessage, setSelectedMessage] = useState({});
   const editDialog = useRef(null);
   const deleteDialog = useRef(null);
 
   allFields[2].value = sessionHandler.user().id;
-  allFields[3].value = location.id;
+  allFields[3].value = locationState.id;
 
   if (!messages.data)
     return (
@@ -31,10 +31,17 @@ export default function Chat() {
       <div className={styles.header}>
         <div
           className={styles.data}
-          onClick={() => location.assign(`profile/${location.item.id}`)}
+          onClick={() =>
+            location.assign(
+              `/profile/${locationState.profile.type}/${locationState.profile.id}`,
+            )
+          }
         >
-          <img src={location.image} alt={`${location.title} picture`} />
-          <h3>{location.title}</h3>
+          <img
+            src={locationState.image}
+            alt={`${locationState.title} picture`}
+          />
+          <h3>{locationState.title}</h3>
         </div>
       </div>
       <div className={styles.messages}>
@@ -108,18 +115,18 @@ export default function Chat() {
   );
 
   async function submitHandler(message) {
-    if (!location.id && !messages.data.length) {
+    if (!locationState.id && !messages.data.length) {
       const chat = await requestHandler.post({}, "chat");
       const loggedMember = await requestHandler.post(
         { chatId: chat.data.id, userId: sessionHandler.user().id },
         "chatMember",
       );
       const otherMember = await requestHandler.post(
-        { chatId: chat.data.id, userId: location.item.id },
+        { chatId: chat.data.id, userId: locationState.item.id },
         "chatMember",
       );
       message.chatId = chat.data.id;
-    } else if (!location.id) message.chatId = messages.chatId;
+    } else if (!locationState.id) message.chatId = messages.chatId;
     const send = await requestHandler.postFile(message, "message");
     if (send.error) return alert(send.error);
 

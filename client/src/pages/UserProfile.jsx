@@ -6,11 +6,9 @@ import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader";
 import Image from "@/components/Image";
 
-export default function Profile() {
-  const userId = useParams().userId;
-  const [user, setUser] = useGet(
-    `user/${userId ? userId : sessionHandler.user().id}`,
-  );
+export default function UserProfile() {
+  const id = useParams().id;
+  const [user, setUser] = useGet(`user/${id ? id : sessionHandler.user().id}`);
   const [edit, setEdit] = useState(false);
 
   if (!user.data)
@@ -20,27 +18,30 @@ export default function Profile() {
     <div className="page">
       <Image src={user.data.image} alt={`${user.data.fullname} picture`} />
       <h2
-        contentEditable={`${userId === undefined}`}
+        contentEditable={`${id === undefined}`}
+        suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="fullname"
       >
         {user.data.fullname}
       </h2>
       <span
-        contentEditable={`${userId === undefined}`}
+        contentEditable={`${id === undefined}`}
+        suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="username"
       >
         {user.data.username}
       </span>
       <p
-        contentEditable={`${userId === undefined}`}
+        contentEditable={`${id === undefined}`}
+        suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="bio"
       >
         {user.data.bio}
       </p>
-      {userId === undefined && (
+      {id === undefined && (
         <button
           disabled={!edit}
           onClick={async () => await requestHandler.put(user.data, "user")}

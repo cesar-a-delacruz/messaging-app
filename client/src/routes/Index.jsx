@@ -5,7 +5,8 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import MyChats from "@/pages/MyChats";
 import Users from "@/pages/Users";
-import Profile from "@/pages/Profile";
+import UserProfile from "@/pages/UserProfile";
+import GroupProfile from "@/pages/GroupProfile";
 import Chat from "@/pages/Chat";
 import Groups from "@/pages/Groups";
 
@@ -20,7 +21,8 @@ export default function Index() {
         <Route index element={<MyChats />} />
         <Route path="users" element={<Users />} />
         <Route path="groups" element={<Groups />} />
-        <Route path="profile/:userId?" element={<Profile />} />
+        <Route path="profile/user/:id?" element={<UserProfile />} />
+        <Route path="profile/group/:id" element={<GroupProfile />} />
         <Route path="chat/:chatId?" element={<Chat />} />
       </Route>
     </Routes>

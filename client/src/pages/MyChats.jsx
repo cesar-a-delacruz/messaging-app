@@ -27,17 +27,18 @@ export default function MyChats() {
           return {
             id: chat.id,
             image: item.image,
-            title: item.username ? item.username : item.name,
+            title: !chat.group ? item.username : item.name,
             content: chat.messages[0].content
               ? chat.messages[0].content
               : "attachment",
+            profile: { type: !chat.group ? "user" : "group", id: item.id },
           };
         })}
-        clickHandler={(chat) =>
+        clickHandler={(chat) => {
           navigate(`/chat/${chat.id}`, {
             state: { ...chat, item: { id: chat.id, type: "chat" } },
-          })
-        }
+          });
+        }}
       />
     </div>
   );
