@@ -24,19 +24,6 @@ module.exports = checkSchema({
       options: { min: 5, max: 40 },
     },
   },
-  password: {
-    isEmpty: {
-      negated: true,
-      errorMessage: formatValidationError("empty", "password"),
-    },
-    isLength: {
-      options: { min: 8, max: 60 },
-      errorMessage: formatValidationError("length", "password", {
-        min: 8,
-        max: 60,
-      }),
-    },
-  },
   bio: {
     isLength: {
       options: { max: 100 },
