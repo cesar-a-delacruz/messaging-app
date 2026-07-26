@@ -26,56 +26,60 @@ export default function Chat() {
       <Loader text={!messages.error ? "Getting messages..." : messages.error} />
     );
 
-  if (messages.data.length === 0) return <div>{messages.message}</div>;
-
   return (
     <div className={styles.chat}>
       <div className={styles.header}>
         <div
           className={styles.data}
-          onClick={() => location.assign(`profile/${location.itemId}`)}
+          onClick={() => location.assign(`profile/${location.item.id}`)}
         >
           <img src={location.image} alt={`${location.title} picture`} />
           <h3>{location.title}</h3>
         </div>
       </div>
       <div className={styles.messages}>
-        {messages.data.map((message) => (
-          <div
-            key={message.id}
-            className={styles.messageContainer}
-            style={{
-              justifyContent:
-                message.authorId === sessionHandler.user().id ? "end" : "start",
-            }}
-          >
-            {selectedMessage.id === message.id && (
-              <Menu
-                options={[
-                  {
-                    text: "Edit",
-                    handler: () => editDialog.current.showModal(),
-                  },
-                  {
-                    text: "Delete",
-                    handler: () => deleteDialog.current.showModal(),
-                  },
-                ]}
-              />
-            )}
+        {messages.data.length ? (
+          messages.data.map((message) => (
             <div
-              onContextMenu={(e) => {
-                e.preventDefault();
-                if (message.authorId === sessionHandler.user().id)
-                  setSelectedMessage(message);
+              key={message.id}
+              className={styles.messageContainer}
+              style={{
+                justifyContent:
+                  message.authorId === sessionHandler.user().id
+                    ? "end"
+                    : "start",
               }}
             >
-              <span>{message.createdAt}</span>
-              {message.content && <p>{message.content}</p>}
-              {message.attachment && <Image src={message.attachment} />}
+              {selectedMessage.id === message.id && (
+                <Menu
+                  options={[
+                    {
+                      text: "Edit",
+                      handler: () => editDialog.current.showModal(),
+                    },
+                    {
+                      text: "Delete",
+                      handler: () => deleteDialog.current.showModal(),
+                    },
+                  ]}
+                />
+              )}
+              <div
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  if (message.authorId === sessionHandler.user().id)
+                    setSelectedMessage(message);
+                }}
+              >
+                <span>{message.createdAt}</span>
+                {message.content && <p>{message.content}</p>}
+                {message.attachment && <Image src={message.attachment} />}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <div>{messages.message}</div>
+        )}
         <Dialog ref={editDialog}>
           <input
             type="text"
@@ -104,9 +108,16 @@ export default function Chat() {
   );
 
   async function submitHandler(message) {
-    let chat = {};
     if (!location.id && !messages.data.length) {
-      chat = await requestHandler.post({}, "chat");
+      const chat = await requestHandler.post({}, "chat");
+      const loggedMember = await requestHandler.post(
+        { chatId: chat.data.id, userId: sessionHandler.user().id },
+        "chatMember",
+      );
+      const otherMember = await requestHandler.post(
+        { chatId: chat.data.id, userId: location.item.id },
+        "chatMember",
+      );
       message.chatId = chat.data.id;
     } else if (!location.id) message.chatId = messages.chatId;
     const send = await requestHandler.postFile(message, "message");
