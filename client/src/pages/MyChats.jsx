@@ -4,7 +4,7 @@ import Loader from "@/components/Loader";
 import List from "@/components/List";
 import { useNavigate } from "react-router-dom";
 
-export default function Friends() {
+export default function MyChats() {
   const navigate = useNavigate();
   const [chats, setChats] = useChatList();
 

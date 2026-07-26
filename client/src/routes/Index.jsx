@@ -3,7 +3,7 @@ import Default from "@/layouts/Default";
 import Main from "@/layouts/Main";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
-import Friends from "@/pages/Friends";
+import MyChats from "@/pages/MyChats";
 import Users from "@/pages/Users";
 import Profile from "@/pages/Profile";
 import Chat from "@/pages/Chat";
@@ -17,7 +17,7 @@ export default function Index() {
         <Route path="register" element={<Register />} />
       </Route>
       <Route path="/" element={<Main />}>
-        <Route index element={<Friends />} />
+        <Route index element={<MyChats />} />
         <Route path="users" element={<Users />} />
         <Route path="groups" element={<Groups />} />
         <Route path="profile/:userId?" element={<Profile />} />
