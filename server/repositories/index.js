@@ -8,5 +8,7 @@ module.exports = {
   user: new UserRepository(entities.user),
   message: new MessageRepository(entities.message),
   chat: new ChatRepository(entities.chat),
+  chat: new ChatRepository(entities.chat),
+  chatMember: new Repository(entities.chatMember),
   group: new Repository(entities.group),
 };
