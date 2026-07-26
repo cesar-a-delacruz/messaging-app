@@ -21,6 +21,13 @@ const dbConfig = require("../configs/dbConfig.js");
         bio: "fake bio 3",
         image: "/user.webp",
       },
+      {
+        username: "fakeuser4",
+        fullname: "fake user 4",
+        password: "fakepassword",
+        bio: "fake bio 3",
+        image: "/user.webp",
+      },
     ],
   });
   const groups = await dbConfig.group.createManyAndReturn({
