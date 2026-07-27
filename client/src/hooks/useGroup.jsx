@@ -24,7 +24,7 @@ export default function useGroup(id) {
 
       setGroup(response);
     })();
-  }, []);
+  }, [id]);
 
   return [group, setGroup];
 }

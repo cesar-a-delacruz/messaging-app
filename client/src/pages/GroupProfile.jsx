@@ -5,11 +5,13 @@ import Loader from "@/components/Loader";
 import Image from "@/components/Image";
 import useGroup from "@/hooks/useGroup";
 import List from "@/components/List";
+import Menu from "@/components/Menu";
 
 export default function GroupProfile() {
   const id = useParams().id;
   const [group, setGroup] = useGroup(id);
   const [edit, setEdit] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
 
   if (!group.data)
     return <Loader text={!group.error ? "Getting group..." : group.error} />;
@@ -48,13 +50,25 @@ export default function GroupProfile() {
             id: member.id,
             title: member.user.username,
             image: member.user.image,
-            highlight: member.role === "ADMIN" ? "Admin" : "",
+            highlight: member.role === "ADMIN" ? "ADMIN" : "",
             userId: member.user.id,
           }))}
-          clickHandler={(member) =>
-            location.assign(`/profile/user/${member.userId}`)
-          }
-        />
+          clickHandler={(member) => setSelectedMember(member)}
+        >
+          {selectedMember && (
+            <Menu
+              options={[
+                { text: "Change role", handler: changeRoleHandler },
+                { text: "Remove member", handler: () => {} },
+                {
+                  text: "See profile",
+                  handler: () =>
+                    location.assign(`/profile/user/${selectedMember.userId}`),
+                },
+              ]}
+            />
+          )}
+        </List>
       </div>
     </div>
   );
@@ -68,5 +82,26 @@ export default function GroupProfile() {
       return prev;
     });
     setEdit(true);
+  }
+
+  async function changeRoleHandler() {
+    if (selectedMember.id === group.data.currentMember.id) return;
+    const member = {
+      id: selectedMember.id,
+      role: selectedMember.highlight === "ADMIN" ? "NONE" : "ADMIN",
+    };
+    const changeRole = await requestHandler.put(member, "chatMember");
+    if (changeRole) return alert(changeRole.error);
+
+    setGroup((prev) => {
+      for (let i = 0; i < prev.data.chats.chatMembers.length; i++) {
+        if (prev.data.chats.chatMembers[i].id === selectedMember.id) {
+          prev.data.chats.chatMembers[i].role = member.role;
+          4;
+          return { ...prev };
+        }
+      }
+    });
+    setSelectedMember(null);
   }
 }

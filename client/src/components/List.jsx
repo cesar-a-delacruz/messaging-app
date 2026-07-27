@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Children } from "react";
 import styles from "./styles/List.module.css";
 
-export default function List({ items, clickHandler }) {
+export default function List({ items, clickHandler, children }) {
   const [list, setList] = useState(items);
 
   useEffect(() => {
@@ -23,6 +23,7 @@ export default function List({ items, clickHandler }) {
             </h3>
             {item.content && <div>{item.content}</div>}
           </div>
+          {children}
         </div>
       ))}
     </div>
