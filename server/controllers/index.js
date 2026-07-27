@@ -14,6 +14,6 @@ module.exports = {
     "attachment",
   ),
   chat: new ChatController(repositories.chat, { run: (req) => req }),
-  chatMember: new Controller(repositories.chatMember, validators.chatMember),
+  chatMember: new Controller(repositories.chatMember, { run: (req) => req }),
   group: new FileController(repositories.group, validators.group, "image"),
 };
