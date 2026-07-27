@@ -48,6 +48,7 @@ export default function GroupProfile() {
             id: member.id,
             title: member.user.username,
             image: member.user.image,
+            highlight: member.role === "ADMIN" ? "Admin" : "",
           }))}
         />
       </div>

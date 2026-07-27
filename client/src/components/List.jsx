@@ -18,7 +18,9 @@ export default function List({ items, clickHandler }) {
         >
           <img src={item.image} alt={`${item.title} picture`} />
           <div className={styles.text}>
-            <h3>{item.title}</h3>
+            <h3>
+              {item.title} <span>{item.highlight && item.highlight}</span>
+            </h3>
             {item.content && <div>{item.content}</div>}
           </div>
         </div>
