@@ -18,7 +18,7 @@ export default function UserProfile() {
     <div className="page">
       <Image src={user.data.image} alt={`${user.data.fullname} picture`} />
       <h2
-        contentEditable={`${id === undefined}`}
+        contentEditable={`${user.data.id === sessionHandler.user().id}`}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="fullname"
@@ -26,7 +26,7 @@ export default function UserProfile() {
         {user.data.fullname}
       </h2>
       <span
-        contentEditable={`${id === undefined}`}
+        contentEditable={`${user.data.id === sessionHandler.user().id}`}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="username"
@@ -34,14 +34,14 @@ export default function UserProfile() {
         {user.data.username}
       </span>
       <p
-        contentEditable={`${id === undefined}`}
+        contentEditable={`${user.data.id === sessionHandler.user().id}`}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="bio"
       >
         {user.data.bio}
       </p>
-      {id === undefined && (
+      {user.data.id === sessionHandler.user().id && (
         <button
           disabled={!edit}
           onClick={async () => await requestHandler.put(user.data, "user")}

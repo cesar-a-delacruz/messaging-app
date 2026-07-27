@@ -49,7 +49,11 @@ export default function GroupProfile() {
             title: member.user.username,
             image: member.user.image,
             highlight: member.role === "ADMIN" ? "Admin" : "",
+            userId: member.user.id,
           }))}
+          clickHandler={(member) =>
+            location.assign(`/profile/user/${member.userId}`)
+          }
         />
       </div>
     </div>
