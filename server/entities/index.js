@@ -23,6 +23,7 @@ module.exports = {
   chatMember: new Entity(dbConfig.chatMember, {
     userId: "string",
     chatId: "string",
+    role: "string",
   }),
   group: new Entity(dbConfig.group, {
     name: "string",
