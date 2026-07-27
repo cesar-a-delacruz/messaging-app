@@ -59,7 +59,7 @@ export default function GroupProfile() {
             <Menu
               options={[
                 { text: "Change role", handler: changeRoleHandler },
-                { text: "Remove member", handler: () => {} },
+                { text: "Remove member", handler: removeMemberHandler },
                 {
                   text: "See profile",
                   handler: () =>
@@ -97,10 +97,30 @@ export default function GroupProfile() {
       for (let i = 0; i < prev.data.chats.chatMembers.length; i++) {
         if (prev.data.chats.chatMembers[i].id === selectedMember.id) {
           prev.data.chats.chatMembers[i].role = member.role;
-          4;
           return { ...prev };
         }
       }
+    });
+    setSelectedMember(null);
+  }
+  async function removeMemberHandler() {
+    if (
+      selectedMember.id === group.data.currentMember.id ||
+      selectedMember.highlight === "ADMIN" ||
+      group.data.currentMember.role !== "ADMIN"
+    )
+      return;
+    const removeMember = await requestHandler.delete(
+      selectedMember.id,
+      "chatMember",
+    );
+    if (removeMember) return alert(removeMember.error);
+
+    setGroup((prev) => {
+      prev.data.chats.chatMembers = prev.data.chats.chatMembers.filter(
+        (member) => member.id !== selectedMember.id,
+      );
+      return { ...prev };
     });
     setSelectedMember(null);
   }
