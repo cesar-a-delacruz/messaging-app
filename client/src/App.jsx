@@ -4,9 +4,9 @@ import { BrowserRouter } from "react-router-dom";
 import Index from "./routes/Index";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Index />
-    </BrowserRouter>
-  </StrictMode>,
+  // <StrictMode>
+  <BrowserRouter>
+    <Index />
+  </BrowserRouter>,
+  // </StrictMode>,
 );

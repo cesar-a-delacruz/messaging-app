@@ -1,17 +1,20 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader";
 import Image from "@/components/Image";
 import useGroup from "@/hooks/useGroup";
 import List from "@/components/List";
 import Menu from "@/components/Menu";
+import Dialog from "@/components/Dialog";
 
 export default function GroupProfile() {
   const id = useParams().id;
   const [group, setGroup] = useGroup(id);
   const [edit, setEdit] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [users, setUsers] = useState([]);
+  const usersDialog = useRef(null);
 
   if (!group.data)
     return <Loader text={!group.error ? "Getting group..." : group.error} />;
@@ -45,6 +48,44 @@ export default function GroupProfile() {
       )}
       <div>
         <h3>Members</h3>
+        <button
+          onClick={async () => {
+            const response = await requestHandler.get(
+              `user/not/chat/${group.data.chats.id}`,
+            );
+            if (response.data) setUsers(response.data);
+            usersDialog.current.showModal();
+          }}
+        >
+          Add member
+        </button>
+        <Dialog ref={usersDialog}>
+          <List
+            items={users.map((user) => ({
+              id: user.id,
+              title: user.username,
+              image: user.image,
+            }))}
+            clickHandler={async (user) => {
+              const chatMember = {
+                userId: user.id,
+                chatId: group.data.chats.id,
+              };
+
+              const response = await requestHandler.post(
+                chatMember,
+                "chatMember",
+              );
+
+              if (response.data)
+                setGroup((prev) => {
+                  prev.data.chats.chatMembers.push(response.data);
+                  return { ...prev };
+                });
+              usersDialog.current.close();
+            }}
+          />
+        </Dialog>
         <List
           items={group.data.chats.chatMembers.map((member) => ({
             id: member.id,
