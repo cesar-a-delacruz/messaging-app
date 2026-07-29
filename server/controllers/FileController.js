@@ -16,13 +16,13 @@ module.exports = class FileController extends Controller {
         console.info(row);
         return res
           .status(201)
-          .json({ message: "Item created successfully", data: row })
+          .json({ message: "Item created successfully.", data: row })
           .end();
       } catch (error) {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to create item", error })
+          .json({ message: "Failed to create item.", error })
           .end();
       }
     },
