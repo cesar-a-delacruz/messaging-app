@@ -8,6 +8,7 @@ module.exports = class Controller {
    */
   constructor(repository, validator) {
     this.repository = repository;
+    if (!validator) validator = { run: (req) => req };
     this.validator = validationMiddleware.bind(null, validator);
   }
 
