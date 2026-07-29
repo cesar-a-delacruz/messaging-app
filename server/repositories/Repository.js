@@ -1,5 +1,3 @@
-const parseData = require("../utils/parseData.js");
-
 module.exports = class Repository {
   /**
    * Allows the execution of database operations with a provided Entity
@@ -25,14 +23,14 @@ module.exports = class Repository {
   };
   create = async (data) => {
     const result = await this.entity.model.create({
-      data: parseData(data, this.entity.schema),
+      data: this.entity.parseData(data),
     });
     return result;
   };
   update = async (id, data) => {
     const result = await this.entity.model.update({
       where: { id },
-      data: parseData(data, this.entity.schema),
+      data: this.entity.parseData(data),
     });
     return result;
   };

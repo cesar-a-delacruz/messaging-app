@@ -1,10 +1,9 @@
-const parseData = require("../utils/parseData.js");
 const Repository = require("./Repository.js");
 
 module.exports = class ChatMemberRepository extends Repository {
   create = async (data) => {
     const result = await this.entity.model.create({
-      data: parseData(data, this.entity.schema),
+      data: this.entity.parseData(data),
       select: {
         id: true,
         role: true,
