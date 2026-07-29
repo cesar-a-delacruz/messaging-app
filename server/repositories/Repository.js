@@ -1,6 +1,6 @@
 module.exports = class Repository {
   /**
-   * Allows the execution of database operations with a provided Entity
+   * Allows the execution of database operations with a provided Entity.
    * @param {Entity} entity The entity that holds both the Prisma model and the schema.
    */
   constructor(entity) {
@@ -13,7 +13,7 @@ module.exports = class Repository {
    */
   findAll = async () => {
     const result = await this.entity.model.findMany();
-    if (result.length === 0) throw new Error("No rows have been found");
+    if (result.length === 0) throw new Error("No rows have been found.");
 
     return result;
   };
@@ -27,7 +27,7 @@ module.exports = class Repository {
     const result = await this.entity.model.findUnique({
       where: { id },
     });
-    if (!result) throw new Error("This row doesn't exists");
+    if (!result) throw new Error("This row doesn't exists.");
 
     return result;
   };

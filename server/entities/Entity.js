@@ -10,7 +10,7 @@ module.exports = class Entity {
   }
 
   /**
-   * Processes the data received to convert from string into the correct type
+   * Processes the data received to convert from string into the correct type.
    * @param {Object} data An object with keys (schema fields) and values in string.
    * @returns {Object}
    */

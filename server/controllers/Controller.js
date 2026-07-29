@@ -2,7 +2,7 @@ const validationMiddleware = require("../middlewares/validationMiddleware.js");
 
 module.exports = class Controller {
   /**
-   * Handles incoming request, validates input values (if any) and return responses
+   * Handles incoming request, validates input values (if any) and returns responses.
    * @param {Repository} repository The repository to perform database operations.
    * @param {RunnableValidationChains} validator The validator to validate request data with express-validator.
    */
@@ -17,13 +17,13 @@ module.exports = class Controller {
       console.table(rows);
       return res
         .status(200)
-        .json({ message: "Items found successfully", data: rows })
+        .json({ message: "Items found successfully.", data: rows })
         .end();
     } catch (error) {
       console.error(error);
       return res
         .status(500)
-        .json({ message: "Failed to find items", error })
+        .json({ message: "Failed to find items.", error })
         .end();
     }
   };
@@ -33,13 +33,13 @@ module.exports = class Controller {
       console.info(row);
       return res
         .status(200)
-        .json({ message: "Item found successfully", data: row })
+        .json({ message: "Item found successfully.", data: row })
         .end();
     } catch (error) {
       console.error(error);
       return res
         .status(500)
-        .json({ message: "Failed to find item", error })
+        .json({ message: "Failed to find item.", error })
         .end();
     }
   };
@@ -51,13 +51,13 @@ module.exports = class Controller {
         console.info(row);
         return res
           .status(201)
-          .json({ message: "Item created successfully", data: row })
+          .json({ message: "Item created successfully.", data: row })
           .end();
       } catch (error) {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to create item", error })
+          .json({ message: "Failed to create item.", error })
           .end();
       }
     },
@@ -73,7 +73,7 @@ module.exports = class Controller {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to update item", error })
+          .json({ message: "Failed to update item.", error })
           .end();
       }
     },
@@ -87,7 +87,7 @@ module.exports = class Controller {
       console.error(error);
       return res
         .status(500)
-        .json({ message: "Failed to delete item", error })
+        .json({ message: "Failed to delete item.", error })
         .end();
     }
   };
