@@ -1,4 +1,3 @@
-const { group } = require("../configs/dbConfig.js");
 const Repository = require("./Repository.js");
 
 module.exports = class ChatRepository extends Repository {

@@ -7,6 +7,7 @@ module.exports = class GroupRepository extends Repository {
       include: {
         chats: {
           select: {
+            id: true,
             chatMembers: {
               select: {
                 id: true,
