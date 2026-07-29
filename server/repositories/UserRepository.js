@@ -9,4 +9,12 @@ module.exports = class UserRepository extends Repository {
 
     return result;
   };
+  findAllNotInChat = async (chatId) => {
+    const result = await this.entity.model.findMany({
+      where: { NOT: { chatMember: { some: { chatId: chatId } } } },
+    });
+    if (!result.length) throw new Error("No matching rows were found");
+
+    return result;
+  };
 };
