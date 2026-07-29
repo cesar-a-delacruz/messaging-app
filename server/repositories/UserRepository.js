@@ -5,15 +5,16 @@ module.exports = class UserRepository extends Repository {
     const result = await this.entity.model.findMany({
       where: { NOT: { id: userId } },
     });
-    if (!result.length) throw new Error("No matching rows were found");
+    if (!result.length) throw new Error("No matching rows were found.");
 
     return result;
   };
   findAllNotInChat = async (chatId) => {
     const result = await this.entity.model.findMany({
-      where: { NOT: { chatMember: { some: { chatId: chatId } } } },
+      where: { NOT: { chatMember: { some: { chatId } } } },
+      omit: { fullname: true, bio: true },
     });
-    if (!result.length) throw new Error("No matching rows were found");
+    if (!result.length) throw new Error("No matching rows were found.");
 
     return result;
   };

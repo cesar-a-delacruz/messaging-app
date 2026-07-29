@@ -9,14 +9,12 @@ module.exports = class GroupRepository extends Repository {
           select: {
             id: true,
             chatMembers: {
-              select: {
-                id: true,
-                role: true,
+              omit: { chatId: true, userId: true },
+              include: {
                 user: {
-                  select: {
-                    id: true,
-                    username: true,
+                  omit: {
                     image: true,
+                    bio: true,
                   },
                 },
               },
@@ -25,7 +23,7 @@ module.exports = class GroupRepository extends Repository {
         },
       },
     });
-    if (!result) throw new Error("This row doesn't exists");
+    if (!result) throw new Error("This row doesn't exists.");
 
     return result;
   };

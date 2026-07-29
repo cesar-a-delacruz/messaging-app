@@ -7,15 +7,8 @@ module.exports = class MessageRepository extends Repository {
       orderBy: {
         createdAt: "asc",
       },
-      select: {
-        id: true,
-        content: true,
-        attachment: true,
-        createdAt: true,
-        authorId: true,
-      },
     });
-    if (!result.length) throw new Error("No matching rows were found");
+    if (!result.length) throw new Error("No matching rows were found.");
 
     return result;
   };

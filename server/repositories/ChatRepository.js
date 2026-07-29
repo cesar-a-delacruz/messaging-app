@@ -2,12 +2,11 @@ const Repository = require("./Repository.js");
 
 module.exports = class ChatRepository extends Repository {
   findAllByUser = async (userId) => {
-    console.log(userId);
     const result = await this.entity.model.findMany({
       where: {
         chatMembers: {
           some: {
-            userId: userId,
+            userId,
           },
         },
       },
@@ -18,35 +17,30 @@ module.exports = class ChatRepository extends Repository {
           select: {
             id: true,
             user: {
-              select: {
-                id: true,
+              omit: {
                 fullname: true,
-                username: true,
-                image: true,
+                bio: true,
               },
             },
           },
         },
         messages: {
-          orderBy: { createdAt: "desc" },
-          take: 1,
           select: {
             content: true,
             attachment: true,
             createdAt: true,
           },
+          orderBy: { createdAt: "desc" },
+          take: 1,
         },
         group: {
-          select: {
-            id: true,
-            name: true,
-            image: true,
+          omit: {
+            info: true,
           },
         },
       },
     });
-    console.log(result);
-    if (!result.length) throw new Error("No matching rows were found");
+    if (!result.length) throw new Error("No matching rows were found.");
 
     return result;
   };
@@ -74,18 +68,14 @@ module.exports = class ChatRepository extends Repository {
       select: {
         id: true,
         messages: {
-          orderBy: { createdAt: "desc" },
-          select: {
-            id: true,
-            content: true,
-            attachment: true,
-            createdAt: true,
-            authorId: true,
+          omit: {
+            chatId: true,
           },
+          orderBy: { createdAt: "desc" },
         },
       },
     });
-    if (!result) throw new Error("No matching rows were found");
+    if (!result) throw new Error("This row doesn't exists.");
 
     return result;
   };
@@ -96,28 +86,24 @@ module.exports = class ChatRepository extends Repository {
           {
             chatMembers: {
               some: {
-                userId: userId,
+                userId,
               },
             },
           },
-          { groupId: groupId },
+          { groupId },
         ],
       },
       select: {
         id: true,
         messages: {
-          orderBy: { createdAt: "desc" },
-          select: {
-            id: true,
-            content: true,
-            attachment: true,
-            createdAt: true,
-            authorId: true,
+          omit: {
+            chatId: true,
           },
+          orderBy: { createdAt: "desc" },
         },
       },
     });
-    if (!result) throw new Error("No matching rows were found");
+    if (!result) throw new Error("This row doesn't exists.");
 
     return result;
   };
