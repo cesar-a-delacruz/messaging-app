@@ -1,44 +1,40 @@
 import useChatList from "@/hooks/useChatList";
 import sessionHandler from "@/handlers/sessionHandler";
 import Loader from "@/components/Loader";
-import List from "@/components/List";
-import { useNavigate } from "react-router-dom";
+import ProfileList from "@/components/ProfileList";
 
 export default function MyChats() {
-  const navigate = useNavigate();
-  const [chats, setChats] = useChatList();
+  const chats = useChatList();
 
   if (!chats.data)
-    return <Loader text={!chats.error ? "Getting friends..." : chats.error} />;
+    return <Loader text={!chats.error ? "Getting chats..." : chats.error} />;
 
   return (
     <div className="page">
-      <List
+      <ProfileList
         items={chats.data.map((chat) => {
-          let item = {};
-          if (chat.group) item = chat.group;
+          let profile = {};
+          if (chat.group) profile = chat.group;
           else {
             for (const chatMember of chat.chatMembers) {
               if (chatMember.user.id !== sessionHandler.user().id)
-                item = chatMember.user;
+                profile = chatMember.user;
             }
           }
 
           return {
-            id: chat.id,
-            image: item.image,
-            title: !chat.group ? item.username : item.name,
+            id: profile.id,
+            image: profile.image,
+            title: !chat.group ? profile.username : profile.name,
             content: chat.messages[0].content
               ? chat.messages[0].content
               : "attachment",
-            profile: { type: !chat.group ? "user" : "group", id: item.id },
+            chat: {
+              type: !chat.group ? "user" : "group",
+              id: chat.id,
+            },
           };
         })}
-        clickHandler={(chat) => {
-          navigate(`/chat/${chat.id}`, {
-            state: { ...chat, item: { id: chat.id, type: "chat" } },
-          });
-        }}
       />
     </div>
   );

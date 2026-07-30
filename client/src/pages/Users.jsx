@@ -1,11 +1,9 @@
 import Loader from "@/components/Loader";
-import List from "@/components/List";
+import ProfileList from "@/components/ProfileList";
 import useGet from "@/hooks/useGet";
-import { useNavigate } from "react-router-dom";
 import sessionHandler from "@/handlers/sessionHandler";
 
 export default function Users() {
-  const navigate = useNavigate();
   const [users, setUsers] = useGet(`user/not/${sessionHandler.user().id}`);
 
   if (!users.data)
@@ -13,19 +11,17 @@ export default function Users() {
 
   return (
     <div className="page">
-      <List
+      <ProfileList
         items={users.data.map((user) => ({
           id: user.id,
           image: user.image,
           title: user.username,
           content: user.bio,
-          profile: { type: "user", id: user.id },
+          chat: {
+            type: "user",
+            id: "",
+          },
         }))}
-        clickHandler={(user) =>
-          navigate(`/chat`, {
-            state: { ...user, id: "", item: { id: user.id, type: "user" } },
-          })
-        }
       />
     </div>
   );
