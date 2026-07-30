@@ -10,6 +10,8 @@ export default function UserProfile() {
   const id = useParams().id;
   const [user, setUser] = useGet(`user/${id ? id : sessionHandler.user().id}`);
   const [edit, setEdit] = useState(false);
+  const isLoggedUserProfile =
+    user.data && user.data.id === sessionHandler.user().id;
 
   if (!user.data)
     return <Loader text={!user.error ? "Getting user..." : user.error} />;
@@ -18,7 +20,7 @@ export default function UserProfile() {
     <div className="page">
       <Image src={user.data.image} alt={`${user.data.fullname} picture`} />
       <h2
-        contentEditable={`${user.data.id === sessionHandler.user().id}`}
+        contentEditable={isLoggedUserProfile}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="fullname"
@@ -26,7 +28,7 @@ export default function UserProfile() {
         {user.data.fullname}
       </h2>
       <span
-        contentEditable={`${user.data.id === sessionHandler.user().id}`}
+        contentEditable={isLoggedUserProfile}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="username"
@@ -34,14 +36,14 @@ export default function UserProfile() {
         {user.data.username}
       </span>
       <p
-        contentEditable={`${user.data.id === sessionHandler.user().id}`}
+        contentEditable={isLoggedUserProfile}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="bio"
       >
         {user.data.bio}
       </p>
-      {user.data.id === sessionHandler.user().id && (
+      {isLoggedUserProfile && (
         <button
           disabled={!edit}
           onClick={async () => await requestHandler.put(user.data, "user")}
