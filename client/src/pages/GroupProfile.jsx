@@ -4,17 +4,20 @@ import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader";
 import Image from "@/components/Image";
 import useGroup from "@/hooks/useGroup";
-import List from "@/components/List";
+import Member from "@/components/Member";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
+import ProfileList from "@/components/ProfileList";
 
 export default function GroupProfile() {
   const id = useParams().id;
   const [group, setGroup] = useGroup(id);
   const [edit, setEdit] = useState(false);
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedMember, setSelectedMember] = useState({});
   const [users, setUsers] = useState([]);
   const usersDialog = useRef(null);
+  const isCurrentMemberAdmin =
+    group.data && group.data.currentMember.role === "ADMIN";
 
   if (!group.data)
     return <Loader text={!group.error ? "Getting group..." : group.error} />;
@@ -23,7 +26,7 @@ export default function GroupProfile() {
     <div className="page">
       <Image src={group.data.image} alt={`${group.data.name} picture`} />
       <h2
-        contentEditable={group.data.currentMember.role === "ADMIN"}
+        contentEditable={isCurrentMemberAdmin}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="name"
@@ -31,14 +34,14 @@ export default function GroupProfile() {
         {group.data.name}
       </h2>
       <p
-        contentEditable={group.data.currentMember.role === "ADMIN"}
+        contentEditable={isCurrentMemberAdmin}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id="info"
       >
         {group.data.info}
       </p>
-      {group.data.currentMember.role === "ADMIN" && (
+      {isCurrentMemberAdmin && (
         <button
           disabled={!edit}
           onClick={async () => await requestHandler.put(group.data, "group")}
@@ -50,66 +53,54 @@ export default function GroupProfile() {
         <h3>Members</h3>
         <button
           onClick={async () => {
+            if (group.data.currentMember.role !== "ADMIN") return;
+
             const response = await requestHandler.get(
               `user/not/chat/${group.data.chats.id}`,
             );
             if (response.data) setUsers(response.data);
+            else alert(response.error);
+
             usersDialog.current.showModal();
           }}
         >
           Add member
         </button>
         <Dialog ref={usersDialog}>
-          <List
+          <ProfileList
             items={users.map((user) => ({
               id: user.id,
-              title: user.username,
               image: user.image,
+              title: user.username,
             }))}
-            clickHandler={async (user) => {
-              const chatMember = {
-                userId: user.id,
-                chatId: group.data.chats.id,
-              };
-
-              const response = await requestHandler.post(
-                chatMember,
-                "chatMember",
-              );
-
-              if (response.data)
-                setGroup((prev) => {
-                  prev.data.chats.chatMembers.push(response.data);
-                  return { ...prev };
-                });
-              usersDialog.current.close();
-            }}
+            clickHandler={async (user) => createMemberHandler(user)}
           />
         </Dialog>
-        <List
-          items={group.data.chats.chatMembers.map((member) => ({
-            id: member.id,
-            title: member.user.username,
-            image: member.user.image,
-            highlight: member.role === "ADMIN" ? "ADMIN" : "",
-            userId: member.user.id,
-          }))}
-          clickHandler={(member) => setSelectedMember(member)}
-        >
-          {selectedMember && (
-            <Menu
-              options={[
-                { text: "Change role", handler: changeRoleHandler },
-                { text: "Remove member", handler: removeMemberHandler },
-                {
-                  text: "See profile",
-                  handler: () =>
-                    location.assign(`/profile/user/${selectedMember.userId}`),
-                },
-              ]}
-            />
-          )}
-        </List>
+        <div>
+          {group.data.chats.chatMembers.map((member) => (
+            <Member
+              key={member.id}
+              data={member}
+              contextMenuHandler={(member) => setSelectedMember(member)}
+            >
+              {selectedMember.id === member.id && (
+                <Menu
+                  options={[
+                    { text: "Change role", handler: changeRoleHandler },
+                    { text: "Remove member", handler: removeMemberHandler },
+                    {
+                      text: "See profile",
+                      handler: () =>
+                        location.assign(
+                          `/profile/user/${selectedMember.user.id}`,
+                        ),
+                    },
+                  ]}
+                />
+              )}
+            </Member>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -125,11 +116,27 @@ export default function GroupProfile() {
     setEdit(true);
   }
 
+  async function createMemberHandler(user) {
+    if (group.data.currentMember.role !== "ADMIN") return;
+    const chatMember = {
+      userId: user.id,
+      chatId: group.data.chats.id,
+    };
+
+    const response = await requestHandler.post(chatMember, "chatMember");
+
+    if (response.data)
+      setGroup((prev) => {
+        prev.data.chats.chatMembers.push(response.data);
+        return { ...prev };
+      });
+    usersDialog.current.close();
+  }
   async function changeRoleHandler() {
     if (selectedMember.id === group.data.currentMember.id) return;
     const member = {
       id: selectedMember.id,
-      role: selectedMember.highlight === "ADMIN" ? "NONE" : "ADMIN",
+      role: selectedMember.role === "ADMIN" ? "NONE" : "ADMIN",
     };
     const changeRole = await requestHandler.put(member, "chatMember");
     if (changeRole) return alert(changeRole.error);
@@ -142,12 +149,12 @@ export default function GroupProfile() {
         }
       }
     });
-    setSelectedMember(null);
+    setSelectedMember({});
   }
   async function removeMemberHandler() {
     if (
       selectedMember.id === group.data.currentMember.id ||
-      selectedMember.highlight === "ADMIN" ||
+      selectedMember.role === "ADMIN" ||
       group.data.currentMember.role !== "ADMIN"
     )
       return;
@@ -163,6 +170,6 @@ export default function GroupProfile() {
       );
       return { ...prev };
     });
-    setSelectedMember(null);
+    setSelectedMember({});
   }
 }
