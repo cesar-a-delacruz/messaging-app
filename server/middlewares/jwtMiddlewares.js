@@ -7,13 +7,12 @@ module.exports = {
   authenticate: async (req, res) => {
     const { username, password } = req.body;
 
-    const user = await dbConfig.user.findFirst({
+    const user = await dbConfig.user.findUnique({
       where: {
-        username: username,
+        username,
       },
       select: {
         id: true,
-        username: true,
         password: true,
       },
     });
@@ -21,8 +20,8 @@ module.exports = {
       return res
         .status(404)
         .json({
-          message: "Failed authentication",
-          error: "Wrong username",
+          message: "Failed authentication.",
+          error: "Wrong username.",
         })
         .end();
     // const match = await compare(password, user.password);
@@ -31,15 +30,14 @@ module.exports = {
       return res
         .status(401)
         .json({
-          message: "Failed authentication",
-          error: "Wrong password",
+          message: "Failed authentication.",
+          error: "Wrong password.",
         })
         .end();
 
     const token = jwt.sign(
       {
         id: user.id,
-        username: user.username,
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" },
@@ -47,7 +45,7 @@ module.exports = {
 
     return res
       .status(200)
-      .json({ message: "Successful authentication", token })
+      .json({ message: "Successful authentication.", token })
       .end();
   },
   autorize: async (req, res, next) => {
@@ -62,12 +60,12 @@ module.exports = {
     });
   },
   refresh: async (req, res) => {
-    const user = await dbConfig.user.findFirst({
-      where: { id: Number(req.params.id) },
+    const user = await dbConfig.user.findUnique({
+      where: { id: req.params.id },
     });
     if (!user) return res.sendStatus(401);
 
-    const payload = { id: user.id, username: user.username, role: user.role };
+    const payload = { id: user.id };
     const token = jwt.sign(payload, process.env.JWT_SECRET);
     return res
       .status(200)
