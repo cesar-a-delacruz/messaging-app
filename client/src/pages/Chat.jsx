@@ -7,19 +7,21 @@ import Form from "@/components/Form";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
 import Loader from "@/components/Loader";
-import Image from "@/components/Image";
 import { useLocation } from "react-router-dom";
 import useMessages from "@/hooks/useMessages";
+import Message from "@/components/Message";
+import FormField from "@/components/FormField";
 
 export default function Chat() {
   const locationState = useLocation().state;
-  const [messages, setMessages] = useMessages(locationState.item);
+  if (!locationState) return location.replace("/");
+  const [messages, setMessages] = useMessages(locationState);
   const [selectedMessage, setSelectedMessage] = useState({});
   const editDialog = useRef(null);
   const deleteDialog = useRef(null);
 
   allFields[2].value = sessionHandler.user().id;
-  allFields[3].value = locationState.id;
+  allFields[3].value = messages.chatId;
 
   if (!messages.data)
     return (
@@ -33,7 +35,7 @@ export default function Chat() {
           className={styles.data}
           onClick={() =>
             location.assign(
-              `/profile/${locationState.profile.type}/${locationState.profile.id}`,
+              `/profile/${locationState.chat.type}/${locationState.id}`,
             )
           }
         >
@@ -47,14 +49,15 @@ export default function Chat() {
       <div className={styles.messages}>
         {messages.data.length ? (
           messages.data.map((message) => (
-            <div
+            <Message
               key={message.id}
-              className={styles.messageContainer}
-              style={{
-                justifyContent:
-                  message.authorId === sessionHandler.user().id
-                    ? "end"
-                    : "start",
+              data={message}
+              styleJustifyContent={
+                message.authorId === sessionHandler.user().id ? "end" : "start"
+              }
+              contextMenuHandler={(message) => {
+                if (message.authorId === sessionHandler.user().id)
+                  setSelectedMessage(message);
               }}
             >
               {selectedMessage.id === message.id && (
@@ -71,37 +74,27 @@ export default function Chat() {
                   ]}
                 />
               )}
-              <div
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  if (message.authorId === sessionHandler.user().id)
-                    setSelectedMessage(message);
-                }}
-              >
-                <span>{message.createdAt}</span>
-                {message.content && <p>{message.content}</p>}
-                {message.attachment && <Image src={message.attachment} />}
-              </div>
-            </div>
+            </Message>
           ))
         ) : (
           <div>{messages.message}</div>
         )}
         <Dialog ref={editDialog}>
-          <input
-            type="text"
-            id="content"
+          <FormField
+            properties={allFields[0]}
             value={selectedMessage.content || ""}
-            onChange={(e) => {
-              const newContent = e.currentTarget.value;
-              setSelectedMessage({ ...selectedMessage, content: newContent });
-            }}
+            changeHandler={(id, value) =>
+              setSelectedMessage({ ...selectedMessage, [id]: value })
+            }
           />
           <button onClick={() => editHandler(selectedMessage)}>Edit</button>
         </Dialog>
         <Dialog ref={deleteDialog}>
           <p>Are you sure you want to delete this message?</p>
-          <input type="hidden" id="id" value={selectedMessage.id || ""} />
+          <FormField
+            properties={allFields[3]}
+            value={selectedMessage.id || ""}
+          />
           <button onClick={() => deleteHandler(selectedMessage)}>Yes</button>
         </Dialog>
       </div>
@@ -115,18 +108,23 @@ export default function Chat() {
   );
 
   async function submitHandler(message) {
-    if (!locationState.id && !messages.data.length) {
+    if (!messages.chatId && locationState.chat.type === "user") {
       const chat = await requestHandler.post({}, "chat");
+
       const loggedMember = await requestHandler.post(
         { chatId: chat.data.id, userId: sessionHandler.user().id },
         "chatMember",
       );
+      if (loggedMember.error) return alert(loggedMember.error);
       const otherMember = await requestHandler.post(
-        { chatId: chat.data.id, userId: locationState.item.id },
+        { chatId: chat.data.id, userId: locationState.id },
         "chatMember",
       );
+      if (otherMember.error) return alert(otherMember.error);
+
       message.chatId = chat.data.id;
-    } else if (!locationState.id) message.chatId = messages.chatId;
+    }
+
     const send = await requestHandler.postFile(message, "message");
     if (send.error) return alert(send.error);
 
