@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 /**
  * Gets and sorts all the chats of the logged user
- * @returns {[Object, SetStateAction]}
+ * @returns {Object}
  */
 export default function useChatList() {
   const [chats, setChats] = useState({});
@@ -27,5 +27,5 @@ export default function useChatList() {
     })();
   }, []);
 
-  return [chats, setChats];
+  return chats;
 }

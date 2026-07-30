@@ -12,28 +12,27 @@ export default function useMessages(item) {
   useEffect(() => {
     (async () => {
       let response = {};
-      switch (item.type) {
-        case "chat":
-          response = await requestHandler.get(`message/chat/${item.id}`);
-          break;
-        case "user":
-          response = await requestHandler.get(
-            `chat/loggedUser/${sessionHandler.user().id}/otherUser/${item.id}`,
-          );
-          if (response.data) {
-            response.chatId = response.data.id;
-            response.data = response.data.messages;
-          }
-          break;
-        case "group":
-          response = await requestHandler.get(
-            `chat/user/${sessionHandler.user().id}/group/${item.id}`,
-          );
-          if (response.data) {
-            response.chatId = response.data.id;
-            response.data = response.data.messages;
-          }
-          break;
+
+      if (item.chat.id) {
+        response = await requestHandler.get(`message/chat/${item.chat.id}`);
+        if (response.data) response.chatId = item.chat.id;
+      } else {
+        switch (item.chat.type) {
+          case "user":
+            response = await requestHandler.get(
+              `chat/loggedUser/${sessionHandler.user().id}/otherUser/${item.id}`,
+            );
+            break;
+          case "group":
+            response = await requestHandler.get(
+              `chat/user/${sessionHandler.user().id}/group/${item.id}`,
+            );
+            break;
+        }
+        if (response.data) {
+          response.chatId = response.data.id;
+          response.data = response.data.messages;
+        }
       }
 
       if (response.error) {
