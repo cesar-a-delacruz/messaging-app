@@ -4,6 +4,7 @@ module.exports = class MessageRepository extends Repository {
   findAllByChat = async (chatId) => {
     const result = await this.entity.model.findMany({
       where: { chatId },
+      omit: { chatId: true },
       orderBy: {
         createdAt: "asc",
       },
