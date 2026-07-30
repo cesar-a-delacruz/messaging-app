@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles/List.module.css";
 
-export default function ProfileList({ items }) {
+export default function ProfileList({ items, clickHandler }) {
   const navigate = useNavigate();
   const [list, setList] = useState(items);
 
@@ -15,7 +15,7 @@ export default function ProfileList({ items }) {
       {list.map((item) => (
         <div
           key={item.id}
-          onClick={() => clickHandler(item)}
+          onClick={() => itemHandler(item)}
           className={styles.item}
         >
           <img src={item.image} alt={`${item.title} picture`} />
@@ -28,7 +28,8 @@ export default function ProfileList({ items }) {
     </div>
   );
 
-  function clickHandler(item) {
+  function itemHandler(item) {
+    if (clickHandler) return clickHandler(item);
     navigate(`/chat`, {
       state: item,
     });
