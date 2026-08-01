@@ -17,6 +17,7 @@ export default function GroupProfile() {
   const [edit, setEdit] = useState(false);
   const [selectedMember, setSelectedMember] = useState({});
   const [users, setUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const usersDialog = useRef(null);
   const removeDialog = useRef(null);
   const isCurrentMemberAdmin =
@@ -67,7 +68,7 @@ export default function GroupProfile() {
             usersDialog.current.showModal();
           }}
         >
-          Add member
+          Add members
         </button>
         <Dialog ref={usersDialog}>
           <ProfileList
@@ -76,8 +77,11 @@ export default function GroupProfile() {
               image: user.image,
               title: user.username,
             }))}
-            clickHandler={async (user) => createMemberHandler(user)}
+            clickHandler={async (user) =>
+              setSelectedUsers([...selectedUsers, user])
+            }
           />
+          <button onClick={() => createMemberHandler()}>Add all</button>
         </Dialog>
         <div>
           {group.data.chats.chatMembers.map((member) => (
@@ -130,20 +134,33 @@ export default function GroupProfile() {
     setEdit(true);
   }
 
-  async function createMemberHandler(user) {
+  async function createMemberHandler() {
     if (group.data.currentMember.role !== "ADMIN") return;
-    const chatMember = {
-      userId: user.id,
-      chatId: group.data.chats.id,
-    };
 
-    const response = await requestHandler.post(chatMember, "chatMember");
+    let chatMembers = [];
+    for (const user of selectedUsers) {
+      chatMembers.push({
+        userId: user.id,
+        chatId: group.data.chats.id,
+      });
+    }
+
+    const response = await requestHandler.post(
+      {
+        chatMembers: JSON.stringify(chatMembers),
+      },
+      "chatMember",
+    );
 
     if (response.data)
       setGroup((prev) => {
-        prev.data.chats.chatMembers.push(response.data);
+        prev.data.chats.chatMembers = [
+          ...prev.data.chats.chatMembers,
+          ...response.data,
+        ];
         return { ...prev };
       });
+    setSelectedUsers([]);
     usersDialog.current.close();
   }
   async function changeRoleHandler() {
