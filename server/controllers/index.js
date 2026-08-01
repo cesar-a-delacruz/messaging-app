@@ -5,6 +5,7 @@ const ChatController = require("./ChatController.js");
 const FileController = require("./FileController.js");
 const repositories = require("../repositories/index.js");
 const validators = require("../validators/index.js");
+const ChatMemberController = require("./ChatMemberController.js");
 
 module.exports = {
   user: new UserController(repositories.user, validators.user, "image"),
@@ -14,6 +15,6 @@ module.exports = {
     "attachment",
   ),
   chat: new ChatController(repositories.chat),
-  chatMember: new Controller(repositories.chatMember),
+  chatMember: new ChatMemberController(repositories.chatMember),
   group: new FileController(repositories.group, validators.group, "image"),
 };
