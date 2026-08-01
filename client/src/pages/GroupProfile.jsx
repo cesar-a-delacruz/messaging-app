@@ -8,6 +8,8 @@ import Member from "@/components/Member";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
 import ProfileList from "@/components/ProfileList";
+import { allFields } from "@/schemas/chatMemberSchema";
+import FormField from "@/components/FormField";
 
 export default function GroupProfile() {
   const id = useParams().id;
@@ -16,6 +18,7 @@ export default function GroupProfile() {
   const [selectedMember, setSelectedMember] = useState({});
   const [users, setUsers] = useState([]);
   const usersDialog = useRef(null);
+  const removeDialog = useRef(null);
   const isCurrentMemberAdmin =
     group.data && group.data.currentMember.role === "ADMIN";
 
@@ -87,7 +90,10 @@ export default function GroupProfile() {
                 <Menu
                   options={[
                     { text: "Change role", handler: changeRoleHandler },
-                    { text: "Remove member", handler: removeMemberHandler },
+                    {
+                      text: "Remove member",
+                      handler: () => removeDialog.current.showModal(),
+                    },
                     {
                       text: "See profile",
                       handler: () =>
@@ -101,6 +107,14 @@ export default function GroupProfile() {
             </Member>
           ))}
         </div>
+        <Dialog ref={removeDialog}>
+          <p>Are you sure you want to remove this member?</p>
+          <FormField
+            properties={allFields[0]}
+            value={selectedMember.id || ""}
+          />
+          <button onClick={() => removeMemberHandler()}>Yes</button>
+        </Dialog>
       </div>
     </div>
   );
@@ -171,5 +185,6 @@ export default function GroupProfile() {
       return { ...prev };
     });
     setSelectedMember({});
+    removeDialog.current.close();
   }
 }
