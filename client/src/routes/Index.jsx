@@ -9,6 +9,7 @@ import UserProfile from "@/pages/UserProfile";
 import GroupProfile from "@/pages/GroupProfile";
 import Chat from "@/pages/Chat";
 import Groups from "@/pages/Groups";
+import NewGroup from "@/pages/NewGroup";
 
 export default function Index() {
   return (
@@ -21,6 +22,7 @@ export default function Index() {
         <Route index element={<MyChats />} />
         <Route path="users" element={<Users />} />
         <Route path="groups" element={<Groups />} />
+        <Route path="groups/new" element={<NewGroup />} />
         <Route path="profile/user/:id?" element={<UserProfile />} />
         <Route path="profile/group/:id" element={<GroupProfile />} />
         <Route path="chat" element={<Chat />} />

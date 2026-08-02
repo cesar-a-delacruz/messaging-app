@@ -17,7 +17,11 @@ export default function Main() {
           <a href="/users">Users</a>
           <a href="/groups">Groups</a>
         </nav>
+
         <footer>
+          <button onClick={() => location.assign("/groups/new")}>
+            Create Group
+          </button>
           <button onClick={() => sessionHandler.logout()}>Logout</button>
           <p>
             Developed by{" "}
