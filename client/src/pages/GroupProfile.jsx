@@ -3,56 +3,39 @@ import { useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { allFields } from "@/schemas/chatMemberSchema";
 import Loader from "@/components/Loader";
-import Image from "@/components/Image";
 import useGroup from "@/hooks/useGroup";
 import Member from "@/components/Member";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
 import ProfileList from "@/components/ProfileList";
 import FormField from "@/components/FormField";
+import Profile from "@/components/Profile";
 
 export default function GroupProfile() {
   const id = useParams().id;
   const [group, setGroup] = useGroup(id);
-  const [edit, setEdit] = useState(false);
   const [selectedMember, setSelectedMember] = useState({});
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const usersDialog = useRef(null);
   const removeDialog = useRef(null);
-  const isCurrentMemberAdmin =
-    group.data && group.data.currentMember.role === "ADMIN";
 
   if (!group.data)
     return <Loader text={!group.error ? "Getting group..." : group.error} />;
 
   return (
     <div className="page">
-      <Image src={group.data.image} alt={`${group.data.name} picture`} />
-      <h2
-        contentEditable={isCurrentMemberAdmin}
-        suppressContentEditableWarning={true}
-        onInput={inputHandler}
-        id="name"
-      >
-        {group.data.name}
-      </h2>
-      <p
-        contentEditable={isCurrentMemberAdmin}
-        suppressContentEditableWarning={true}
-        onInput={inputHandler}
-        id="info"
-      >
-        {group.data.info}
-      </p>
-      {isCurrentMemberAdmin && (
-        <button
-          disabled={!edit}
-          onClick={async () => await requestHandler.put(group.data, "group")}
-        >
-          Edit
-        </button>
-      )}
+      <Profile
+        initialData={{
+          image: { id: "image", value: group.data.image },
+          title: { id: "name", value: group.data.name },
+          content: { id: "info", value: group.data.info },
+        }}
+        contentEditable={group.data.currentMember.role === "ADMIN"}
+        editHandler={async (data) =>
+          await requestHandler.put({ ...data, id: group.data.id }, "group")
+        }
+      />
       <div>
         <h3>Members</h3>
         <button
@@ -126,17 +109,6 @@ export default function GroupProfile() {
       </div>
     </div>
   );
-
-  function inputHandler(event) {
-    const key = event.currentTarget.id;
-    const value = event.currentTarget.innerHTML;
-
-    setGroup((prev) => {
-      prev.data[key] = value;
-      return prev;
-    });
-    setEdit(true);
-  }
 
   async function createMemberHandler() {
     if (group.data.currentMember.role !== "ADMIN") return;
