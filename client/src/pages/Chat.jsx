@@ -1,16 +1,16 @@
+import { useLocation } from "react-router-dom";
 import { useState, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
-import styles from "./styles/Chat.module.css";
 import sessionHandler from "@/handlers/sessionHandler";
 import { allFields } from "@/schemas/messageSchema";
+import useMessages from "@/hooks/useMessages";
 import Form from "@/components/Form";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
 import Loader from "@/components/Loader";
-import { useLocation } from "react-router-dom";
-import useMessages from "@/hooks/useMessages";
 import Message from "@/components/Message";
 import FormField from "@/components/FormField";
+import styles from "./styles/Chat.module.css";
 
 export default function Chat() {
   const locationState = useLocation().state;

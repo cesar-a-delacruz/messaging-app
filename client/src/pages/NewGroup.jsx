@@ -1,10 +1,10 @@
+import { useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
+import sessionHandler from "@/handlers/sessionHandler";
 import { allFields } from "@/schemas/groupSchema";
 import Form from "@/components/Form";
 import Dialog from "@/components/Dialog";
 import ProfileList from "@/components/ProfileList";
-import { useRef, useState } from "react";
-import sessionHandler from "@/handlers/sessionHandler";
 import Member from "@/components/Member";
 
 export default function NewGroup() {

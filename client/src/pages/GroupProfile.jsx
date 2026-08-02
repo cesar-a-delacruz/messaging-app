@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
+import { allFields } from "@/schemas/chatMemberSchema";
 import Loader from "@/components/Loader";
 import Image from "@/components/Image";
 import useGroup from "@/hooks/useGroup";
@@ -8,7 +9,6 @@ import Member from "@/components/Member";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
 import ProfileList from "@/components/ProfileList";
-import { allFields } from "@/schemas/chatMemberSchema";
 import FormField from "@/components/FormField";
 
 export default function GroupProfile() {

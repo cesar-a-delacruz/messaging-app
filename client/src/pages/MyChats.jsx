@@ -1,5 +1,5 @@
-import useChatList from "@/hooks/useChatList";
 import sessionHandler from "@/handlers/sessionHandler";
+import useChatList from "@/hooks/useChatList";
 import Loader from "@/components/Loader";
 import ProfileList from "@/components/ProfileList";
 

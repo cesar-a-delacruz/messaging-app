@@ -1,9 +1,9 @@
+import useGet from "@/hooks/useGet";
 import Loader from "@/components/Loader";
 import ProfileList from "@/components/ProfileList";
-import useGet from "@/hooks/useGet";
 
 export default function Groups() {
-  const [groups, setGroups] = useGet("group");
+  const [groups] = useGet("group");
 
   if (!groups.data)
     return <Loader text={!groups.error ? "Getting groups..." : groups.error} />;

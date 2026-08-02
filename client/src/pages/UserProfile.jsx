@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import useGet from "@/hooks/useGet";
 import sessionHandler from "@/handlers/sessionHandler";
 import requestHandler from "@/handlers/requestHandler";
+import useGet from "@/hooks/useGet";
 import Loader from "@/components/Loader";
 import Image from "@/components/Image";
 
