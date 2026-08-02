@@ -2,10 +2,10 @@ const Controller = require("./Controller.js");
 const MessageController = require("./MessageController.js");
 const UserController = require("./UserController.js");
 const ChatController = require("./ChatController.js");
-const FileController = require("./FileController.js");
 const repositories = require("../repositories/index.js");
 const validators = require("../validators/index.js");
 const ChatMemberController = require("./ChatMemberController.js");
+const GroupController = require("./GroupController.js");
 
 module.exports = {
   user: new UserController(repositories.user, validators.user, "image"),
@@ -16,5 +16,5 @@ module.exports = {
   ),
   chat: new ChatController(repositories.chat),
   chatMember: new ChatMemberController(repositories.chatMember),
-  group: new FileController(repositories.group, validators.group, "image"),
+  group: new GroupController(repositories.group, validators.group, "image"),
 };

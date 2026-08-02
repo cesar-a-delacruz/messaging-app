@@ -27,4 +27,13 @@ module.exports = class GroupRepository extends Repository {
 
     return result;
   };
+  create = async (data, members) => {
+    const result = await this.entity.model.create({
+      data: {
+        ...this.entity.parseData(data),
+        chats: { create: { chatMembers: { create: members } } },
+      },
+    });
+    return result;
+  };
 };
