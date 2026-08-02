@@ -4,11 +4,16 @@ module.exports = class ChatRepository extends Repository {
   findAllByUser = async (userId) => {
     const result = await this.entity.model.findMany({
       where: {
-        chatMembers: {
-          some: {
-            userId,
+        AND: [
+          {
+            chatMembers: {
+              some: {
+                userId,
+              },
+            },
           },
-        },
+          { messages: { some: {} } },
+        ],
       },
       distinct: ["id"],
       select: {
