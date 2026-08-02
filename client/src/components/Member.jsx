@@ -8,11 +8,10 @@ export default function Member({ data, children, contextMenuHandler }) {
         contextMenuHandler(data);
       }}
     >
-      <img src={data.user.image} alt={`${data.user.username} picture`} />
+      <img src={data.image} alt={`${data.username} picture`} />
       <div className={styles.text}>
         <h3>
-          {data.user.username}{" "}
-          <span>{data.role === "NONE" ? "" : "ADMIN"}</span>
+          {data.username} <span>{data.role === "ADMIN" ? "ADMIN" : ""}</span>
         </h3>
       </div>
       {children}

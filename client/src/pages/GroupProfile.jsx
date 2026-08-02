@@ -87,7 +87,11 @@ export default function GroupProfile() {
           {group.data.chats.chatMembers.map((member) => (
             <Member
               key={member.id}
-              data={member}
+              data={{
+                ...member,
+                username: member.user.username,
+                image: member.user.image,
+              }}
               contextMenuHandler={(member) => setSelectedMember(member)}
             >
               {selectedMember.id === member.id && (
