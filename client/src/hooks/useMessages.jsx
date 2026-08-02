@@ -35,7 +35,7 @@ export default function useMessages(item) {
         }
       }
 
-      if (response.error) {
+      if (response.error || !response.data.length) {
         response.message = "Start a convesation :)";
         response.data = [];
       }
