@@ -34,7 +34,7 @@ export function dispatcher(state, action) {
 
     case actions.changeRole:
       prev.data.members = prev.data.members.map((member) => {
-        if (member.id === action.payload.memberId)
+        if (member.id === state.data.selected.id)
           member.role = action.payload.memberRole;
         return member;
       });
@@ -43,7 +43,7 @@ export function dispatcher(state, action) {
 
     case actions.remove:
       prev.data.members = prev.data.members.filter(
-        (member) => member.id !== action.payload.memberId,
+        (member) => member.id !== state.data.selected.id,
       );
       prev.data.selected = {};
       return { ...prev };

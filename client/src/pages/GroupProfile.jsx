@@ -169,7 +169,7 @@ export default function GroupProfile() {
       return;
 
     const member = {
-      id: chatMembers.data.selected.id,
+      ...chatMembers.data.selected,
       role: chatMembers.data.selected.role === "ADMIN" ? "NONE" : "ADMIN",
     };
     const changeRole = await requestHandler.put(member, "chatMember");
@@ -177,7 +177,7 @@ export default function GroupProfile() {
 
     dispatchChatMembers({
       type: actions.changeRole,
-      payload: { memberId: member.id, memberRole: member.role },
+      payload: { memberRole: member.role },
     });
   }
   async function removeMemberHandler() {
@@ -196,7 +196,6 @@ export default function GroupProfile() {
 
     dispatchChatMembers({
       type: actions.remove,
-      payload: { memberId: chatMembers.data.selected.id },
     });
 
     removeDialog.current.close();
