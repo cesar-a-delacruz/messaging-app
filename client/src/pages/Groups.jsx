@@ -21,6 +21,7 @@ export default function Groups() {
             id: "",
           },
         }))}
+        clickHandler={(item) => location.assign(`/profile/group/${item.id}`)}
       />
     </div>
   );
