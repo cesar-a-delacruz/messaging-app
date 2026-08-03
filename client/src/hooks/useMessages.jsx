@@ -15,7 +15,12 @@ export default function useMessages(item) {
 
       if (item.chat.id) {
         response = await requestHandler.get(`message/chat/${item.chat.id}`);
-        if (response.data) response.chatId = item.chat.id;
+        if (response.data)
+          response.data = {
+            messages: response.data,
+            selected: {},
+            chatId: item.chat.id,
+          };
       } else {
         switch (item.chat.type) {
           case "user":
@@ -30,17 +35,20 @@ export default function useMessages(item) {
             break;
         }
         if (response.data) {
-          response.chatId = response.data.id;
-          response.data = response.data.messages;
+          response.data = {
+            messages: response.data.messages,
+            selected: {},
+            chatId: response.data.id,
+          };
         }
       }
 
-      if (response.error || !response.data.length) {
+      if (response.error || !response.data.messages.length) {
         response.message = "Start a convesation :)";
-        response.data = [];
+        response.data = {};
       }
 
-      response.data.sort(
+      response.data.messages.sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       );

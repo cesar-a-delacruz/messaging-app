@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import sessionHandler from "@/handlers/sessionHandler";
 import { allFields } from "@/schemas/messageSchema";
@@ -16,12 +16,11 @@ export default function Chat() {
   const locationState = useLocation().state;
   if (!locationState) return location.replace("/");
   const [messages, setMessages] = useMessages(locationState);
-  const [selectedMessage, setSelectedMessage] = useState({});
   const editDialog = useRef(null);
   const deleteDialog = useRef(null);
 
   allFields[2].value = sessionHandler.user().id;
-  allFields[3].value = messages.chatId;
+  allFields[3].value = messages.data ? messages.data.chatId : "";
 
   if (!messages.data)
     return (
@@ -47,8 +46,8 @@ export default function Chat() {
         </div>
       </div>
       <div className={styles.messages}>
-        {messages.data.length ? (
-          messages.data.map((message) => (
+        {messages.data.messages.length ? (
+          messages.data.messages.map((message) => (
             <Message
               key={message.id}
               data={message}
@@ -57,10 +56,16 @@ export default function Chat() {
               }
               contextMenuHandler={(message) => {
                 if (message.authorId === sessionHandler.user().id)
-                  setSelectedMessage(message);
+                  setMessages({
+                    ...messages,
+                    data: {
+                      ...messages.data,
+                      selected: message,
+                    },
+                  });
               }}
             >
-              {selectedMessage.id === message.id && (
+              {messages.data.selected.id === message.id && (
                 <Menu
                   options={[
                     {
@@ -82,20 +87,26 @@ export default function Chat() {
         <Dialog ref={editDialog}>
           <FormField
             properties={allFields[0]}
-            value={selectedMessage.content || ""}
+            value={messages.data.selected.content || ""}
             changeHandler={(id, value) =>
-              setSelectedMessage({ ...selectedMessage, [id]: value })
+              setMessages({
+                ...messages,
+                data: {
+                  ...messages.data,
+                  selected: { ...messages.data.selected, [id]: value },
+                },
+              })
             }
           />
-          <button onClick={() => editHandler(selectedMessage)}>Edit</button>
+          <button onClick={() => editHandler()}>Edit</button>
         </Dialog>
         <Dialog ref={deleteDialog}>
           <p>Are you sure you want to delete this message?</p>
           <FormField
             properties={allFields[3]}
-            value={selectedMessage.id || ""}
+            value={messages.data.selected.id || ""}
           />
-          <button onClick={() => deleteHandler(selectedMessage)}>Yes</button>
+          <button onClick={() => deleteHandler()}>Yes</button>
         </Dialog>
       </div>
       <div className={styles.footer}>
@@ -108,7 +119,7 @@ export default function Chat() {
   );
 
   async function submitHandler(message) {
-    if (!messages.chatId && locationState.chat.type === "user") {
+    if (!messages.data.chatId && locationState.chat.type === "user") {
       const chat = await requestHandler.post({}, "chat");
 
       const loggedMember = await requestHandler.post(
@@ -128,29 +139,49 @@ export default function Chat() {
     const send = await requestHandler.postFile(message, "message");
     if (send.error) return alert(send.error);
 
-    setMessages({ ...messages, data: [...messages.data, send.data] });
+    setMessages({
+      ...messages,
+      data: {
+        ...messages.data,
+        messages: [...messages.data.messages, send.data],
+      },
+    });
   }
-  async function editHandler(message) {
-    const messageContent = { id: message.id, content: message.content };
+  async function editHandler() {
+    const messageContent = {
+      id: messages.data.selected.id,
+      content: messages.data.selected.content,
+    };
     const edited = await requestHandler.put(messageContent, "message");
     if (edited) return alert(edited.error);
 
     setMessages({
       ...messages,
-      data: messages.data.map((m) => {
-        if (m.id == messageContent.id) m.content = messageContent.content;
-        return m;
-      }),
+      data: {
+        ...messages.data,
+        messages: messages.data.messages.map((m) => {
+          if (m.id == messageContent.id) m.content = messageContent.content;
+          return m;
+        }),
+      },
     });
     editDialog.current.close();
   }
-  async function deleteHandler(message) {
-    const removed = await requestHandler.delete(message.id, "message");
+  async function deleteHandler() {
+    const removed = await requestHandler.delete(
+      messages.data.selected.id,
+      "message",
+    );
     if (removed) return alert(removed.error);
 
     setMessages({
       ...messages,
-      data: messages.data.filter((m) => m.id !== message.id),
+      data: {
+        ...messages.data,
+        messages: messages.data.messages.filter(
+          (m) => m.id !== messages.data.selected.id,
+        ),
+      },
     });
     deleteDialog.current.close();
   }
