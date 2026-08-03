@@ -1,9 +1,9 @@
 import { useLocation } from "react-router-dom";
-import { useRef } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import sessionHandler from "@/handlers/sessionHandler";
 import { allFields } from "@/schemas/messageSchema";
-import useMessages from "@/hooks/useMessages";
+import { actions, dispatcher } from "@/reducers/messageReducer";
 import Form from "@/components/Form";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
@@ -15,17 +15,57 @@ import styles from "./styles/Chat.module.css";
 export default function Chat() {
   const locationState = useLocation().state;
   if (!locationState) return location.replace("/");
-  const [messages, setMessages] = useMessages(locationState);
+  const [messages, dispatchMessages] = useReducer(dispatcher, {});
   const editDialog = useRef(null);
   const deleteDialog = useRef(null);
 
-  allFields[2].value = sessionHandler.user().id;
-  allFields[3].value = messages.data ? messages.data.chatId : "";
+  useEffect(() => {
+    (async () => {
+      let response = {};
+
+      if (locationState.chat.id) {
+        response = await requestHandler.get(
+          `message/chat/${locationState.chat.id}`,
+        );
+        if (response.data)
+          response.data = {
+            messages: response.data,
+            selected: {},
+            chatId: locationState.chat.id,
+          };
+      } else {
+        switch (locationState.chat.type) {
+          case "user":
+            response = await requestHandler.get(
+              `chat/loggedUser/${sessionHandler.user().id}/otherUser/${locationState.id}`,
+            );
+            break;
+          case "group":
+            response = await requestHandler.get(
+              `chat/user/${sessionHandler.user().id}/group/${locationState.id}`,
+            );
+            break;
+        }
+        if (response.data) {
+          response.data = {
+            messages: response.data.messages,
+            selected: {},
+            chatId: response.data.id,
+          };
+        }
+      }
+
+      dispatchMessages({ type: actions.load, payload: { response } });
+    })();
+  }, []);
 
   if (!messages.data)
     return (
       <Loader text={!messages.error ? "Getting messages..." : messages.error} />
     );
+
+  allFields[2].value = sessionHandler.user().id;
+  allFields[3].value = messages.data.chatId;
 
   return (
     <div className={styles.chat}>
@@ -56,12 +96,9 @@ export default function Chat() {
               }
               contextMenuHandler={(message) => {
                 if (message.authorId === sessionHandler.user().id)
-                  setMessages({
-                    ...messages,
-                    data: {
-                      ...messages.data,
-                      selected: message,
-                    },
+                  dispatchMessages({
+                    type: actions.select,
+                    payload: { selectedMessage: message },
                   });
               }}
             >
@@ -89,12 +126,9 @@ export default function Chat() {
             properties={allFields[0]}
             value={messages.data.selected.content || ""}
             changeHandler={(id, value) =>
-              setMessages({
-                ...messages,
-                data: {
-                  ...messages.data,
-                  selected: { ...messages.data.selected, [id]: value },
-                },
+              dispatchMessages({
+                type: actions.changeSelected,
+                payload: { id, value },
               })
             }
           />
@@ -106,7 +140,7 @@ export default function Chat() {
             properties={allFields[3]}
             value={messages.data.selected.id || ""}
           />
-          <button onClick={() => deleteHandler()}>Yes</button>
+          <button onClick={() => removeHandler()}>Yes</button>
         </Dialog>
       </div>
       <div className={styles.footer}>
@@ -139,49 +173,31 @@ export default function Chat() {
     const send = await requestHandler.postFile(message, "message");
     if (send.error) return alert(send.error);
 
-    setMessages({
-      ...messages,
-      data: {
-        ...messages.data,
-        messages: [...messages.data.messages, send.data],
+    dispatchMessages({
+      type: actions.add,
+      payload: {
+        data: send.data,
       },
     });
   }
   async function editHandler() {
-    const messageContent = {
-      id: messages.data.selected.id,
-      content: messages.data.selected.content,
-    };
-    const edited = await requestHandler.put(messageContent, "message");
+    const edited = await requestHandler.put(messages.data.selected, "message");
     if (edited) return alert(edited.error);
 
-    setMessages({
-      ...messages,
-      data: {
-        ...messages.data,
-        messages: messages.data.messages.map((m) => {
-          if (m.id == messageContent.id) m.content = messageContent.content;
-          return m;
-        }),
-      },
+    dispatchMessages({
+      type: actions.edit,
     });
     editDialog.current.close();
   }
-  async function deleteHandler() {
+  async function removeHandler() {
     const removed = await requestHandler.delete(
       messages.data.selected.id,
       "message",
     );
     if (removed) return alert(removed.error);
 
-    setMessages({
-      ...messages,
-      data: {
-        ...messages.data,
-        messages: messages.data.messages.filter(
-          (m) => m.id !== messages.data.selected.id,
-        ),
-      },
+    dispatchMessages({
+      type: actions.remove,
     });
     deleteDialog.current.close();
   }
