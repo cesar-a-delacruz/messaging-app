@@ -43,7 +43,7 @@ export function dispatcher(state, action) {
 
     case actions.remove:
       prev.data.members = prev.data.members.filter(
-        (member) => member.id !== state.data.selected.id,
+        (member) => member.id !== action.payload.id,
       );
       prev.data.selected = {};
       return { ...prev };

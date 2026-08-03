@@ -20,6 +20,7 @@ export default function GroupProfile() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const usersDialog = useRef(null);
   const removeDialog = useRef(null);
+  const exitDialog = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -75,6 +76,9 @@ export default function GroupProfile() {
           }}
         >
           Add members
+        </button>
+        <button onClick={async () => exitDialog.current.showModal()}>
+          Exit group
         </button>
         <Dialog ref={usersDialog}>
           <ProfileList
@@ -134,6 +138,21 @@ export default function GroupProfile() {
           />
           <button onClick={() => removeMemberHandler()}>Yes</button>
         </Dialog>
+        <Dialog ref={exitDialog}>
+          <p>Are you sure you want to exit this group?</p>
+          <FormField
+            properties={allFields[0]}
+            value={chatMembers.data.currentMember.id || ""}
+          />
+          <button
+            onClick={() => {
+              removeMemberHandler(chatMembers.data.currentMember.id);
+              exitDialog.current.close();
+            }}
+          >
+            Yes
+          </button>
+        </Dialog>
       </div>
     </div>
   );
@@ -180,7 +199,7 @@ export default function GroupProfile() {
       payload: { memberRole: member.role },
     });
   }
-  async function removeMemberHandler() {
+  async function removeMemberHandler(id) {
     if (
       chatMembers.data.selected.id === chatMembers.data.currentMember.id ||
       chatMembers.data.selected.role === "ADMIN" ||
@@ -188,14 +207,12 @@ export default function GroupProfile() {
     )
       return;
 
-    const removeMember = await requestHandler.delete(
-      chatMembers.data.selected.id,
-      "chatMember",
-    );
+    const removeMember = await requestHandler.delete(id, "chatMember");
     if (removeMember) return alert(removeMember.error);
 
     dispatchChatMembers({
       type: actions.remove,
+      payload: { id },
     });
 
     removeDialog.current.close();
