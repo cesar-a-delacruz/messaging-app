@@ -119,7 +119,7 @@ export default function Chat() {
             </Message>
           ))
         ) : (
-          <div>{messages.message}</div>
+          <div>Start a convesation :)</div>
         )}
         <Dialog ref={editDialog}>
           <FormField

@@ -14,11 +14,9 @@ export function dispatcher(state, action) {
     case actions.load:
       if (
         action.payload.response.error ||
-        !action.payload.response.data.messages.length
-      ) {
-        action.payload.response.message = "Start a convesation :)";
+        !action.payload.response.data.messages
+      )
         action.payload.response.data = {};
-      }
 
       action.payload.response.data.messages.sort(
         (a, b) =>
