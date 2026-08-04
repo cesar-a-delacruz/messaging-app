@@ -62,24 +62,26 @@ export default function GroupProfile() {
       />
       <div>
         <h3>Members</h3>
-        <button
-          onClick={async () => {
-            if (chatMembers.data.currentMember.role !== "ADMIN") return;
+        {chatMembers.data.currentMember.role === "ADMIN" && (
+          <button
+            onClick={async () => {
+              const response = await requestHandler.get(
+                `user/not/chat/${group.data.chats[0].id}`,
+              );
+              if (response.data) setUsers(response.data);
+              else alert(response.error);
 
-            const response = await requestHandler.get(
-              `user/not/chat/${group.data.chats[0].id}`,
-            );
-            if (response.data) setUsers(response.data);
-            else alert(response.error);
-
-            usersDialog.current.showModal();
-          }}
-        >
-          Add members
-        </button>
-        <button onClick={async () => exitDialog.current.showModal()}>
-          Exit group
-        </button>
+              usersDialog.current.showModal();
+            }}
+          >
+            Add members
+          </button>
+        )}
+        {chatMembers.data.currentMember && (
+          <button onClick={async () => exitDialog.current.showModal()}>
+            Exit group
+          </button>
+        )}
         <Dialog ref={usersDialog}>
           <ProfileList
             items={users.map((user) => ({

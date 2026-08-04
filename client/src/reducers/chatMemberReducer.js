@@ -13,16 +13,17 @@ export function dispatcher(state, action) {
 
   switch (action.type) {
     case actions.load:
-      for (const member of action.payload.response.data) {
+      action.payload.response.data = {
+        selected: {},
+        members: action.payload.response.data,
+      };
+      for (const member of action.payload.response.data.members) {
         if (member.userId === sessionHandler.user().id) {
-          action.payload.response.data = {
-            selected: {},
-            members: action.payload.response.data,
-            currentMember: member,
-          };
-          return { ...action.payload.response };
+          action.payload.response.data.currentMember = member;
+          break;
         }
       }
+      return { ...action.payload.response };
 
     case actions.add:
       prev.data.members = [...prev.data.members, ...action.payload.data];
