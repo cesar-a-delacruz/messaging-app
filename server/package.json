@@ -7,6 +7,7 @@
     "migrate": "npx prisma migrate dev",
     "reset": "npx prisma migrate reset",
     "seed": "npx prisma db seed",
+    "restore": "npm run reset && npm run seed",
     "generate": "npx prisma generate",
     "test": "npx jest"
   },
