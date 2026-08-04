@@ -24,8 +24,8 @@ module.exports = {
           error: "Wrong username.",
         })
         .end();
-    // const match = await compare(password, user.password);
-    const match = password === user.password.trim();
+
+    const match = await compare(password, user.password);
     if (!match)
       return res
         .status(401)
@@ -34,7 +34,6 @@ module.exports = {
           error: "Wrong password.",
         })
         .end();
-
     const token = jwt.sign(
       {
         id: user.id,

@@ -1,4 +1,5 @@
 const dbConfig = require("../configs/dbConfig.js");
+const { hash } = require("bcryptjs");
 
 (async function main() {
   const users = await dbConfig.user.createManyAndReturn({
@@ -6,25 +7,25 @@ const dbConfig = require("../configs/dbConfig.js");
       {
         username: "fakeuser1",
         fullname: "fake user 1",
-        password: "fakepassword",
+        password: await hash("fakepassword", 10),
       },
       {
         username: "fakeuser2",
         fullname: "fake user 2",
-        password: "fakepassword",
+        password: await hash("fakepassword", 10),
         bio: "fake bio 2",
       },
       {
         username: "fakeuser3",
         fullname: "fake user 3",
-        password: "fakepassword",
+        password: await hash("fakepassword", 10),
         bio: "fake bio 3",
         image: "/user.webp",
       },
       {
         username: "fakeuser4",
         fullname: "fake user 4",
-        password: "fakepassword",
+        password: await hash("fakepassword", 10),
         bio: "fake bio 3",
         image: "/user.webp",
       },
