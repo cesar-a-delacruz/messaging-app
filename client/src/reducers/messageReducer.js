@@ -13,7 +13,15 @@ export function dispatcher(state, action) {
   switch (action.type) {
     case actions.load:
       const initial = { ...action.payload.response };
-      if (initial.error || !initial.data.messages) initial.data = {};
+      console.log(initial);
+      if (initial.error) {
+        initial.data = {
+          selected: {},
+          messages: [],
+          chatId: "",
+        };
+        return initial;
+      }
 
       initial.data.messages.sort(
         (a, b) =>

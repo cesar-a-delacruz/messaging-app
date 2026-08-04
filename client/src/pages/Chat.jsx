@@ -156,16 +156,18 @@ export default function Chat() {
     if (!messages.data.chatId && locationState.chat.type === "user") {
       const chat = await requestHandler.post({}, "chat");
 
-      const loggedMember = await requestHandler.post(
+      let newChatMembers = [
         { chatId: chat.data.id, userId: sessionHandler.user().id },
-        "chatMember",
-      );
-      if (loggedMember.error) return alert(loggedMember.error);
-      const otherMember = await requestHandler.post(
         { chatId: chat.data.id, userId: locationState.id },
+      ];
+
+      const addMembers = await requestHandler.post(
+        {
+          chatMembers: JSON.stringify(newChatMembers),
+        },
         "chatMember",
       );
-      if (otherMember.error) return alert(otherMember.error);
+      if (addMembers.error) return alert(addMembers.error);
 
       message.chatId = chat.data.id;
     }
