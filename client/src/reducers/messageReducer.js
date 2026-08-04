@@ -12,17 +12,14 @@ export function dispatcher(state, action) {
 
   switch (action.type) {
     case actions.load:
-      if (
-        action.payload.response.error ||
-        !action.payload.response.data.messages
-      )
-        action.payload.response.data = {};
+      const initial = { ...action.payload.response };
+      if (initial.error || !initial.data.messages) initial.data = {};
 
-      action.payload.response.data.messages.sort(
+      initial.data.messages.sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       );
-      return { ...action.payload.response };
+      return { ...initial };
 
     case actions.add:
       prev.data.messages = [...prev.data.messages, action.payload.data];

@@ -13,20 +13,24 @@ export function dispatcher(state, action) {
 
   switch (action.type) {
     case actions.load:
-      action.payload.response.data = {
+      const initial = { ...action.payload.response };
+      initial.data = {
         selected: {},
-        members: action.payload.response.data,
+        members: [...initial.data],
       };
-      for (const member of action.payload.response.data.members) {
+      for (const member of initial.data.members) {
         if (member.userId === sessionHandler.user().id) {
-          action.payload.response.data.currentMember = member;
+          initial.data.currentMember = member;
           break;
         }
       }
-      return { ...action.payload.response };
+      return initial;
 
     case actions.add:
-      prev.data.members = [...prev.data.members, ...action.payload.data];
+      prev.data.members = [
+        ...prev.data.members,
+        ...action.payload.response.data,
+      ];
       return { ...prev };
 
     case actions.select:
@@ -49,6 +53,4 @@ export function dispatcher(state, action) {
       prev.data.selected = {};
       return { ...prev };
   }
-
-  return state;
 }
