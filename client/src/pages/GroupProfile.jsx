@@ -56,28 +56,32 @@ export default function GroupProfile() {
           title: { id: "name", value: group.data.name },
           content: { id: "info", value: group.data.info },
         }}
-        contentEditable={chatMembers.data.currentMember.role === "ADMIN"}
+        contentEditable={
+          chatMembers.data.currentMember &&
+          chatMembers.data.currentMember.role === "ADMIN"
+        }
         editHandler={async (data) =>
           await requestHandler.put({ ...data, id: group.data.id }, "group")
         }
       />
       <div>
         <h3>Members</h3>
-        {chatMembers.data.currentMember.role === "ADMIN" && (
-          <button
-            onClick={async () => {
-              const response = await requestHandler.get(
-                `user/not/chat/${group.data.chats[0].id}`,
-              );
-              if (response.data) setUsers(response.data);
-              else alert(response.error);
+        {chatMembers.data.currentMember &&
+          chatMembers.data.currentMember.role === "ADMIN" && (
+            <button
+              onClick={async () => {
+                const response = await requestHandler.get(
+                  `user/not/chat/${group.data.chats[0].id}`,
+                );
+                if (response.data) setUsers(response.data);
+                else alert(response.error);
 
-              usersDialog.current.showModal();
-            }}
-          >
-            Add members
-          </button>
-        )}
+                usersDialog.current.showModal();
+              }}
+            >
+              Add members
+            </button>
+          )}
         {chatMembers.data.currentMember && (
           <>
             <button onClick={async () => exitDialog.current.showModal()}>
@@ -160,21 +164,23 @@ export default function GroupProfile() {
           />
           <button onClick={() => removeMemberHandler()}>Yes</button>
         </Dialog>
-        <Dialog ref={exitDialog}>
-          <p>Are you sure you want to exit this group?</p>
-          <FormField
-            properties={allFields[0]}
-            value={chatMembers.data.currentMember.id || ""}
-          />
-          <button
-            onClick={() => {
-              removeMemberHandler(chatMembers.data.currentMember.id);
-              exitDialog.current.close();
-            }}
-          >
-            Yes
-          </button>
-        </Dialog>
+        {chatMembers.data.currentMember && (
+          <Dialog ref={exitDialog}>
+            <p>Are you sure you want to exit this group?</p>
+            <FormField
+              properties={allFields[0]}
+              value={chatMembers.data.currentMember.id || ""}
+            />
+            <button
+              onClick={() => {
+                removeMemberHandler(chatMembers.data.currentMember.id);
+                exitDialog.current.close();
+              }}
+            >
+              Yes
+            </button>
+          </Dialog>
+        )}
       </div>
     </div>
   );
