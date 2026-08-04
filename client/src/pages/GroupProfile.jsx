@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useReducer, useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { allFields } from "@/schemas/chatMemberSchema";
@@ -14,6 +14,7 @@ import Profile from "@/components/Profile";
 
 export default function GroupProfile() {
   const id = useParams().id;
+  const navigate = useNavigate();
   const [group] = useGet(`group/${id}`);
   const [chatMembers, dispatchChatMembers] = useReducer(dispatcher, {});
   const [users, setUsers] = useState([]);
@@ -78,9 +79,28 @@ export default function GroupProfile() {
           </button>
         )}
         {chatMembers.data.currentMember && (
-          <button onClick={async () => exitDialog.current.showModal()}>
-            Exit group
-          </button>
+          <>
+            <button onClick={async () => exitDialog.current.showModal()}>
+              Exit group
+            </button>
+            <button
+              onClick={async () =>
+                navigate(`/chat`, {
+                  state: {
+                    id: group.data.id,
+                    image: group.data.image,
+                    title: group.data.name,
+                    chat: {
+                      type: "group",
+                      id: "",
+                    },
+                  },
+                })
+              }
+            >
+              View chat
+            </button>
+          </>
         )}
         <Dialog ref={usersDialog}>
           <ProfileList
