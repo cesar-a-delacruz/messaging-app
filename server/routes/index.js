@@ -17,7 +17,7 @@ module.exports = {
       "loggedUser/:loggedUserId/otherUser/:otherUserId",
       "findOneByUsers",
     )
-    .route("get", "user/:userId/group/:groupId", "findOneByUserAndGroup"),
+    .route("get", "group/:groupId", "findOneByGroup"),
   chatMember: new Router("chatMember", controllers.chatMember)
     .routeREST()
     .route("get", "group/:groupId", "findAll"),

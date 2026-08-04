@@ -36,12 +36,9 @@ module.exports = class ChatController extends Controller {
         .end();
     }
   };
-  findOneByUserAndGroup = async (req, res) => {
+  findOneByGroup = async (req, res) => {
     try {
-      const row = await this.repository.findOneByUserAndGroup(
-        req.params.userId,
-        req.params.groupId,
-      );
+      const row = await this.repository.findOneByGroup(req.params.groupId);
       console.info(row);
       return res
         .status(200)

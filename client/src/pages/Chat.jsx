@@ -42,7 +42,7 @@ export default function Chat() {
             break;
           case "group":
             response = await requestHandler.get(
-              `chat/user/${sessionHandler.user().id}/group/${locationState.id}`,
+              `chat/group/${locationState.id}`,
             );
             break;
         }

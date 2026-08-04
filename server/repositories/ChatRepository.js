@@ -84,19 +84,10 @@ module.exports = class ChatRepository extends Repository {
 
     return result;
   };
-  findOneByUserAndGroup = async (userId, groupId) => {
+  findOneByGroup = async (groupId) => {
     const result = await this.entity.model.findFirst({
       where: {
-        AND: [
-          {
-            chatMembers: {
-              some: {
-                userId,
-              },
-            },
-          },
-          { groupId },
-        ],
+        groupId,
       },
       select: {
         id: true,
