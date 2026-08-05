@@ -12,6 +12,8 @@ export default function UserProfile() {
   if (!user.data)
     return <Loader text={!user.error ? "Getting user..." : user.error} />;
 
+  const isLoggedUserProfile = user.data.id === sessionHandler.user().id;
+
   return (
     <div className="page">
       <Profile
@@ -21,10 +23,18 @@ export default function UserProfile() {
           subtitle: { id: "username", value: user.data.username },
           content: { id: "bio", value: user.data.bio },
         }}
-        contentEditable={user.data.id === sessionHandler.user().id}
-        editHandler={async (data) =>
-          await requestHandler.put({ ...data, id: user.data.id }, "user")
-        }
+        edit={{
+          isAllowed: isLoggedUserProfile,
+          handler: async (data) =>
+            await requestHandler.put({ ...data, id: user.data.id }, "user"),
+        }}
+        options={[
+          {
+            text: "Change credentials",
+            handler: () => location.assign("/auth/change"),
+            hide: !isLoggedUserProfile,
+          },
+        ]}
       />
     </div>
   );
