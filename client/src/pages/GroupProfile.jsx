@@ -48,6 +48,17 @@ export default function GroupProfile() {
       />
     );
 
+  const isLoggedUserMember = chatMembers.data.currentMember;
+  const isCurrentMemberAdmin =
+    isLoggedUserMember && chatMembers.data.currentMember.role === "ADMIN";
+
+  const isMemberSelected = chatMembers.data.selected.id;
+  const isCurrentMemberSelected =
+    isMemberSelected &&
+    chatMembers.data.selected.id === chatMembers.data.currentMember.id;
+  const isSelectedMemberAdmin =
+    isMemberSelected && chatMembers.data.selected.role === "ADMIN";
+
   return (
     <div className="page">
       <Profile
@@ -56,69 +67,50 @@ export default function GroupProfile() {
           title: { id: "name", value: group.data.name },
           content: { id: "info", value: group.data.info },
         }}
-        contentEditable={
-          chatMembers.data.currentMember &&
-          chatMembers.data.currentMember.role === "ADMIN"
-        }
-        editHandler={async (data) =>
-          await requestHandler.put({ ...data, id: group.data.id }, "group")
-        }
+        edit={{
+          isAllowed: isCurrentMemberAdmin,
+          handler: async (data) =>
+            await requestHandler.put({ ...data, id: group.data.id }, "group"),
+        }}
+        options={[
+          {
+            text: "Add member",
+            handler: async () => {
+              const response = await requestHandler.get(
+                `user/not/chat/${group.data.chats[0].id}`,
+              );
+              if (response.data) setUsers(response.data);
+              else alert(response.error);
+
+              usersDialog.current.showModal();
+            },
+            hide: !isCurrentMemberAdmin,
+          },
+          {
+            text: "Exit group",
+            handler: () => exitDialog.current.showModal(),
+            hide: !isLoggedUserMember,
+          },
+          {
+            text: "View chat",
+            handler: async () =>
+              navigate(`/chat`, {
+                state: {
+                  id: group.data.id,
+                  image: group.data.image,
+                  title: group.data.name,
+                  chat: {
+                    type: "group",
+                    id: "",
+                  },
+                },
+              }),
+            hide: !isLoggedUserMember,
+          },
+        ]}
       />
       <div>
         <h3>Members</h3>
-        {chatMembers.data.currentMember &&
-          chatMembers.data.currentMember.role === "ADMIN" && (
-            <button
-              onClick={async () => {
-                const response = await requestHandler.get(
-                  `user/not/chat/${group.data.chats[0].id}`,
-                );
-                if (response.data) setUsers(response.data);
-                else alert(response.error);
-
-                usersDialog.current.showModal();
-              }}
-            >
-              Add members
-            </button>
-          )}
-        {chatMembers.data.currentMember && (
-          <>
-            <button onClick={async () => exitDialog.current.showModal()}>
-              Exit group
-            </button>
-            <button
-              onClick={async () =>
-                navigate(`/chat`, {
-                  state: {
-                    id: group.data.id,
-                    image: group.data.image,
-                    title: group.data.name,
-                    chat: {
-                      type: "group",
-                      id: "",
-                    },
-                  },
-                })
-              }
-            >
-              View chat
-            </button>
-          </>
-        )}
-        <Dialog ref={usersDialog}>
-          <ProfileList
-            items={users.map((user) => ({
-              id: user.id,
-              image: user.image,
-              title: user.username,
-            }))}
-            clickHandler={async (user) =>
-              setSelectedUsers([...selectedUsers, user])
-            }
-          />
-          <button onClick={() => addMemberHandler()}>Add all</button>
-        </Dialog>
         <div>
           {chatMembers.data.members.map((member) => (
             <Member
@@ -135,36 +127,54 @@ export default function GroupProfile() {
                 })
               }
             >
-              {chatMembers.data.selected.id === member.id && (
-                <Menu
-                  options={[
-                    { text: "Change role", handler: changeMemberRoleHandler },
-                    {
-                      text: "Remove member",
-                      handler: () => removeDialog.current.showModal(),
-                    },
-                    {
-                      text: "See profile",
-                      handler: () =>
-                        location.assign(
-                          `/profile/user/${chatMembers.data.selected.user.id}`,
-                        ),
-                    },
-                  ]}
-                />
-              )}
+              {chatMembers.data.selected.id === member.id &&
+                !isCurrentMemberSelected && (
+                  <Menu
+                    options={[
+                      { text: "Change role", handler: changeMemberRoleHandler },
+                      {
+                        text: "Remove member",
+                        handler: () => removeDialog.current.showModal(),
+                      },
+                      {
+                        text: "See profile",
+                        handler: () =>
+                          location.assign(
+                            `/profile/user/${chatMembers.data.selected.user.id}`,
+                          ),
+                      },
+                    ]}
+                  />
+                )}
             </Member>
           ))}
         </div>
-        <Dialog ref={removeDialog}>
-          <p>Are you sure you want to remove this member?</p>
-          <FormField
-            properties={allFields[0]}
-            value={chatMembers.data.selected.id || ""}
-          />
-          <button onClick={() => removeMemberHandler()}>Yes</button>
-        </Dialog>
-        {chatMembers.data.currentMember && (
+        {isCurrentMemberAdmin && (
+          <Dialog ref={usersDialog}>
+            <ProfileList
+              items={users.map((user) => ({
+                id: user.id,
+                image: user.image,
+                title: user.username,
+              }))}
+              clickHandler={async (user) =>
+                setSelectedUsers([...selectedUsers, user])
+              }
+            />
+            <button onClick={() => addMemberHandler()}>Add all</button>
+          </Dialog>
+        )}
+        {(!isSelectedMemberAdmin || isCurrentMemberAdmin) && (
+          <Dialog ref={removeDialog}>
+            <p>Are you sure you want to remove this member?</p>
+            <FormField
+              properties={allFields[0]}
+              value={chatMembers.data.selected.id || ""}
+            />
+            <button onClick={() => removeMemberHandler()}>Yes</button>
+          </Dialog>
+        )}
+        {isLoggedUserMember && (
           <Dialog ref={exitDialog}>
             <p>Are you sure you want to exit this group?</p>
             <FormField
@@ -173,7 +183,7 @@ export default function GroupProfile() {
             />
             <button
               onClick={() => {
-                removeMemberHandler(chatMembers.data.currentMember.id);
+                removeMemberHandler();
                 exitDialog.current.close();
               }}
             >
@@ -186,8 +196,6 @@ export default function GroupProfile() {
   );
 
   async function addMemberHandler() {
-    if (chatMembers.data.currentMember.role !== "ADMIN") return;
-
     let newChatMembers = [];
     for (const user of selectedUsers) {
       newChatMembers.push({
@@ -212,12 +220,9 @@ export default function GroupProfile() {
     usersDialog.current.close();
   }
   async function changeMemberRoleHandler() {
-    if (chatMembers.data.selected.id === chatMembers.data.currentMember.id)
-      return;
-
     const member = {
       ...chatMembers.data.selected,
-      role: chatMembers.data.selected.role === "ADMIN" ? "NONE" : "ADMIN",
+      role: isSelectedMemberAdmin ? "NONE" : "ADMIN",
     };
     const changeRole = await requestHandler.put(member, "chatMember");
     if (changeRole) return alert(changeRole.error);
@@ -227,20 +232,16 @@ export default function GroupProfile() {
       payload: { memberRole: member.role },
     });
   }
-  async function removeMemberHandler(id) {
-    if (
-      chatMembers.data.selected.id === chatMembers.data.currentMember.id ||
-      chatMembers.data.selected.role === "ADMIN" ||
-      chatMembers.data.currentMember.role !== "ADMIN"
-    )
-      return;
-
-    const removeMember = await requestHandler.delete(id, "chatMember");
+  async function removeMemberHandler() {
+    const removeMember = await requestHandler.delete(
+      chatMembers.data.selected.id,
+      "chatMember",
+    );
     if (removeMember) return alert(removeMember.error);
 
     dispatchChatMembers({
       type: actions.remove,
-      payload: { id },
+      payload: { id: chatMembers.data.selected.id },
     });
 
     removeDialog.current.close();
