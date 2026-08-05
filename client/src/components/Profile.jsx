@@ -1,51 +1,52 @@
 import { useState } from "react";
 import Image from "@/components/Image";
 
-export default function Profile({ initialData, contentEditable, editHandler }) {
+export default function Profile({ initialData, edit = {}, options = [] }) {
   const [data, setData] = useState(initialData);
 
   return (
-    <div className="page">
+    <div className="profile">
       <Image src={data.image.value} alt={`${data.title.value} picture`} />
       <h2
-        contentEditable={contentEditable}
+        contentEditable={edit.isAllowed}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id={"title"}
       >
         {data.title.value}
       </h2>
-      {data.subtitle && (
-        <span
-          contentEditable={contentEditable}
-          suppressContentEditableWarning={true}
-          onInput={inputHandler}
-          id={"subtitle"}
-        >
-          {data.subtitle.value}
-        </span>
-      )}
+      {data.subtitle && <span id={"subtitle"}>{data.subtitle.value}</span>}
       <p
-        contentEditable={contentEditable}
+        contentEditable={edit.isAllowed}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id={"content"}
       >
         {data.content.value}
       </p>
-      {contentEditable && (
+      {edit.isAllowed && (
         <button
           onClick={() => {
             const newData = {};
             Object.keys(data).forEach((key) => {
               newData[data[key].id] = data[key].value;
             });
-            editHandler(newData);
+            edit.handler(newData);
           }}
         >
           Edit
         </button>
       )}
+      <div className="options">
+        {options.map(
+          (option) =>
+            !option.hide && (
+              <button key={option.text} onClick={() => option.handler()}>
+                {option.text}
+              </button>
+            ),
+        )}
+      </div>
     </div>
   );
 
