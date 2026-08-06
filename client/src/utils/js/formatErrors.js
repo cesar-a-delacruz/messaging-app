@@ -4,24 +4,17 @@
  * @returns {Object} errors in the response.
  */
 export default async function formatErrors(response) {
-  let errorMessage;
+  const server = await response.json();
   switch (response.status) {
-    case 500:
-      const server = await response.json();
-      errorMessage = server.message + "\n" + JSON.stringify(server.error);
-      console.error(server.error);
-      return { error: errorMessage };
     case 422:
-      const validation = await response.json();
-      console.error(validation.errors);
-
-      errorMessage = validation.message;
-      Object.keys(validation.errors).forEach((error) => {
-        errorMessage += "\n" + validation.errors[error].msg;
+      console.error(server.errors);
+      let errorMessage = server.message;
+      Object.keys(server.errors).forEach((error) => {
+        errorMessage += "\n" + server.errors[error].msg;
       });
       return { error: errorMessage };
     default:
-      console.error(response);
-      return { error: JSON.stringify(response) };
+      console.error(server.message);
+      return { error: server.message || JSON.stringify(response) };
   }
 }

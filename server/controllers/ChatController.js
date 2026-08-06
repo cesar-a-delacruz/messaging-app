@@ -8,20 +8,14 @@ module.exports = class ChatController extends Controller {
       if (!rows.length)
         return res
           .status(404)
-          .json({ message: "No items heve been found.", data: rows })
+          .json({ message: "No items heve been found." })
           .end();
 
       console.table(rows);
-      return res
-        .status(200)
-        .json({ message: "Items found successfully.", data: rows })
-        .end();
+      return res.status(200).json({ data: rows }).end();
     } catch (error) {
       console.error(error);
-      return res
-        .status(500)
-        .json({ message: "Failed to find items.", error })
-        .end();
+      return res.status(500).json({ message: "Failed to find items." }).end();
     }
   };
   findOneByUsers = async (req, res) => {
@@ -34,20 +28,14 @@ module.exports = class ChatController extends Controller {
       if (!row)
         return res
           .status(404)
-          .json({ message: "This item doesn't exists.", data: row })
+          .json({ message: "This item doesn't exists." })
           .end();
 
       console.info(row);
-      return res
-        .status(200)
-        .json({ message: "Item found successfully.", data: row })
-        .end();
+      return res.status(200).json({ data: row }).end();
     } catch (error) {
       console.error(error);
-      return res
-        .status(500)
-        .json({ message: "Failed to find item.", error })
-        .end();
+      return res.status(500).json({ message: "Failed to find item." }).end();
     }
   };
   findOneByGroup = async (req, res) => {
@@ -57,20 +45,14 @@ module.exports = class ChatController extends Controller {
       if (!row)
         return res
           .status(404)
-          .json({ message: "This item doesn't exists.", data: row })
+          .json({ message: "This item doesn't exists." })
           .end();
 
       console.info(row);
-      return res
-        .status(200)
-        .json({ message: "Item found successfully.", data: row })
-        .end();
+      return res.status(200).json({ data: row }).end();
     } catch (error) {
       console.error(error);
-      return res
-        .status(500)
-        .json({ message: "Failed to find item.", error })
-        .end();
+      return res.status(500).json({ message: "Failed to find item." }).end();
     }
   };
 };

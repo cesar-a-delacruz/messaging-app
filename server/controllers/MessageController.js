@@ -9,20 +9,14 @@ module.exports = class MessageController extends FileController {
       if (!rows.length)
         return res
           .status(404)
-          .json({ message: "No items heve been found.", data: rows })
+          .json({ message: "No items heve been found." })
           .end();
 
       console.table(rows);
-      return res
-        .status(200)
-        .json({ message: "Items found successfully.", data: rows })
-        .end();
+      return res.status(200).json({ data: rows }).end();
     } catch (error) {
       console.error(error);
-      return res
-        .status(500)
-        .json({ message: "Failed to find items.", error })
-        .end();
+      return res.status(500).json({ message: "Failed to find items." }).end();
     }
   };
 };

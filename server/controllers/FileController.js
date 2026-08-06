@@ -14,15 +14,12 @@ module.exports = class FileController extends Controller {
       try {
         const row = await this.repository.create(req.body);
         console.info(row);
-        return res
-          .status(201)
-          .json({ message: "Item created successfully.", data: row })
-          .end();
+        return res.status(201).json({ data: row }).end();
       } catch (error) {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to create item.", error })
+          .json({ message: "Failed to create item." })
           .end();
       }
     },

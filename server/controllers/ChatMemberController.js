@@ -8,7 +8,7 @@ module.exports = class ChatMemberController extends Controller {
       if (!rows.length)
         return res
           .status(404)
-          .json({ message: "No items heve been found.", data: rows })
+          .json({ message: "No items heve been found." })
           .end();
 
       console.table(rows);
@@ -18,10 +18,7 @@ module.exports = class ChatMemberController extends Controller {
         .end();
     } catch (error) {
       console.error(error);
-      return res
-        .status(500)
-        .json({ message: "Failed to find items.", error })
-        .end();
+      return res.status(500).json({ message: "Failed to find items." }).end();
     }
   };
   create = [
@@ -32,15 +29,12 @@ module.exports = class ChatMemberController extends Controller {
           JSON.parse(req.body.chatMembers),
         );
         console.info(rows);
-        return res
-          .status(201)
-          .json({ message: "Items created successfully.", data: rows })
-          .end();
+        return res.status(201).json({ data: rows }).end();
       } catch (error) {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to create items.", error })
+          .json({ message: "Failed to create items." })
           .end();
       }
     },

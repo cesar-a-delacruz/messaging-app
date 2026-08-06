@@ -19,20 +19,14 @@ module.exports = class Controller {
       if (!rows.length)
         return res
           .status(404)
-          .json({ message: "No items heve been found.", data: rows })
+          .json({ message: "No items heve been found." })
           .end();
 
       console.table(rows);
-      return res
-        .status(200)
-        .json({ message: "Items found successfully.", data: rows })
-        .end();
+      return res.status(200).json({ data: rows }).end();
     } catch (error) {
       console.error(error);
-      return res
-        .status(500)
-        .json({ message: "Failed to find items.", error })
-        .end();
+      return res.status(500).json({ message: "Failed to find items." }).end();
     }
   };
   findOne = async (req, res) => {
@@ -46,16 +40,10 @@ module.exports = class Controller {
           .end();
 
       console.info(row);
-      return res
-        .status(200)
-        .json({ message: "Item found successfully.", data: row })
-        .end();
+      return res.status(200).json({ data: row }).end();
     } catch (error) {
       console.error(error);
-      return res
-        .status(500)
-        .json({ message: "Failed to find item.", error })
-        .end();
+      return res.status(500).json({ message: "Failed to find item." }).end();
     }
   };
   create = [
@@ -64,15 +52,12 @@ module.exports = class Controller {
       try {
         const row = await this.repository.create(req.body);
         console.info(row);
-        return res
-          .status(201)
-          .json({ message: "Item created successfully.", data: row })
-          .end();
+        return res.status(201).json({ data: row }).end();
       } catch (error) {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to create item.", error })
+          .json({ message: "Failed to create item." })
           .end();
       }
     },
@@ -95,7 +80,7 @@ module.exports = class Controller {
 
         return res
           .status(500)
-          .json({ message: "Failed to update item.", error })
+          .json({ message: "Failed to update item." })
           .end();
       }
     },
@@ -114,10 +99,7 @@ module.exports = class Controller {
           .json({ message: "Can't find an item to delete." })
           .end();
 
-      return res
-        .status(500)
-        .json({ message: "Failed to delete item.", error })
-        .end();
+      return res.status(500).json({ message: "Failed to delete item." }).end();
     }
   };
 };

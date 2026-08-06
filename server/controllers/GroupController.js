@@ -11,15 +11,12 @@ module.exports = class GroupController extends FileController {
           JSON.parse(req.body.chatMembers),
         );
         console.info(rows);
-        return res
-          .status(201)
-          .json({ message: "Items created successfully.", data: rows })
-          .end();
+        return res.status(201).json({ data: rows }).end();
       } catch (error) {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to create items.", error })
+          .json({ message: "Failed to create items." })
           .end();
       }
     },
