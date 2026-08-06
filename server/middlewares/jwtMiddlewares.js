@@ -21,7 +21,7 @@ module.exports = {
         return res
           .status(400)
           .json({
-            message: "Credentials mismatch. Incorrect username.",
+            error: "Credentials mismatch. Incorrect username.",
           })
           .end();
 
@@ -30,7 +30,7 @@ module.exports = {
         return res
           .status(400)
           .json({
-            message: "Credentials mismatch. Incorrect password.",
+            error: "Credentials mismatch. Incorrect password.",
           })
           .end();
 
@@ -45,7 +45,7 @@ module.exports = {
       return res.status(200).json({ token }).end();
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "Failed to find user." }).end();
+      return res.status(500).json({ error: "Failed to find user." }).end();
     }
   },
   authorize: async (req, res, next) => {

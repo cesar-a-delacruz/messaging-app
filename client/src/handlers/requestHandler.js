@@ -1,13 +1,17 @@
-import formatErrors from "@/utils/js/formatErrors.js";
-
+/**
+ * Handles all requests for CRUD operations.
+ */
 export default {
   get: async (path) => {
     const response = await fetch(`${import.meta.env.VITE_SERVER}/${path}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     });
 
-    if (!response.ok) return formatErrors(response);
-    return await response.json();
+    const json = await response.json();
+    if (response.ok) return json;
+
+    console.error(json.error);
+    return { error: json.error };
   },
   post: async (data, path) => {
     const response = await fetch(`${import.meta.env.VITE_SERVER}/${path}`, {
@@ -18,8 +22,11 @@ export default {
       body: new URLSearchParams(data),
     });
 
-    if (!response.ok) return formatErrors(response);
-    return await response.json();
+    const json = await response.json();
+    if (response.ok) return json;
+
+    console.error(json.error);
+    return { error: json.error };
   },
   postFile: async (data, path) => {
     const formData = new FormData();
@@ -35,8 +42,11 @@ export default {
       body: formData,
     });
 
-    if (!response.ok) return formatErrors(response);
-    return await response.json();
+    const json = await response.json();
+    if (response.ok) return json;
+
+    console.error(json.error);
+    return { error: json.error };
   },
   put: async (data, path) => {
     const response = await fetch(
@@ -50,7 +60,11 @@ export default {
       },
     );
 
-    if (!response.ok) return formatErrors(response);
+    if (response.ok) return;
+
+    const json = await response.json();
+    console.error(json.error);
+    return { error: json.error };
   },
   delete: async (id, path) => {
     const response = await fetch(
@@ -63,6 +77,10 @@ export default {
       },
     );
 
-    if (!response.ok) return formatErrors(response);
+    if (response.ok) return;
+
+    const json = await response.json();
+    console.error(json.error);
+    return { error: json.error };
   },
 };

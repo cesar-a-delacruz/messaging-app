@@ -1,5 +1,4 @@
 import { jwtDecode } from "jwt-decode";
-import formatErrors from "@/utils/js/formatErrors.js";
 
 /**
  * Handles requests related to the user's jwt sessions
@@ -15,9 +14,14 @@ export default {
       body: new URLSearchParams(credentials),
     });
 
-    if (!response.ok) return formatErrors(response);
-    const data = await response.json();
-    localStorage.setItem("jwt", data.token);
+    const json = await response.json();
+    if (response.ok) {
+      localStorage.setItem("jwt", json.token);
+      return;
+    }
+
+    console.error(json.error);
+    return { error: json.error };
   },
   logout: () => {
     localStorage.removeItem("jwt");
@@ -27,9 +31,14 @@ export default {
     const response = await fetch(
       `${import.meta.env.VITE_SERVER}/refresh/${id}`,
     );
-    if (!response.ok) return formatErrors(response);
 
-    const data = await response.json();
-    localStorage.setItem("jwt", data.token);
+    const json = await response.json();
+    if (response.ok) {
+      localStorage.setItem("jwt", json.token);
+      return;
+    }
+
+    console.error(json.error);
+    return { error: json.error };
   },
 };
