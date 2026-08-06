@@ -31,53 +31,47 @@ export default function GroupProfile() {
       dispatchChatMembers({
         type: actions.load,
         payload: {
-          response,
+          data: response.data,
         },
       });
     })();
   }, []);
 
-  if (!group.data)
-    return <Loader text={!group.error ? "Getting group..." : group.error} />;
-  if (!chatMembers.data)
-    return (
-      <Loader
-        text={
-          !chatMembers.error ? "Getting chat members..." : chatMembers.error
-        }
-      />
-    );
+  if (!Object.keys(group).length || group.error)
+    return <Loader text={group.error || "Getting group..."} />;
+  if (!Object.keys(chatMembers).length || chatMembers.error)
+    return <Loader text={chatMembers.error || "Getting chat members..."} />;
 
-  const isLoggedUserMember = chatMembers.data.currentMember;
+  const isLoggedUserMember = chatMembers.currentMember;
   const isCurrentMemberAdmin =
-    isLoggedUserMember && chatMembers.data.currentMember.role === "ADMIN";
+    isLoggedUserMember && chatMembers.currentMember.role === "ADMIN";
 
-  const isMemberSelected = chatMembers.data.selected.id;
+  const isMemberSelected = chatMembers.selected.id;
   const isCurrentMemberSelected =
     isMemberSelected &&
-    chatMembers.data.selected.id === chatMembers.data.currentMember.id;
+    chatMembers.selected.id === chatMembers.currentMember.id;
   const isSelectedMemberAdmin =
-    isMemberSelected && chatMembers.data.selected.role === "ADMIN";
+    isMemberSelected && chatMembers.selected.role === "ADMIN";
 
   return (
     <div className="page">
       <Profile
         initialData={{
-          image: { id: "image", value: group.data.image },
-          title: { id: "name", value: group.data.name },
-          content: { id: "info", value: group.data.info },
+          image: { id: "image", value: group.image },
+          title: { id: "name", value: group.name },
+          content: { id: "info", value: group.info },
         }}
         edit={{
           isAllowed: isCurrentMemberAdmin,
           handler: async (data) =>
-            await requestHandler.put({ ...data, id: group.data.id }, "group"),
+            await requestHandler.put({ ...data, id: group.id }, "group"),
         }}
         options={[
           {
             text: "Add member",
             handler: async () => {
               const response = await requestHandler.get(
-                `user/not/chat/${group.data.chats[0].id}`,
+                `user/not/chat/${group.chats[0].id}`,
               );
               if (response.data) setUsers(response.data);
               else alert(response.error);
@@ -96,9 +90,9 @@ export default function GroupProfile() {
             handler: async () =>
               navigate(`/chat`, {
                 state: {
-                  id: group.data.id,
-                  image: group.data.image,
-                  title: group.data.name,
+                  id: group.id,
+                  image: group.image,
+                  title: group.name,
                   chat: {
                     type: "group",
                     id: "",
@@ -112,7 +106,7 @@ export default function GroupProfile() {
       <div>
         <h3>Members</h3>
         <div>
-          {chatMembers.data.members.map((member) => (
+          {chatMembers.members.map((member) => (
             <Member
               key={member.id}
               data={{
@@ -127,7 +121,7 @@ export default function GroupProfile() {
                 })
               }
             >
-              {chatMembers.data.selected.id === member.id &&
+              {chatMembers.selected.id === member.id &&
                 !isCurrentMemberSelected && (
                   <Menu
                     options={[
@@ -140,7 +134,7 @@ export default function GroupProfile() {
                         text: "See profile",
                         handler: () =>
                           location.assign(
-                            `/profile/user/${chatMembers.data.selected.user.id}`,
+                            `/profile/user/${chatMembers.selected.user.id}`,
                           ),
                       },
                     ]}
@@ -169,7 +163,7 @@ export default function GroupProfile() {
             <p>Are you sure you want to remove this member?</p>
             <FormField
               properties={allFields[0]}
-              value={chatMembers.data.selected.id || ""}
+              value={chatMembers.selected.id || ""}
             />
             <button onClick={() => removeMemberHandler()}>Yes</button>
           </Dialog>
@@ -179,7 +173,7 @@ export default function GroupProfile() {
             <p>Are you sure you want to exit this group?</p>
             <FormField
               properties={allFields[0]}
-              value={chatMembers.data.currentMember.id || ""}
+              value={chatMembers.currentMember.id || ""}
             />
             <button
               onClick={() => {
@@ -200,7 +194,7 @@ export default function GroupProfile() {
     for (const user of selectedUsers) {
       newChatMembers.push({
         userId: user.id,
-        chatId: group.data.chats[0].id,
+        chatId: group.chats[0].id,
       });
     }
     const addMember = await requestHandler.post(
@@ -221,7 +215,7 @@ export default function GroupProfile() {
   }
   async function changeMemberRoleHandler() {
     const member = {
-      ...chatMembers.data.selected,
+      ...chatMembers.selected,
       role: isSelectedMemberAdmin ? "NONE" : "ADMIN",
     };
     const changeRole = await requestHandler.put(member, "chatMember");
@@ -234,14 +228,14 @@ export default function GroupProfile() {
   }
   async function removeMemberHandler() {
     const removeMember = await requestHandler.delete(
-      chatMembers.data.selected.id,
+      chatMembers.selected.id,
       "chatMember",
     );
     if (removeMember) return alert(removeMember.error);
 
     dispatchChatMembers({
       type: actions.remove,
-      payload: { id: chatMembers.data.selected.id },
+      payload: { id: chatMembers.selected.id },
     });
 
     removeDialog.current.close();

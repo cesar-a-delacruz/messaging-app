@@ -6,13 +6,13 @@ import ProfileList from "@/components/ProfileList";
 export default function Users() {
   const [users] = useGet(`user/not/${sessionHandler.user().id}`);
 
-  if (!users.data)
-    return <Loader text={!users.error ? "Getting users..." : users.error} />;
+  if (!Object.keys(users).length || users.error)
+    return <Loader text={users.error || "Getting users..."} />;
 
   return (
     <div className="page">
       <ProfileList
-        items={users.data.map((user) => ({
+        items={users.map((user) => ({
           id: user.id,
           image: user.image,
           title: user.username,

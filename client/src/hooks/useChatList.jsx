@@ -11,19 +11,19 @@ export default function useChatList() {
 
   useEffect(() => {
     (async () => {
-      const response = await requestHandler.get(
+      const request = await requestHandler.get(
         `chat/user/${sessionHandler.user().id}`,
       );
 
-      if (response.error) return setResponse(response);
+      if (request.error) return setResponse(request);
 
-      response.data.sort(
+      request.data.sort(
         (a, b) =>
           new Date(b.messages[0].createdAt).getTime() -
           new Date(a.messages[0].createdAt).getTime(),
       );
 
-      setResponse(response);
+      setResponse(request.data);
     })();
   }, []);
 

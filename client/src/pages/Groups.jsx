@@ -5,13 +5,13 @@ import ProfileList from "@/components/ProfileList";
 export default function Groups() {
   const [groups] = useGet("group");
 
-  if (!groups.data)
-    return <Loader text={!groups.error ? "Getting groups..." : groups.error} />;
+  if (!Object.keys(groups).length || groups.error)
+    return <Loader text={groups.error || "Getting groups..."} />;
 
   return (
     <div className="page">
       <ProfileList
-        items={groups.data.map((group) => ({
+        items={groups.map((group) => ({
           id: group.id,
           image: group.image,
           title: group.name,

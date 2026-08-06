@@ -27,7 +27,7 @@ export default function Chat() {
         response = await requestHandler.get(
           `message/chat/${locationState.chat.id}`,
         );
-        if (response.data)
+        if (!response.error)
           response.data = {
             messages: response.data,
             selected: {},
@@ -46,7 +46,7 @@ export default function Chat() {
             );
             break;
         }
-        if (response.data) {
+        if (!response.error) {
           response.data = {
             messages: response.data.messages,
             selected: {},
@@ -54,18 +54,26 @@ export default function Chat() {
           };
         }
       }
+      if (response.error) {
+        response.data = {
+          selected: {},
+          messages: [],
+          chatId: "",
+        };
+      }
 
-      dispatchMessages({ type: actions.load, payload: { response } });
+      dispatchMessages({
+        type: actions.load,
+        payload: { data: response.data },
+      });
     })();
   }, []);
 
-  if (!messages.data)
-    return (
-      <Loader text={!messages.error ? "Getting messages..." : messages.error} />
-    );
+  if (!Object.keys(messages).length || messages.error)
+    return <Loader text={messages.error || "Getting messages..."} />;
 
   allFields[2].value = sessionHandler.user().id;
-  allFields[3].value = messages.data.chatId;
+  allFields[3].value = messages.chatId;
 
   return (
     <div className={styles.chat}>
@@ -86,8 +94,8 @@ export default function Chat() {
         </div>
       </div>
       <div className={styles.messages}>
-        {messages.data.messages.length ? (
-          messages.data.messages.map((message) => (
+        {messages.messages.length ? (
+          messages.messages.map((message) => (
             <Message
               key={message.id}
               data={message}
@@ -102,7 +110,7 @@ export default function Chat() {
                   });
               }}
             >
-              {messages.data.selected.id === message.id && (
+              {messages.selected.id === message.id && (
                 <Menu
                   options={[
                     {
@@ -124,7 +132,7 @@ export default function Chat() {
         <Dialog ref={editDialog}>
           <FormField
             properties={allFields[0]}
-            value={messages.data.selected.content || ""}
+            value={messages.selected.content || ""}
             changeHandler={(id, value) =>
               dispatchMessages({
                 type: actions.changeSelected,
@@ -138,7 +146,7 @@ export default function Chat() {
           <p>Are you sure you want to delete this message?</p>
           <FormField
             properties={allFields[3]}
-            value={messages.data.selected.id || ""}
+            value={messages.selected.id || ""}
           />
           <button onClick={() => removeHandler()}>Yes</button>
         </Dialog>
@@ -153,7 +161,7 @@ export default function Chat() {
   );
 
   async function submitHandler(message) {
-    if (!messages.data.chatId && locationState.chat.type === "user") {
+    if (!messages.chatId && locationState.chat.type === "user") {
       const chat = await requestHandler.post({}, "chat");
 
       let newChatMembers = [
@@ -183,7 +191,7 @@ export default function Chat() {
     });
   }
   async function editHandler() {
-    const edited = await requestHandler.put(messages.data.selected, "message");
+    const edited = await requestHandler.put(messages.selected, "message");
     if (edited) return alert(edited.error);
 
     dispatchMessages({
@@ -193,7 +201,7 @@ export default function Chat() {
   }
   async function removeHandler() {
     const removed = await requestHandler.delete(
-      messages.data.selected.id,
+      messages.selected.id,
       "message",
     );
     if (removed) return alert(removed.error);

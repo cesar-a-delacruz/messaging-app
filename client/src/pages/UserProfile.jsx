@@ -9,24 +9,24 @@ export default function UserProfile() {
   const id = useParams().id;
   const [user] = useGet(`user/${id ? id : sessionHandler.user().id}`);
 
-  if (!user.data)
-    return <Loader text={!user.error ? "Getting user..." : user.error} />;
+  if (!Object.keys(user).length || user.error)
+    return <Loader text={user.error || "Getting user..."} />;
 
-  const isLoggedUserProfile = user.data.id === sessionHandler.user().id;
+  const isLoggedUserProfile = user.id === sessionHandler.user().id;
 
   return (
     <div className="page">
       <Profile
         initialData={{
-          image: { id: "image", value: user.data.image },
-          title: { id: "fullname", value: user.data.fullname },
-          subtitle: { id: "username", value: user.data.username },
-          content: { id: "bio", value: user.data.bio },
+          image: { id: "image", value: user.image },
+          title: { id: "fullname", value: user.fullname },
+          subtitle: { id: "username", value: user.username },
+          content: { id: "bio", value: user.bio },
         }}
         edit={{
           isAllowed: isLoggedUserProfile,
           handler: async (data) =>
-            await requestHandler.put({ ...data, id: user.data.id }, "user"),
+            await requestHandler.put({ ...data, id: user.id }, "user"),
         }}
         options={[
           {

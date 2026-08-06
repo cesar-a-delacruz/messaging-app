@@ -13,44 +13,40 @@ export function dispatcher(state, action) {
 
   switch (action.type) {
     case actions.load:
-      const initial = { ...action.payload.response };
-      initial.data = {
+      const initial = {
         selected: {},
-        members: [...initial.data],
+        members: [...action.payload.data],
       };
-      for (const member of initial.data.members) {
+      for (const member of initial.members) {
         if (member.userId === sessionHandler.user().id) {
-          initial.data.currentMember = member;
+          initial.currentMember = member;
           break;
         }
       }
       return initial;
 
     case actions.add:
-      prev.data.members = [
-        ...prev.data.members,
-        ...action.payload.response.data,
-      ];
+      prev.members = [...prev.members, ...action.payload.data];
       return { ...prev };
 
     case actions.select:
-      prev.data.selected = action.payload.selectedMember;
+      prev.selected = action.payload.selectedMember;
       return { ...prev };
 
     case actions.changeRole:
-      prev.data.members = prev.data.members.map((member) => {
-        if (member.id === state.data.selected.id)
+      prev.members = prev.members.map((member) => {
+        if (member.id === state.selected.id)
           member.role = action.payload.memberRole;
         return member;
       });
-      prev.data.selected = {};
+      prev.selected = {};
       return { ...prev };
 
     case actions.remove:
-      prev.data.members = prev.data.members.filter(
+      prev.members = prev.members.filter(
         (member) => member.id !== action.payload.id,
       );
-      prev.data.selected = {};
+      prev.selected = {};
       return { ...prev };
   }
 }

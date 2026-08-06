@@ -11,8 +11,9 @@ export default function useGet(endpoint) {
 
   useEffect(() => {
     (async () => {
-      const response = await requestHandler.get(endpoint);
-      setResponse(response);
+      const request = await requestHandler.get(endpoint);
+      if (request.error) setResponse(request);
+      else setResponse(request.data);
     })();
   }, []);
 

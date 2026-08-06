@@ -6,13 +6,13 @@ import ProfileList from "@/components/ProfileList";
 export default function MyChats() {
   const chats = useChatList();
 
-  if (!chats.data)
-    return <Loader text={!chats.error ? "Getting chats..." : chats.error} />;
+  if (!Object.keys(chats).length || chats.error)
+    return <Loader text={chats.error || "Getting chats..."} />;
 
   return (
     <div className="page">
       <ProfileList
-        items={chats.data.map((chat) => {
+        items={chats.map((chat) => {
           let profile = {};
           if (chat.group) profile = chat.group;
           else {

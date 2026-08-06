@@ -12,49 +12,40 @@ export function dispatcher(state, action) {
 
   switch (action.type) {
     case actions.load:
-      const initial = { ...action.payload.response };
-      console.log(initial);
-      if (initial.error) {
-        initial.data = {
-          selected: {},
-          messages: [],
-          chatId: "",
-        };
-        return initial;
-      }
+      const initial = { ...action.payload.data };
 
-      initial.data.messages.sort(
+      initial.messages.sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       );
       return { ...initial };
 
     case actions.add:
-      prev.data.messages = [...prev.data.messages, action.payload.data];
+      prev.messages = [...prev.messages, action.payload];
       return { ...prev };
 
     case actions.select:
-      prev.data.selected = action.payload.selectedMessage;
+      prev.selected = action.payload.selectedMessage;
       return { ...prev };
 
     case actions.changeSelected:
-      prev.data.selected[action.payload.id] = action.payload.value;
+      prev.selected[action.payload.id] = action.payload.value;
       return { ...prev };
 
     case actions.edit:
-      prev.data.messages = prev.data.messages.map((message) => {
-        if (message.id === state.data.selected.id)
-          message.content = state.data.selected.content;
+      prev.messages = prev.messages.map((message) => {
+        if (message.id === state.selected.id)
+          message.content = state.selected.content;
         return message;
       });
-      prev.data.selected = {};
+      prev.selected = {};
       return { ...prev };
 
     case actions.remove:
-      prev.data.messages = prev.data.messages.filter(
-        (message) => message.id !== state.data.selected.id,
+      prev.messages = prev.messages.filter(
+        (message) => message.id !== state.selected.id,
       );
-      prev.data.selected = {};
+      prev.selected = {};
       return { ...prev };
   }
 
