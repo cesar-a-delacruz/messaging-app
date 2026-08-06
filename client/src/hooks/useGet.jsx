@@ -7,14 +7,14 @@ import { useEffect, useState } from "react";
  * @returns {[Object, SetStateAction]}
  */
 export default function useGet(endpoint) {
-  const [data, setData] = useState({});
+  const [response, setResponse] = useState({});
 
   useEffect(() => {
     (async () => {
       const response = await requestHandler.get(endpoint);
-      setData(response);
+      setResponse(response);
     })();
   }, []);
 
-  return [data, setData];
+  return [response, setResponse];
 }

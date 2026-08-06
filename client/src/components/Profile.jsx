@@ -2,34 +2,36 @@ import { useState } from "react";
 import Image from "@/components/Image";
 
 export default function Profile({ initialData, edit = {}, options = [] }) {
-  const [data, setData] = useState(initialData);
+  const [profile, setProfile] = useState(initialData);
 
   return (
     <div className="profile">
-      <Image src={data.image.value} alt={`${data.title.value} picture`} />
+      <Image src={profile.image.value} alt={`${profile.title.value} picture`} />
       <h2
         contentEditable={edit.isAllowed}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id={"title"}
       >
-        {data.title.value}
+        {profile.title.value}
       </h2>
-      {data.subtitle && <span id={"subtitle"}>{data.subtitle.value}</span>}
+      {profile.subtitle && (
+        <span id={"subtitle"}>{profile.subtitle.value}</span>
+      )}
       <p
         contentEditable={edit.isAllowed}
         suppressContentEditableWarning={true}
         onInput={inputHandler}
         id={"content"}
       >
-        {data.content.value}
+        {profile.content.value}
       </p>
       {edit.isAllowed && (
         <button
           onClick={() => {
             const newData = {};
-            Object.keys(data).forEach((key) => {
-              newData[data[key].id] = data[key].value;
+            Object.keys(profile).forEach((key) => {
+              newData[profile[key].id] = profile[key].value;
             });
             edit.handler(newData);
           }}
@@ -54,7 +56,7 @@ export default function Profile({ initialData, edit = {}, options = [] }) {
     const key = event.currentTarget.id;
     const value = event.currentTarget.innerHTML;
 
-    setData((prev) => {
+    setProfile((prev) => {
       prev[key].value = value;
       return { ...prev };
     });

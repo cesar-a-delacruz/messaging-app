@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
  * @returns {Object}
  */
 export default function useChatList() {
-  const [chats, setChats] = useState({});
+  const [response, setResponse] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -15,7 +15,7 @@ export default function useChatList() {
         `chat/user/${sessionHandler.user().id}`,
       );
 
-      if (response.error) return setChats(response);
+      if (response.error) return setResponse(response);
 
       response.data.sort(
         (a, b) =>
@@ -23,9 +23,9 @@ export default function useChatList() {
           new Date(a.messages[0].createdAt).getTime(),
       );
 
-      setChats(response);
+      setResponse(response);
     })();
   }, []);
 
-  return chats;
+  return response;
 }
