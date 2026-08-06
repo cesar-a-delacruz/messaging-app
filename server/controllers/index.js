@@ -8,13 +8,19 @@ const ChatMemberController = require("./ChatMemberController.js");
 const GroupController = require("./GroupController.js");
 
 module.exports = {
-  user: new UserController(repositories.user, validators.user, "image"),
+  user: new UserController("user", repositories.user, validators.user, "image"),
   message: new MessageController(
+    "message",
     repositories.message,
     validators.message,
     "attachment",
   ),
-  chat: new ChatController(repositories.chat),
-  chatMember: new ChatMemberController(repositories.chatMember),
-  group: new GroupController(repositories.group, validators.group, "image"),
+  chat: new ChatController("chat", repositories.chat),
+  chatMember: new ChatMemberController("chat member", repositories.chatMember),
+  group: new GroupController(
+    "group",
+    repositories.group,
+    validators.group,
+    "image",
+  ),
 };

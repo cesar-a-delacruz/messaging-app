@@ -16,7 +16,7 @@ module.exports = class GroupController extends FileController {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to create items." })
+          .json({ error: `Failed to create ${this.itemName}.` })
           .end();
       }
     },

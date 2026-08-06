@@ -6,10 +6,11 @@ module.exports = class Controller {
    * @param {Repository} repository The repository to perform database operations.
    * @param {RunnableValidationChains} validator The validator to validate request data with express-validator.
    */
-  constructor(repository, validator) {
+  constructor(itemName, repository, validator) {
+    this.itemName = itemName;
     this.repository = repository;
     if (!validator) validator = { run: (req) => req };
-    this.validator = validationMiddleware.bind(null, validator);
+    this.validator = validationMiddleware.bind(null, validator, itemName);
   }
 
   findAll = async (req, res) => {
@@ -19,14 +20,17 @@ module.exports = class Controller {
       if (!rows.length)
         return res
           .status(404)
-          .json({ message: "No items heve been found." })
+          .json({ error: `No ${this.itemName} have been found.` })
           .end();
 
       console.table(rows);
       return res.status(200).json({ data: rows }).end();
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "Failed to find items." }).end();
+      return res
+        .status(500)
+        .json({ error: `Failed to find any ${this.itemName}.` })
+        .end();
     }
   };
   findOne = async (req, res) => {
@@ -36,14 +40,17 @@ module.exports = class Controller {
       if (!row)
         return res
           .status(404)
-          .json({ message: "This item doesn't exists.", data: row })
+          .json({ error: `This ${this.itemName} doesn't exists.`, data: row })
           .end();
 
       console.info(row);
       return res.status(200).json({ data: row }).end();
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "Failed to find item." }).end();
+      return res
+        .status(500)
+        .json({ error: `Failed to find ${this.itemName}.` })
+        .end();
     }
   };
   create = [
@@ -57,7 +64,7 @@ module.exports = class Controller {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to create item." })
+          .json({ error: `Failed to create ${this.itemName}.` })
           .end();
       }
     },
@@ -75,12 +82,12 @@ module.exports = class Controller {
         if (error.code === "P2025")
           return res
             .status(400)
-            .json({ message: "Can't find an item to update." })
+            .json({ error: `Can't find ${this.itemName} to update.` })
             .end();
 
         return res
           .status(500)
-          .json({ message: "Failed to update item." })
+          .json({ error: `Failed to update ${this.itemName}.` })
           .end();
       }
     },
@@ -96,10 +103,13 @@ module.exports = class Controller {
       if (error.code === "P2025")
         return res
           .status(400)
-          .json({ message: "Can't find an item to delete." })
+          .json({ error: `Can't find ${this.itemName} to delete.` })
           .end();
 
-      return res.status(500).json({ message: "Failed to delete item." }).end();
+      return res
+        .status(500)
+        .json({ error: `Failed to delete ${this.itemName}.` })
+        .end();
     }
   };
 };

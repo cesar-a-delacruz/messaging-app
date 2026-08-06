@@ -2,8 +2,8 @@ const Controller = require("./Controller.js");
 const uploadMiddleware = require("../middlewares/uploadMiddleware.js");
 
 module.exports = class FileController extends Controller {
-  constructor(repository, validator, fileField) {
-    super(repository, validator);
+  constructor(itemName, repository, validator, fileField) {
+    super(itemName, repository, validator);
     this.uploader = uploadMiddleware.bind(null, fileField);
   }
 
@@ -19,7 +19,7 @@ module.exports = class FileController extends Controller {
         console.error(error);
         return res
           .status(500)
-          .json({ message: "Failed to create item." })
+          .json({ error: `Failed to create ${this.itemName}.` })
           .end();
       }
     },

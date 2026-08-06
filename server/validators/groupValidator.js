@@ -5,7 +5,7 @@ module.exports = checkSchema({
   name: {
     isEmpty: {
       negated: true,
-      errorMessage: formatValidationError("empty", "fullname"),
+      errorMessage: formatValidationError("empty", "name"),
     },
     isLength: {
       options: { min: 5, max: 40 },
@@ -14,7 +14,7 @@ module.exports = checkSchema({
   info: {
     isLength: {
       options: { max: 100 },
-      errorMessage: formatValidationError("length", "bio", {
+      errorMessage: formatValidationError("length", "info", {
         min: 0,
         max: 100,
       }),

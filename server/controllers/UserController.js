@@ -9,14 +9,17 @@ module.exports = class UserController extends FileController {
       if (!rows.length)
         return res
           .status(404)
-          .json({ message: "No items heve been found." })
+          .json({ error: `No ${this.itemName} have been found.` })
           .end();
 
       console.table(rows);
       return res.status(200).json({ data: rows }).end();
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "Failed to find items." }).end();
+      return res
+        .status(500)
+        .json({ error: `Failed to find any ${this.itemName}.` })
+        .end();
     }
   };
   findAllNotInChat = async (req, res) => {
@@ -26,17 +29,17 @@ module.exports = class UserController extends FileController {
       if (!rows.length)
         return res
           .status(404)
-          .json({ message: "No items heve been found." })
+          .json({ error: `No ${this.itemName} have been found.` })
           .end();
 
       console.table(rows);
-      return res
-        .status(200)
-        .json({ message: "Items found successfully.", data: rows })
-        .end();
+      return res.status(200).json({ data: rows }).end();
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: "Failed to find items." }).end();
+      return res
+        .status(500)
+        .json({ error: `Failed to find any ${this.itemName}.` })
+        .end();
     }
   };
 };

@@ -5,47 +5,48 @@ require("dotenv").config();
 
 module.exports = {
   authenticate: async (req, res) => {
-    const { username, password } = req.body;
+    try {
+      const { username, password } = req.body;
 
-    const user = await dbConfig.user.findUnique({
-      where: {
-        username,
-      },
-      select: {
-        id: true,
-        password: true,
-      },
-    });
-    if (user === null)
-      return res
-        .status(404)
-        .json({
-          message: "Failed authentication.",
-          error: "Wrong username.",
-        })
-        .end();
+      const user = await dbConfig.user.findUnique({
+        where: {
+          username,
+        },
+        select: {
+          id: true,
+          password: true,
+        },
+      });
+      if (user === null)
+        return res
+          .status(400)
+          .json({
+            message: "Credentials mismatch. Incorrect username.",
+          })
+          .end();
 
-    const match = await compare(password, user.password);
-    if (!match)
-      return res
-        .status(401)
-        .json({
-          message: "Failed authentication.",
-          error: "Wrong password.",
-        })
-        .end();
-    const token = jwt.sign(
-      {
-        id: user.id,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" },
-    );
+      const match = await compare(password, user.password);
+      if (!match)
+        return res
+          .status(400)
+          .json({
+            message: "Credentials mismatch. Incorrect password.",
+          })
+          .end();
 
-    return res
-      .status(200)
-      .json({ message: "Successful authentication.", token })
-      .end();
+      const token = jwt.sign(
+        {
+          id: user.id,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" },
+      );
+
+      return res.status(200).json({ token }).end();
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Failed to find user." }).end();
+    }
   },
   authorize: async (req, res, next) => {
     const authHeader = req.headers["authorization"];
@@ -66,9 +67,6 @@ module.exports = {
 
     const payload = { id: user.id };
     const token = jwt.sign(payload, process.env.JWT_SECRET);
-    return res
-      .status(200)
-      .json({ message: "Successful refresh", token: token })
-      .end();
+    return res.status(200).json({ token: token }).end();
   },
 };
