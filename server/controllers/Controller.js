@@ -15,6 +15,13 @@ module.exports = class Controller {
   findAll = async (req, res) => {
     try {
       const rows = await this.repository.findAll();
+
+      if (!rows.length)
+        return res
+          .status(404)
+          .json({ message: "No items heve been found.", data: rows })
+          .end();
+
       console.table(rows);
       return res
         .status(200)
@@ -31,6 +38,13 @@ module.exports = class Controller {
   findOne = async (req, res) => {
     try {
       const row = await this.repository.findOne(req.params.id);
+
+      if (!row)
+        return res
+          .status(404)
+          .json({ message: "This item doesn't exists.", data: row })
+          .end();
+
       console.info(row);
       return res
         .status(200)
@@ -72,6 +86,13 @@ module.exports = class Controller {
         return res.status(204).end();
       } catch (error) {
         console.error(error);
+
+        if (error.code === "P2025")
+          return res
+            .status(400)
+            .json({ message: "Can't find an item to update." })
+            .end();
+
         return res
           .status(500)
           .json({ message: "Failed to update item.", error })
@@ -86,6 +107,13 @@ module.exports = class Controller {
       return res.status(204).end();
     } catch (error) {
       console.error(error);
+
+      if (error.code === "P2025")
+        return res
+          .status(400)
+          .json({ message: "Can't find an item to delete." })
+          .end();
+
       return res
         .status(500)
         .json({ message: "Failed to delete item.", error })

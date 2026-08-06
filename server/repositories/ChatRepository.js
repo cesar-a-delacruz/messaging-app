@@ -1,8 +1,8 @@
 const Repository = require("./Repository.js");
 
 module.exports = class ChatRepository extends Repository {
-  findAllByUser = async (userId) => {
-    const result = await this.entity.model.findMany({
+  findAllByUser = async (userId) =>
+    await this.entity.model.findMany({
       where: {
         AND: [
           {
@@ -45,12 +45,8 @@ module.exports = class ChatRepository extends Repository {
         },
       },
     });
-    if (!result.length) throw new Error("No matching rows were found.");
-
-    return result;
-  };
-  findOneByUsers = async (loggedUserId, otherUserId) => {
-    const result = await this.entity.model.findFirst({
+  findOneByUsers = async (loggedUserId, otherUserId) =>
+    await this.entity.model.findFirst({
       where: {
         AND: [
           {
@@ -80,12 +76,8 @@ module.exports = class ChatRepository extends Repository {
         },
       },
     });
-    if (!result) throw new Error("This row doesn't exists.");
-
-    return result;
-  };
-  findOneByGroup = async (groupId) => {
-    const result = await this.entity.model.findFirst({
+  findOneByGroup = async (groupId) =>
+    await this.entity.model.findFirst({
       where: {
         groupId,
       },
@@ -99,8 +91,4 @@ module.exports = class ChatRepository extends Repository {
         },
       },
     });
-    if (!result) throw new Error("This row doesn't exists.");
-
-    return result;
-  };
 };

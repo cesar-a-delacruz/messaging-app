@@ -6,10 +6,9 @@ module.exports = class GroupController extends FileController {
     async (req, res, next) => await this.validator(req, res, next),
     async (req, res) => {
       try {
-        const { chatMembers, ...group } = req.body;
         const rows = await this.repository.create(
           group,
-          JSON.parse(chatMembers),
+          JSON.parse(req.body.chatMembers),
         );
         console.info(rows);
         return res

@@ -5,6 +5,13 @@ module.exports = class MessageController extends FileController {
   findAllByChat = async (req, res) => {
     try {
       const rows = await this.repository.findAllByChat(req.params.chatId);
+
+      if (!rows.length)
+        return res
+          .status(404)
+          .json({ message: "No items heve been found.", data: rows })
+          .end();
+
       console.table(rows);
       return res
         .status(200)

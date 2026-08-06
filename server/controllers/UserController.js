@@ -5,6 +5,13 @@ module.exports = class UserController extends FileController {
   findAll = async (req, res) => {
     try {
       const rows = await this.repository.findAll(req.params.userId);
+
+      if (!rows.length)
+        return res
+          .status(404)
+          .json({ message: "No items heve been found.", data: rows })
+          .end();
+
       console.table(rows);
       return res
         .status(200)
@@ -21,6 +28,13 @@ module.exports = class UserController extends FileController {
   findAllNotInChat = async (req, res) => {
     try {
       const rows = await this.repository.findAllNotInChat(req.params.chatId);
+
+      if (!rows.length)
+        return res
+          .status(404)
+          .json({ message: "No items heve been found.", data: rows })
+          .end();
+
       console.table(rows);
       return res
         .status(200)

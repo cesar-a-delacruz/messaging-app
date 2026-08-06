@@ -4,6 +4,13 @@ module.exports = class ChatMemberController extends Controller {
   findAll = async (req, res) => {
     try {
       const rows = await this.repository.findAll(req.params.groupId);
+
+      if (!rows.length)
+        return res
+          .status(404)
+          .json({ message: "No items heve been found.", data: rows })
+          .end();
+
       console.table(rows);
       return res
         .status(200)
@@ -21,8 +28,9 @@ module.exports = class ChatMemberController extends Controller {
     async (req, res, next) => await this.validator(req, res, next),
     async (req, res) => {
       try {
-        req.body = JSON.parse(req.body.chatMembers);
-        const rows = await this.repository.create(req.body);
+        const rows = await this.repository.create(
+          JSON.parse(req.body.chatMembers),
+        );
         console.info(rows);
         return res
           .status(201)
