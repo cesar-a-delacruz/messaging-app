@@ -29,9 +29,9 @@ module.exports = class UserRepository extends Repository {
   };
   updateCredentials = async (id, data) => {
     data = this.entity.parseData(data);
-    data.password = await hash(data.password, 10);
+    if (data.password) data.password = await hash(data.password, 10);
 
-    return await his.entity.model.update({
+    return await this.entity.model.update({
       where: { id },
       data,
     });

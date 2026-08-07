@@ -5,8 +5,10 @@ const repositories = require("../repositories/index.js");
 const validators = require("../validators/index.js");
 const ChatMemberController = require("./ChatMemberController.js");
 const GroupController = require("./GroupController.js");
+const AuthController = require("./AuthController.js");
 
 module.exports = {
+  auth: new AuthController("user", repositories.user, validators.auth),
   user: new UserController("user", repositories.user, validators.user, "image"),
   message: new MessageController(
     "message",
