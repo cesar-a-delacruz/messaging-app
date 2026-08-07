@@ -19,9 +19,14 @@ export default function Main() {
         </nav>
 
         <footer>
-          <button onClick={() => location.assign("/groups/new")}>
-            Create Group
-          </button>
+          <div className="options">
+            <button onClick={() => location.assign("/profile/user")}>
+              Profile
+            </button>
+            <button onClick={() => location.assign("/groups/new")}>
+              Create Group
+            </button>
+          </div>
           <button onClick={() => sessionHandler.logout()}>Logout</button>
           <p>
             Developed by{" "}
