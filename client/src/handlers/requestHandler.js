@@ -1,3 +1,5 @@
+import formatErrors from "@/utils/js/formatErrors";
+
 /**
  * Handles all requests for CRUD operations.
  */
@@ -7,11 +9,8 @@ export default {
       headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     });
 
-    const json = await response.json();
-    if (response.ok) return json;
-
-    console.error(json.error);
-    return { error: json.error };
+    if (response.ok) return await response.json();
+    return formatErrors(response);
   },
   post: async (data, path) => {
     const response = await fetch(`${import.meta.env.VITE_SERVER}/${path}`, {
@@ -22,11 +21,8 @@ export default {
       body: new URLSearchParams(data),
     });
 
-    const json = await response.json();
-    if (response.ok) return json;
-
-    console.error(json.error);
-    return { error: json.error };
+    if (response.ok) return await response.json();
+    return formatErrors(response);
   },
   postFile: async (data, path) => {
     const formData = new FormData();
@@ -42,11 +38,8 @@ export default {
       body: formData,
     });
 
-    const json = await response.json();
-    if (response.ok) return json;
-
-    console.error(json.error);
-    return { error: json.error };
+    if (response.ok) return await response.json();
+    return formatErrors(response);
   },
   put: async (data, path) => {
     const response = await fetch(
@@ -61,10 +54,7 @@ export default {
     );
 
     if (response.ok) return;
-
-    const json = await response.json();
-    console.error(json.error);
-    return { error: json.error };
+    return formatErrors(response);
   },
   delete: async (id, path) => {
     const response = await fetch(
@@ -78,9 +68,6 @@ export default {
     );
 
     if (response.ok) return;
-
-    const json = await response.json();
-    console.error(json.error);
-    return { error: json.error };
+    return formatErrors(response);
   },
 };

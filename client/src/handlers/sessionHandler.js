@@ -1,3 +1,4 @@
+import formatErrors from "@/utils/js/formatErrors";
 import { jwtDecode } from "jwt-decode";
 
 /**
@@ -14,14 +15,12 @@ export default {
       body: new URLSearchParams(credentials),
     });
 
-    const json = await response.json();
     if (response.ok) {
+      const json = await response.json();
       localStorage.setItem("jwt", json.token);
       return;
     }
-
-    console.error(json.error);
-    return { error: json.error };
+    return formatErrors(response);
   },
   logout: () => {
     localStorage.removeItem("jwt");
@@ -32,13 +31,12 @@ export default {
       `${import.meta.env.VITE_SERVER}/refresh/${id}`,
     );
 
-    const json = await response.json();
     if (response.ok) {
+      const json = await response.json();
       localStorage.setItem("jwt", json.token);
       return;
     }
 
-    console.error(json.error);
-    return { error: json.error };
+    return formatErrors(response);
   },
 };
