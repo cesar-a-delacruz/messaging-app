@@ -10,6 +10,9 @@ export default function Login() {
         fields={loginFields}
         submit={{ text: "Enter", handler: submitHandler }}
       />
+      <p>
+        Don't have an account? Register <a href="/register">here</a>
+      </p>
     </div>
   );
 

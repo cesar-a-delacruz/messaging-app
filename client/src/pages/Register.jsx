@@ -10,6 +10,9 @@ export default function Register() {
         fields={registerFields}
         submit={{ text: "Create Account", handler: submitHandler }}
       />
+      <p>
+        Already have an account? Login <a href="/login">here</a>
+      </p>
     </div>
   );
 
