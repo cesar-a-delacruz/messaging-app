@@ -1,39 +1,47 @@
 const CRUDRouter = require("./CRUDRouter.js");
 const Router = require("./Router.js");
 const controllers = require("../controllers/index.js");
-const { authorize } = require("../middlewares/jwtMiddlewares.js");
+const authorizationMiddleware = require("../middlewares/authorizationMiddleware.js");
 
 module.exports = {
-  auth: new Router("auth", controllers.auth).route(
-    "put",
-    "updateCredentials",
-    "credentials/:id",
-    authorize,
-  ),
+  auth: new Router("auth", controllers.auth)
+    .route(
+      "put",
+      "updateCredentials",
+      "credentials/:id",
+      authorizationMiddleware,
+    )
+    .route("post", "authenticate")
+    .route("get", "refresh", "refresh/:id"),
   user: new Router("user", controllers.user)
-    .route("get", "findOne", ":id", authorize)
-    .route("get", "findAll", "not/:userId", authorize)
-    .route("get", "findAllNotInChat", "not/chat/:chatId", authorize)
+    .route("get", "findOne", ":id", authorizationMiddleware)
+    .route("get", "findAll", "not/:userId", authorizationMiddleware)
+    .route(
+      "get",
+      "findAllNotInChat",
+      "not/chat/:chatId",
+      authorizationMiddleware,
+    )
     .route("post", "create")
-    .route("put", "update", ":id", authorize)
-    .route("delete", "delete", ":id", authorize),
-  message: new CRUDRouter("message", controllers.message, authorize).route(
-    "get",
-    "findAllByChat",
-    "chat/:chatId",
-  ),
-  chat: new CRUDRouter("chat", controllers.chat, authorize)
+    .route("put", "update", ":id", authorizationMiddleware)
+    .route("delete", "delete", ":id", authorizationMiddleware),
+  message: new CRUDRouter(
+    "message",
+    controllers.message,
+    authorizationMiddleware,
+  ).route("get", "findAllByChat", "chat/:chatId"),
+  chat: new CRUDRouter("chat", controllers.chat, authorizationMiddleware)
     .route("get", "findAllByUser", "user/:userId")
     .route(
       "get",
       "findOneByUsers",
       "loggedUser/:loggedUserId/otherUser/:otherUserId",
     )
-    .route("get", "findOneByGroup", "group/:groupId", authorize),
+    .route("get", "findOneByGroup", "group/:groupId", authorizationMiddleware),
   chatMember: new CRUDRouter(
     "chatMember",
     controllers.chatMember,
-    authorize,
+    authorizationMiddleware,
   ).route("get", "findAll", "group/:groupId"),
-  group: new CRUDRouter("group", controllers.group, authorize),
+  group: new CRUDRouter("group", controllers.group, authorizationMiddleware),
 };
