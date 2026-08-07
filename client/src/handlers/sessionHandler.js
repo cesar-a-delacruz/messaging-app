@@ -28,7 +28,7 @@ export default {
   },
   refresh: async (id) => {
     const response = await fetch(
-      `${import.meta.env.VITE_SERVER}/refresh/${id}`,
+      `${import.meta.env.VITE_SERVER}/auth/refresh/${id}`,
     );
 
     if (response.ok) {
