@@ -10,6 +10,7 @@ import GroupProfile from "@/pages/GroupProfile";
 import Chat from "@/pages/Chat";
 import Groups from "@/pages/Groups";
 import NewGroup from "@/pages/NewGroup";
+import ChangeCredentials from "@/pages/ChangeCredentials";
 
 export default function Index() {
   return (
@@ -26,6 +27,7 @@ export default function Index() {
         <Route path="profile/user/:id?" element={<UserProfile />} />
         <Route path="profile/group/:id" element={<GroupProfile />} />
         <Route path="chat" element={<Chat />} />
+        <Route path="credentials" element={<ChangeCredentials />} />
       </Route>
     </Routes>
   );

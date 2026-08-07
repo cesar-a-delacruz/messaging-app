@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import sessionHandler from "@/handlers/sessionHandler";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
@@ -8,6 +8,7 @@ import Profile from "@/components/Profile";
 export default function UserProfile() {
   const id = useParams().id;
   const [user] = useGet(`user/${id ? id : sessionHandler.user().id}`);
+  const navigate = useNavigate();
 
   if (!Object.keys(user).length || user.error)
     return <Loader text={user.error || "Getting user..."} />;
@@ -31,7 +32,13 @@ export default function UserProfile() {
         options={[
           {
             text: "Change credentials",
-            handler: () => location.assign("/auth/change"),
+            handler: () =>
+              navigate("/credentials", {
+                state: {
+                  id: user.id,
+                  username: user.username,
+                },
+              }),
             hide: !isLoggedUserProfile,
           },
         ]}

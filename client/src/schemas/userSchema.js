@@ -37,6 +37,12 @@ export const allFields = [
 
 export const loginFields = [allFields[1], allFields[3]];
 
+export const changeCredentialsFields = [
+  allFields[0],
+  allFields[1],
+  allFields[3],
+];
+
 export const registerFields = [
   allFields[1],
   allFields[2],
