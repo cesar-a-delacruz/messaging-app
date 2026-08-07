@@ -1,25 +1,27 @@
-const Router = require("./Router.js");
+const CRUDRouter = require("./CRUDRouter.js");
 const controllers = require("../controllers/index.js");
 
 module.exports = {
-  user: new Router("user", controllers.user)
-    .routeREST()
-    .route("get", "not/:userId", "findAll")
-    .route("get", "not/chat/:chatId", "findAllNotInChat"),
-  message: new Router("message", controllers.message)
-    .routeREST()
-    .route("get", "chat/:chatId", "findAllByChat"),
-  chat: new Router("chat", controllers.chat)
-    .routeREST()
-    .route("get", "user/:userId", "findAllByUser")
+  user: new CRUDRouter("user", controllers.user)
+    .route("get", "findAll", "not/:userId")
+    .route("get", "findAllNotInChat", "not/chat/:chatId"),
+  message: new CRUDRouter("message", controllers.message).route(
+    "get",
+    "findAllByChat",
+    "chat/:chatId",
+  ),
+  chat: new CRUDRouter("chat", controllers.chat)
+    .route("get", "findAllByUser", "user/:userId")
     .route(
       "get",
-      "loggedUser/:loggedUserId/otherUser/:otherUserId",
       "findOneByUsers",
+      "loggedUser/:loggedUserId/otherUser/:otherUserId",
     )
-    .route("get", "group/:groupId", "findOneByGroup"),
-  chatMember: new Router("chatMember", controllers.chatMember)
-    .routeREST()
-    .route("get", "group/:groupId", "findAll"),
-  group: new Router("group", controllers.group).routeREST(),
+    .route("get", "findOneByGroup", "group/:groupId"),
+  chatMember: new CRUDRouter("chatMember", controllers.chatMember).route(
+    "get",
+    "findAll",
+    "group/:groupId",
+  ),
+  group: new CRUDRouter("group", controllers.group),
 };

@@ -1,7 +1,7 @@
-const Controller = require("./Controller.js");
+const CRUDController = require("./CRUDController.js");
 const uploadMiddleware = require("../middlewares/uploadMiddleware.js");
 
-module.exports = class FileController extends Controller {
+module.exports = class FileController extends CRUDController {
   constructor(itemName, repository, validator, fileField) {
     super(itemName, repository, validator);
     this.uploader = uploadMiddleware.bind(null, fileField);

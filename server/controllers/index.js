@@ -1,4 +1,3 @@
-const Controller = require("./Controller.js");
 const MessageController = require("./MessageController.js");
 const UserController = require("./UserController.js");
 const ChatController = require("./ChatController.js");

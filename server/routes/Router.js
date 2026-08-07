@@ -12,41 +12,15 @@ module.exports = class Router {
     this.router = ExpressRouter();
   }
 
-  routeREST = (middleware) => {
-    if (!middleware) middleware = this.#emptyMiddleware;
-
-    this.router.get(`/${this.basePath}/`, middleware, this.controller.findAll);
-    this.router.get(
-      `/${this.basePath}/:id`,
-      middleware,
-      this.controller.findOne,
-    );
-    this.router.post(`/${this.basePath}/`, middleware, this.controller.create);
-    this.router.put(
-      `/${this.basePath}/:id`,
-      middleware,
-      this.controller.update,
-    );
-    this.router.delete(
-      `/${this.basePath}/:id`,
-      middleware,
-      this.controller.delete,
-    );
-    return this;
-  };
-  route = (method, path, controllerMethod, middleware) => {
+  route = (routerMethod, controllerMethod, path, middleware) => {
     if (!path) path = "";
-    if (!middleware) middleware = this.#emptyMiddleware;
+    if (!middleware) middleware = (req, res, next) => next();
 
-    this.router[method](
+    this.router[routerMethod](
       `/${this.basePath}/${path}`,
       middleware,
       this.controller[controllerMethod],
     );
     return this;
-  };
-
-  #emptyMiddleware = (req, res, next) => {
-    next();
   };
 };

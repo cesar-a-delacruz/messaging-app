@@ -1,6 +1,6 @@
-const Controller = require("./Controller.js");
+const CRUDController = require("./CRUDController.js");
 
-module.exports = class ChatMemberController extends Controller {
+module.exports = class ChatMemberController extends CRUDController {
   findAll = async (req, res) => {
     try {
       const rows = await this.repository.findAll(req.params.groupId);
