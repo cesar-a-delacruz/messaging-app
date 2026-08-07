@@ -1,5 +1,5 @@
-const MessageController = require("./MessageController.js");
 const UserController = require("./UserController.js");
+const MessageController = require("./MessageController.js");
 const ChatController = require("./ChatController.js");
 const repositories = require("../repositories/index.js");
 const validators = require("../validators/index.js");

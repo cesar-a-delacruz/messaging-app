@@ -11,11 +11,28 @@ module.exports = class UserRepository extends Repository {
       where: { NOT: { chatMember: { some: { chatId } } } },
       omit: { fullname: true, bio: true },
     });
+  findOneByUsername = async (username) =>
+    await this.entity.model.findUnique({
+      where: { username },
+      select: {
+        id: true,
+        password: true,
+      },
+    });
   create = async (data) => {
     data = this.entity.parseData(data);
     data.password = await hash(data.password, 10);
 
     return await this.entity.model.create({
+      data,
+    });
+  };
+  updateCredentials = async (id, data) => {
+    data = this.entity.parseData(data);
+    data.password = await hash(data.password, 10);
+
+    return await his.entity.model.update({
+      where: { id },
       data,
     });
   };
