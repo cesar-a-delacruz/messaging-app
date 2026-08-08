@@ -12,7 +12,10 @@ export function dispatcher(state, action) {
 
   switch (action.type) {
     case actions.load:
-      const initial = { ...action.payload.data };
+      const initial = {
+        selected: {},
+        ...action.payload.data,
+      };
 
       initial.messages.sort(
         (a, b) =>

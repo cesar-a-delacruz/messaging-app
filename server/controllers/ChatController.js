@@ -35,7 +35,10 @@ module.exports = class ChatController extends CRUDController {
           .end();
 
       console.info(row);
-      return res.status(200).json({ data: row }).end();
+      return res
+        .status(200)
+        .json({ data: { chatId: row.id, messages: row.messages } })
+        .end();
     } catch (error) {
       console.error(error);
       return res
@@ -55,7 +58,10 @@ module.exports = class ChatController extends CRUDController {
           .end();
 
       console.info(row);
-      return res.status(200).json({ data: row }).end();
+      return res
+        .status(200)
+        .json({ data: { chatId: row.id, messages: row.messages } })
+        .end();
     } catch (error) {
       console.error(error);
       return res

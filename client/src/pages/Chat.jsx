@@ -27,12 +27,6 @@ export default function Chat() {
         response = await requestHandler.get(
           `message/chat/${locationState.chat.id}`,
         );
-        if (!response.error)
-          response.data = {
-            messages: response.data,
-            selected: {},
-            chatId: locationState.chat.id,
-          };
       } else {
         switch (locationState.chat.type) {
           case "user":
@@ -46,21 +40,8 @@ export default function Chat() {
             );
             break;
         }
-        if (!response.error) {
-          response.data = {
-            messages: response.data.messages,
-            selected: {},
-            chatId: response.data.id,
-          };
-        }
       }
-      if (response.error) {
-        response.data = {
-          selected: {},
-          messages: [],
-          chatId: "",
-        };
-      }
+      if (response.error) return alert(response.error);
 
       dispatchMessages({
         type: actions.load,
