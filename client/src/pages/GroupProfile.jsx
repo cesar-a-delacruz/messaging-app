@@ -12,6 +12,7 @@ import ProfileList from "@/components/ProfileList";
 import FormField from "@/components/FormField";
 import Profile from "@/components/Profile";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
+import prepareChatMembers from "@/utils/js/prepareChatMembers";
 
 export default function GroupProfile() {
   const id = useParams().id;
@@ -199,16 +200,9 @@ export default function GroupProfile() {
   );
 
   async function addMemberHandler() {
-    let newChatMembers = [];
-    for (const user of selectedUsers) {
-      newChatMembers.push({
-        userId: user.id,
-        chatId: group.chats[0].id,
-      });
-    }
     const addMember = await requestHandler.post(
       {
-        chatMembers: JSON.stringify(newChatMembers),
+        chatMembers: prepareChatMembers(selectedUsers, group.chats[0].id),
       },
       "chatMember",
     );

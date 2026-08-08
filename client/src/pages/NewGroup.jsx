@@ -7,6 +7,7 @@ import Dialog from "@/components/Dialog";
 import ProfileList from "@/components/ProfileList";
 import Member from "@/components/Member";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
+import prepareChatMembers from "@/utils/js/prepareChatMembers";
 
 export default function NewGroup() {
   const [users, setUsers] = useState([]);
@@ -59,20 +60,15 @@ export default function NewGroup() {
     if (!selectedUsers.length)
       return alert("You must add at least one member.");
 
-    let chatMembers = [
-      {
-        userId: sessionHandler.user().id,
-        role: "ADMIN",
-      },
-    ];
-    for (const user of selectedUsers) {
-      chatMembers.push({ userId: user.id });
-    }
+    const admin = {
+      id: sessionHandler.user().id,
+      role: "ADMIN",
+    };
 
     const newGroup = await requestHandler.postFile(
       {
         ...removeEmptyFields(group),
-        chatMembers: JSON.stringify(chatMembers),
+        chatMembers: prepareChatMembers([...selectedUsers, admin]),
       },
       "group",
     );

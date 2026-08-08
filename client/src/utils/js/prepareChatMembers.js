@@ -1,0 +1,15 @@
+/**
+ * Prepares the users to create chat members.
+ * @param {Array} users Array of users with their id.
+ * @param {string?} chatId The chat to associate the chat members with.
+ * @returns {string}
+ */
+export default function prepareChatMembers(users, chatId) {
+  const chatMembers = users.map((user) => {
+    const member = { userId: user.id };
+    if (user.role) member.role = user.role;
+    if (chatId) member.chatId = chatId;
+    return member;
+  });
+  return JSON.stringify(chatMembers);
+}
