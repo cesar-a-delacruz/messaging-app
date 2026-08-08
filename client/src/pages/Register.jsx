@@ -1,6 +1,7 @@
 import requestHandler from "@/handlers/requestHandler";
 import { registerFields } from "@/schemas/userSchema";
 import Form from "@/components/Form";
+import removeEmptyFields from "@/utils/js/removeEmptyFields";
 
 export default function Register() {
   return (
@@ -16,12 +17,16 @@ export default function Register() {
     </div>
   );
 
-  async function submitHandler(userData) {
-    if (userData.password !== userData.confirm)
+  async function submitHandler(data) {
+    if (data.password !== data.confirm)
       return alert("The passwords don't match");
 
-    const register = await requestHandler.postFile(userData, "user");
+    const register = await requestHandler.postFile(
+      removeEmptyFields(data),
+      "user",
+    );
     if (register.error) return alert(register.error);
+
     location.replace("/login");
   }
 }

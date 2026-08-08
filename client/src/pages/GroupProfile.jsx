@@ -11,6 +11,7 @@ import Dialog from "@/components/Dialog";
 import ProfileList from "@/components/ProfileList";
 import FormField from "@/components/FormField";
 import Profile from "@/components/Profile";
+import removeEmptyFields from "@/utils/js/removeEmptyFields";
 
 export default function GroupProfile() {
   const id = useParams().id;
@@ -63,8 +64,10 @@ export default function GroupProfile() {
         }}
         edit={{
           isAllowed: isCurrentMemberAdmin,
-          handler: async (data) =>
-            await requestHandler.put({ ...data, id: group.id }, "group"),
+          handler: async (data) => {
+            data.id = group.id;
+            await requestHandler.put(removeEmptyFields(data), "group");
+          },
         }}
         options={[
           {

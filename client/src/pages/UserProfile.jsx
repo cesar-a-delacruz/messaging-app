@@ -4,6 +4,7 @@ import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
 import Loader from "@/components/Loader";
 import Profile from "@/components/Profile";
+import removeEmptyFields from "@/utils/js/removeEmptyFields";
 
 export default function UserProfile() {
   const id = useParams().id;
@@ -26,8 +27,10 @@ export default function UserProfile() {
         }}
         edit={{
           isAllowed: isLoggedUserProfile,
-          handler: async (data) =>
-            await requestHandler.put({ ...data, id: user.id }, "user"),
+          handler: async (data) => {
+            data.id = user.id;
+            await requestHandler.put(removeEmptyFields(data), "user");
+          },
         }}
         options={[
           {

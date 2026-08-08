@@ -180,7 +180,10 @@ export default function Chat() {
       message.chatId = chat.data.id;
     }
 
-    const send = await requestHandler.postFile(message, "message");
+    const send = await requestHandler.postFile(
+      removeEmptyFields(message),
+      "message",
+    );
     if (send.error) return alert(send.error);
 
     dispatchMessages({

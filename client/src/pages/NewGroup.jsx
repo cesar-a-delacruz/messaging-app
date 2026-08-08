@@ -6,6 +6,7 @@ import Form from "@/components/Form";
 import Dialog from "@/components/Dialog";
 import ProfileList from "@/components/ProfileList";
 import Member from "@/components/Member";
+import removeEmptyFields from "@/utils/js/removeEmptyFields";
 
 export default function NewGroup() {
   const [users, setUsers] = useState([]);
@@ -54,7 +55,7 @@ export default function NewGroup() {
     </div>
   );
 
-  async function submitHandler(groupData) {
+  async function submitHandler(group) {
     if (!selectedUsers.length)
       return alert("You must add at least one member.");
 
@@ -70,7 +71,7 @@ export default function NewGroup() {
 
     const newGroup = await requestHandler.postFile(
       {
-        ...groupData,
+        ...removeEmptyFields(group),
         chatMembers: JSON.stringify(chatMembers),
       },
       "group",

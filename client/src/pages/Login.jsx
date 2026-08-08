@@ -16,9 +16,10 @@ export default function Login() {
     </div>
   );
 
-  async function submitHandler(credentials) {
-    const login = await sessionHandler.login(credentials);
+  async function submitHandler(data) {
+    const login = await sessionHandler.login(data);
     if (!sessionHandler.user()) return alert(login.error);
+
     location.replace("/");
   }
 }

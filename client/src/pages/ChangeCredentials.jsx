@@ -3,6 +3,7 @@ import { changeCredentialsFields } from "@/schemas/userSchema";
 import Form from "@/components/Form";
 import requestHandler from "@/handlers/requestHandler";
 import { useLocation } from "react-router-dom";
+import removeEmptyFields from "@/utils/js/removeEmptyFields";
 
 export default function ChangeCredentials() {
   const locationState = useLocation().state;
@@ -20,13 +21,11 @@ export default function ChangeCredentials() {
     </div>
   );
 
-  async function submitHandler(credentials) {
-    let data = {};
-    Object.keys(credentials).forEach((field) => {
-      if (credentials[field]) data[field] = credentials[field];
-    });
-
-    const newCredentials = await requestHandler.put(data, "auth/credentials");
+  async function submitHandler(data) {
+    const newCredentials = await requestHandler.put(
+      removeEmptyFields(data),
+      "auth/credentials",
+    );
     if (newCredentials) return alert(newCredentials.error);
 
     location.replace("profile/user");
