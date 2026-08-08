@@ -15,7 +15,7 @@ export default function ProfileList({ items, clickHandler }) {
       {list.map((item) => (
         <div
           key={item.id}
-          onClick={() => itemHandler(item)}
+          onClick={() => clickHandler(item)}
           className={styles.item}
         >
           <img src={item.image} alt={`${item.title} picture`} />
@@ -27,11 +27,4 @@ export default function ProfileList({ items, clickHandler }) {
       ))}
     </div>
   );
-
-  function itemHandler(item) {
-    if (clickHandler) return clickHandler(item);
-    navigate(`/chat`, {
-      state: item,
-    });
-  }
 }

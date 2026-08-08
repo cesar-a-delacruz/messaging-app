@@ -2,9 +2,11 @@ import sessionHandler from "@/handlers/sessionHandler";
 import useChatList from "@/hooks/useChatList";
 import Loader from "@/components/Loader";
 import ProfileList from "@/components/ProfileList";
+import { useNavigate } from "react-router-dom";
 
 export default function MyChats() {
   const chats = useChatList();
+  const navigate = useNavigate();
 
   if (!Object.keys(chats).length || chats.error)
     return <Loader text={chats.error || "Getting chats..."} />;
@@ -35,6 +37,7 @@ export default function MyChats() {
             },
           };
         })}
+        clickHandler={(chat) => navigate("/chat", { state: chat })}
       />
     </div>
   );
