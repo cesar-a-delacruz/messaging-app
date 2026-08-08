@@ -22,6 +22,7 @@ export default function Users() {
             id: "",
           },
         }))}
+        clickHandler={(item) => location.assign(`/profile/user/${item.id}`)}
       />
     </div>
   );

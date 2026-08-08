@@ -41,6 +41,22 @@ export default function UserProfile() {
               }),
             hide: !isLoggedUserProfile,
           },
+          {
+            text: "View chat",
+            handler: async () =>
+              navigate(`/chat`, {
+                state: {
+                  id: user.id,
+                  image: user.image,
+                  title: user.name,
+                  chat: {
+                    type: "user",
+                    id: "",
+                  },
+                },
+              }),
+            hide: isLoggedUserProfile,
+          },
         ]}
       />
     </div>

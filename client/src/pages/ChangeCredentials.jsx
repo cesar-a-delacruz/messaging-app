@@ -27,7 +27,7 @@ export default function ChangeCredentials() {
     });
 
     const newCredentials = await requestHandler.put(data, "auth/credentials");
-    if (newCredentials.error) return alert(newCredentials.error);
+    if (newCredentials) return alert(newCredentials.error);
 
     location.replace("profile/user");
   }
