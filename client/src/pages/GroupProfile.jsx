@@ -85,7 +85,13 @@ export default function GroupProfile() {
           },
           {
             text: "Exit group",
-            handler: () => exitDialog.current.showModal(),
+            handler: () => {
+              dispatchChatMembers({
+                type: actions.select,
+                payload: { selectedMember: chatMembers.currentMember },
+              });
+              exitDialog.current.showModal();
+            },
             hide: !isLoggedUserMember,
           },
           {
@@ -230,6 +236,17 @@ export default function GroupProfile() {
     });
   }
   async function removeMemberHandler() {
+    if (chatMembers.members.length === 2) {
+      const lastMember = chatMembers.members.find(
+        (member) => member.id !== chatMembers.selected.id,
+      );
+      const lastMemberRoleChange = await requestHandler.put(
+        { ...lastMember, role: "ADMIN" },
+        "chatMember",
+      );
+      if (lastMemberRoleChange) return alert(lastMemberRoleChange.error);
+      location.reload();
+    }
     const removeMember = await requestHandler.delete(
       chatMembers.selected.id,
       "chatMember",
