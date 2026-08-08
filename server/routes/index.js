@@ -29,19 +29,20 @@ module.exports = {
     "message",
     controllers.message,
     authorizationMiddleware,
-  ).route("get", "findAllByChat", "chat/:chatId"),
+  ).route("get", "findAllByChat", "chat/:chatId", authorizationMiddleware),
   chat: new CRUDRouter("chat", controllers.chat, authorizationMiddleware)
-    .route("get", "findAllByUser", "user/:userId")
+    .route("get", "findAllByUser", "user/:userId", authorizationMiddleware)
     .route(
       "get",
       "findOneByUsers",
       "loggedUser/:loggedUserId/otherUser/:otherUserId",
+      authorizationMiddleware,
     )
     .route("get", "findOneByGroup", "group/:groupId", authorizationMiddleware),
   chatMember: new CRUDRouter(
     "chatMember",
     controllers.chatMember,
     authorizationMiddleware,
-  ).route("get", "findAll", "group/:groupId"),
+  ).route("get", "findAll", "group/:groupId", authorizationMiddleware),
   group: new CRUDRouter("group", controllers.group, authorizationMiddleware),
 };
