@@ -28,13 +28,16 @@ export default function GroupProfile() {
   useEffect(() => {
     (async () => {
       const response = await requestHandler.get(`chatMember/group/${id}`);
-      if (response.error) return alert(response.error);
+
+      if (response.error)
+        return dispatchChatMembers({
+          type: actions.load,
+          payload: response,
+        });
 
       dispatchChatMembers({
         type: actions.load,
-        payload: {
-          data: response.data,
-        },
+        payload: response.data,
       });
     })();
   }, []);

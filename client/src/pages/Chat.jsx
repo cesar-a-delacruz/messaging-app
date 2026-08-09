@@ -23,11 +23,11 @@ export default function Chat() {
     (async () => {
       let response = {};
 
-      if (locationState.chat.id) {
+      if (locationState.chat.id)
         response = await requestHandler.get(
           `message/chat/${locationState.chat.id}`,
         );
-      } else {
+      else {
         switch (locationState.chat.type) {
           case "user":
             response = await requestHandler.get(
@@ -41,11 +41,16 @@ export default function Chat() {
             break;
         }
       }
-      if (response.error) return alert(response.error);
+
+      if (response.error)
+        return dispatchMessages({
+          type: actions.load,
+          payload: response,
+        });
 
       dispatchMessages({
         type: actions.load,
-        payload: { data: response.data },
+        payload: response.data,
       });
     })();
   }, []);

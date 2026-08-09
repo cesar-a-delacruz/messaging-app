@@ -12,9 +12,11 @@ export function dispatcher(state, action) {
 
   switch (action.type) {
     case actions.load:
+      if (action.payload.error) return { ...action.payload };
+
       const initial = {
         selected: {},
-        ...action.payload.data,
+        ...action.payload,
       };
 
       initial.messages.sort(

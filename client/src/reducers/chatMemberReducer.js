@@ -13,10 +13,13 @@ export function dispatcher(state, action) {
 
   switch (action.type) {
     case actions.load:
+      if (action.payload.error) return { ...action.payload };
+
       const initial = {
         selected: {},
-        members: [...action.payload.data],
+        members: [...action.payload],
       };
+
       for (const member of initial.members) {
         if (member.userId === sessionHandler.user().id) {
           initial.currentMember = member;
