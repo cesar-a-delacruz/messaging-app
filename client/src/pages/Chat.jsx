@@ -74,38 +74,56 @@ export default function Chat() {
         </div>
       </div>
       <div className={styles.messages}>
+        <button
+          onClick={async () => {
+            const response = await requestHandler.get(
+              `message/chat/${messages.chatId}/${messages.page}`,
+            );
+
+            dispatchMessages({
+              type: actions.fetch,
+              payload: !response.error ? response.data : response,
+            });
+          }}
+        >
+          Load more
+        </button>
         {messages.messages.length ? (
-          messages.messages.map((message) => (
-            <Message
-              key={message.id}
-              data={message}
-              styleJustifyContent={
-                message.authorId === messages.currentAuthorId ? "end" : "start"
-              }
-              contextMenuHandler={(message) => {
-                if (message.authorId === messages.currentAuthorId)
-                  dispatchMessages({
-                    type: actions.select,
-                    payload: { selectedMessage: message },
-                  });
-              }}
-            >
-              {messages.selected.id === message.id && (
-                <Menu
-                  options={[
-                    {
-                      text: "Edit",
-                      handler: () => editDialog.current.showModal(),
-                    },
-                    {
-                      text: "Delete",
-                      handler: () => deleteDialog.current.showModal(),
-                    },
-                  ]}
-                />
-              )}
-            </Message>
-          ))
+          messages.messages.map((message) => {
+            return (
+              <Message
+                key={message.id}
+                data={message}
+                styleJustifyContent={
+                  message.authorId === messages.currentAuthorId
+                    ? "end"
+                    : "start"
+                }
+                contextMenuHandler={(message) => {
+                  if (message.authorId === messages.currentAuthorId)
+                    dispatchMessages({
+                      type: actions.select,
+                      payload: { selectedMessage: message },
+                    });
+                }}
+              >
+                {messages.selected.id === message.id && (
+                  <Menu
+                    options={[
+                      {
+                        text: "Edit",
+                        handler: () => editDialog.current.showModal(),
+                      },
+                      {
+                        text: "Delete",
+                        handler: () => deleteDialog.current.showModal(),
+                      },
+                    ]}
+                  />
+                )}
+              </Message>
+            );
+          })
         ) : (
           <div>Start a convesation :)</div>
         )}

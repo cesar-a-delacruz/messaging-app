@@ -1,6 +1,7 @@
 export const actions = {
   load: "LOAD",
   add: "ADD",
+  fetch: "FETCH",
   select: "SELECT",
   changeSelected: "CHANGE_SELECTED",
   edit: "EDIT",
@@ -16,6 +17,7 @@ export function dispatcher(state, action) {
 
       const initial = {
         selected: {},
+        page: 1,
         ...action.payload,
       };
 
@@ -27,6 +29,20 @@ export function dispatcher(state, action) {
 
     case actions.add:
       prev.messages = [...prev.messages, action.payload.data];
+      return { ...prev };
+
+    case actions.fetch:
+      if (action.payload.error) {
+        alert("There are no more messages.");
+        return state;
+      }
+      const newMessages = action.payload.messages;
+      newMessages.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      );
+      prev.messages = [...newMessages, ...prev.messages];
+      prev.page++;
       return { ...prev };
 
     case actions.select:
