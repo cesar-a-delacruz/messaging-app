@@ -4,8 +4,8 @@ import styles from "./styles/Default.module.css";
 import useSession from "@/hooks/useSession";
 
 export default function Default() {
-  // const isUserLogged = useSession();
-  // if (isUserLogged) return <Navigate to={"/"} />;
+  const isUserLogged = useSession(false);
+  if (isUserLogged) return <Navigate to={"/"} />;
 
   return (
     <div className={`layout ${styles.default}`}>

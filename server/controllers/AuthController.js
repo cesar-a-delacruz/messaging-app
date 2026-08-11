@@ -60,7 +60,7 @@ module.exports = class AuthController extends Controller {
           .end();
 
       req.session.token = token;
-      return res.status(200).json({ token: req.session.token }).end();
+      return res.status(200).end();
     } catch (error) {
       console.error(error);
       return res
@@ -71,8 +71,8 @@ module.exports = class AuthController extends Controller {
   };
   logout = async (req, res) => {
     try {
-      req.session.token = null;
-      return res.send(200).end();
+      req.session = null;
+      return res.sendStatus(200).end();
     } catch (error) {
       console.error(error);
       return res
@@ -83,7 +83,6 @@ module.exports = class AuthController extends Controller {
   };
   status = async (req, res) => {
     try {
-      console.log(req.session);
       if (req.session.token) return res.sendStatus(200);
       else return res.sendStatus(401);
     } catch (error) {

@@ -5,8 +5,8 @@ import sessionHandler from "@/handlers/sessionHandler";
 import useSession from "@/hooks/useSession";
 
 export default function Main() {
-  // const isUserLogged = useSession();
-  // if (!isUserLogged) return <Navigate to={"/login"} />;
+  const isUserLogged = useSession(true);
+  if (!isUserLogged) return <Navigate to={"/login"} />;
 
   return (
     <div className={`layout ${styles.main}`}>
