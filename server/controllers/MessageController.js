@@ -13,9 +13,17 @@ module.exports = class MessageController extends FileController {
           .end();
 
       console.table(rows);
+
+      const response = {
+        currentAuthorId: req.user.id,
+        chatId: req.params.chatId,
+        messages: rows,
+      };
       return res
         .status(200)
-        .json({ data: { chatId: req.params.chatId, messages: rows } })
+        .json({
+          data: response,
+        })
         .end();
     } catch (error) {
       console.error(error);

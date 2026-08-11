@@ -1,10 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom";
 import "@/utils/css/layouts.css";
 import styles from "./styles/Default.module.css";
-import sessionHandler from "@/handlers/sessionHandler";
+import useSession from "@/hooks/useSession";
 
 export default function Default() {
-  if (sessionHandler.user()) return <Navigate to={"/"} />;
+  // const isUserLogged = useSession();
+  // if (isUserLogged) return <Navigate to={"/"} />;
 
   return (
     <div className={`layout ${styles.default}`}>

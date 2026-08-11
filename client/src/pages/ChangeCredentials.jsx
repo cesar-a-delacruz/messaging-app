@@ -1,4 +1,3 @@
-import sessionHandler from "@/handlers/sessionHandler";
 import { changeCredentialsFields } from "@/schemas/userSchema";
 import Form from "@/components/Form";
 import requestHandler from "@/handlers/requestHandler";

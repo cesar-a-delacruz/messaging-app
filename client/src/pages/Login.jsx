@@ -18,8 +18,6 @@ export default function Login() {
 
   async function submitHandler(data) {
     const login = await sessionHandler.login(data);
-    if (!sessionHandler.user()) return alert(login.error);
-
-    location.replace("/");
+    if (login) return alert(login.error);
   }
 }

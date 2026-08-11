@@ -1,9 +1,9 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useReducer, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
-import sessionHandler from "@/handlers/sessionHandler";
 import { allFields } from "@/schemas/messageSchema";
 import { actions, dispatcher } from "@/reducers/messageReducer";
+import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import Form from "@/components/Form";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
@@ -31,7 +31,7 @@ export default function Chat() {
         switch (locationState.chat.type) {
           case "user":
             response = await requestHandler.get(
-              `chat/loggedUser/${sessionHandler.user().id}/otherUser/${locationState.id}`,
+              `chat/otherUser/${locationState.id}`,
             );
             break;
           case "group":
@@ -58,7 +58,7 @@ export default function Chat() {
   if (!Object.keys(messages).length || messages.error)
     return <Loader text={messages.error || "Getting messages..."} />;
 
-  allFields[2].value = sessionHandler.user().id;
+  allFields[2].value = messages.currentAuthorId;
   allFields[3].value = messages.chatId;
 
   return (
@@ -86,10 +86,10 @@ export default function Chat() {
               key={message.id}
               data={message}
               styleJustifyContent={
-                message.authorId === sessionHandler.user().id ? "end" : "start"
+                message.authorId === messages.currentAuthorId ? "end" : "start"
               }
               contextMenuHandler={(message) => {
-                if (message.authorId === sessionHandler.user().id)
+                if (message.authorId === messages.currentAuthorId)
                   dispatchMessages({
                     type: actions.select,
                     payload: { selectedMessage: message },
@@ -151,7 +151,7 @@ export default function Chat() {
       const chat = await requestHandler.post({}, "chat");
 
       const users = [
-        { id: sessionHandler.user().id },
+        { id: messages.currentAuthorId },
         { id: locationState.id },
       ];
 
@@ -165,7 +165,6 @@ export default function Chat() {
 
       message.chatId = chat.data.id;
     }
-
     const send = await requestHandler.postFile(
       removeEmptyFields(message),
       "message",

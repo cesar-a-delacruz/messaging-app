@@ -26,7 +26,7 @@ export function dispatcher(state, action) {
       return { ...initial };
 
     case actions.add:
-      prev.messages = [...prev.messages, action.payload];
+      prev.messages = [...prev.messages, action.payload.data];
       return { ...prev };
 
     case actions.select:

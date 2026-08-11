@@ -12,7 +12,15 @@ module.exports = class ChatMemberController extends CRUDController {
           .end();
 
       console.table(rows);
-      return res.status(200).json({ data: rows }).end();
+
+      const response = { members: rows };
+      for (const member of rows) {
+        if (member.userId === req.user.id) {
+          response.currentMember = member;
+          break;
+        }
+      }
+      return res.status(200).json({ data: response }).end();
     } catch (error) {
       console.error(error);
       return res

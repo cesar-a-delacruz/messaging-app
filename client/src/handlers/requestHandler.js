@@ -7,6 +7,7 @@ export default {
   get: async (path) => {
     const response = await fetch(`${import.meta.env.VITE_SERVER}/${path}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+      credentials: "include",
     });
 
     if (response.ok) return await response.json();
@@ -18,6 +19,7 @@ export default {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
+      credentials: "include",
       body: new URLSearchParams(data),
     });
 
@@ -35,6 +37,7 @@ export default {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
+      credentials: "include",
       body: formData,
     });
 
@@ -49,6 +52,7 @@ export default {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt")}`,
         },
+        credentials: "include",
         body: new URLSearchParams(data),
       },
     );
@@ -64,6 +68,7 @@ export default {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt")}`,
         },
+        credentials: "include",
       },
     );
 

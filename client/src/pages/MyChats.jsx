@@ -1,4 +1,3 @@
-import sessionHandler from "@/handlers/sessionHandler";
 import useChatList from "@/hooks/useChatList";
 import Loader from "@/components/Loader";
 import ProfileList from "@/components/ProfileList";
@@ -14,29 +13,18 @@ export default function MyChats() {
   return (
     <div className="page">
       <ProfileList
-        items={chats.map((chat) => {
-          let profile = {};
-          if (chat.group) profile = chat.group;
-          else {
-            for (const chatMember of chat.chatMembers) {
-              if (chatMember.user.id !== sessionHandler.user().id)
-                profile = chatMember.user;
-            }
-          }
-
-          return {
-            id: profile.id,
-            image: profile.image,
-            title: !chat.group ? profile.username : profile.name,
-            content: chat.messages[0].content
-              ? chat.messages[0].content
-              : "attachment",
-            chat: {
-              type: !chat.group ? "user" : "group",
-              id: chat.id,
-            },
-          };
-        })}
+        items={chats.map((chat) => ({
+          id: chat.profile.id,
+          image: chat.profile.image,
+          title: !chat.group ? chat.profile.username : chat.profile.name,
+          content: chat.messages[0].content
+            ? chat.messages[0].content
+            : "attachment",
+          chat: {
+            type: !chat.group ? "user" : "group",
+            id: chat.id,
+          },
+        }))}
         clickHandler={(chat) => navigate("/chat", { state: chat })}
       />
     </div>

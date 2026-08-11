@@ -24,9 +24,7 @@ export default function NewGroup() {
       <h3>Members</h3>
       <button
         onClick={async () => {
-          const response = await requestHandler.get(
-            `user/not/${sessionHandler.user().id}`,
-          );
+          const response = await requestHandler.get("user/not/logged");
           if (response.data) setUsers(response.data);
           else alert(response.error);
 
@@ -50,7 +48,11 @@ export default function NewGroup() {
       </Dialog>
       <div>
         {selectedUsers.map((user) => (
-          <Member key={user.id} data={user} contextMenuHandler={() => {}} />
+          <Member
+            key={user.id}
+            data={{ ...user, username: user.title }}
+            contextMenuHandler={() => {}}
+          />
         ))}
       </div>
     </div>
@@ -60,15 +62,10 @@ export default function NewGroup() {
     if (!selectedUsers.length)
       return alert("You must add at least one member.");
 
-    const admin = {
-      id: sessionHandler.user().id,
-      role: "ADMIN",
-    };
-
     const newGroup = await requestHandler.postFile(
       {
         ...removeEmptyFields(group),
-        chatMembers: prepareChatMembers([...selectedUsers, admin]),
+        chatMembers: prepareChatMembers(selectedUsers),
       },
       "group",
     );

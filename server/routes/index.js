@@ -11,11 +11,13 @@ module.exports = {
       "credentials/:id",
       authorizationMiddleware,
     )
-    .route("post", "authenticate")
-    .route("get", "refresh", "refresh/:id"),
+    .route("post", "login")
+    .route("get", "logout", "logout")
+    .route("get", "refresh", "refresh/:id")
+    .route("get", "status", "status"),
   user: new Router("user", controllers.user)
     .route("get", "findOne", ":id", authorizationMiddleware)
-    .route("get", "findAll", "not/:userId", authorizationMiddleware)
+    .route("get", "findAll", "not/logged", authorizationMiddleware)
     .route(
       "get",
       "findAllNotInChat",
@@ -31,11 +33,11 @@ module.exports = {
     authorizationMiddleware,
   ).route("get", "findAllByChat", "chat/:chatId", authorizationMiddleware),
   chat: new CRUDRouter("chat", controllers.chat, authorizationMiddleware)
-    .route("get", "findAllByUser", "user/:userId", authorizationMiddleware)
+    .route("get", "findAllByUser", "user/logged", authorizationMiddleware)
     .route(
       "get",
       "findOneByUsers",
-      "loggedUser/:loggedUserId/otherUser/:otherUserId",
+      "otherUser/:otherUserId",
       authorizationMiddleware,
     )
     .route("get", "findOneByGroup", "group/:groupId", authorizationMiddleware),

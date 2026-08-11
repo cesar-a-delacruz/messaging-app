@@ -3,16 +3,24 @@ const CRUDController = require("./CRUDController.js");
 module.exports = class ChatController extends CRUDController {
   findAllByUser = async (req, res) => {
     try {
-      const rows = await this.repository.findAllByUser(req.params.userId);
-
+      const rows = await this.repository.findAllByUser(req.user.id);
       if (!rows.length)
         return res
           .status(404)
           .json({ error: `No ${this.itemName} have been found.` })
           .end();
-
+      const response = rows.map((chat) => {
+        if (chat.group) chat.profile = chat.group;
+        else {
+          for (const chatMember of chat.chatMembers) {
+            if (chatMember.user.id !== req.user.id)
+              chat.profile = chatMember.user;
+          }
+        }
+        return chat;
+      });
       console.table(rows);
-      return res.status(200).json({ data: rows }).end();
+      return res.status(200).json({ data: response }).end();
     } catch (error) {
       console.error(error);
       return res
@@ -24,7 +32,7 @@ module.exports = class ChatController extends CRUDController {
   findOneByUsers = async (req, res) => {
     try {
       const row = await this.repository.findOneByUsers(
-        req.params.loggedUserId,
+        req.user.id,
         req.params.otherUserId,
       );
 
@@ -35,10 +43,13 @@ module.exports = class ChatController extends CRUDController {
           .end();
 
       console.info(row);
-      return res
-        .status(200)
-        .json({ data: { chatId: row.id, messages: row.messages } })
-        .end();
+
+      const response = {
+        currentAuthorId: req.user.id,
+        chatId: row.id,
+        messages: row.messages,
+      };
+      return res.status(200).json({ data: response }).end();
     } catch (error) {
       console.error(error);
       return res
@@ -58,10 +69,13 @@ module.exports = class ChatController extends CRUDController {
           .end();
 
       console.info(row);
-      return res
-        .status(200)
-        .json({ data: { chatId: row.id, messages: row.messages } })
-        .end();
+
+      const response = {
+        currentAuthorId: req.user.id,
+        chatId: row.id,
+        messages: row.messages,
+      };
+      return res.status(200).json({ data: response }).end();
     } catch (error) {
       console.error(error);
       return res

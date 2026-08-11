@@ -11,9 +11,7 @@ export default function useChatList() {
 
   useEffect(() => {
     (async () => {
-      const request = await requestHandler.get(
-        `chat/user/${sessionHandler.user().id}`,
-      );
+      const request = await requestHandler.get("chat/user/logged");
 
       if (request.error) return setResponse(request);
 

@@ -17,15 +17,9 @@ export function dispatcher(state, action) {
 
       const initial = {
         selected: {},
-        members: [...action.payload],
+        ...action.payload,
       };
 
-      for (const member of initial.members) {
-        if (member.userId === sessionHandler.user().id) {
-          initial.currentMember = member;
-          break;
-        }
-      }
       return initial;
 
     case actions.add:

@@ -37,7 +37,7 @@ module.exports = class AuthController extends Controller {
       }
     },
   ];
-  authenticate = async (req, res) => {
+  login = async (req, res) => {
     try {
       const { username, password } = req.body;
 
@@ -59,13 +59,38 @@ module.exports = class AuthController extends Controller {
           })
           .end();
 
-      return res.status(200).json({ token: token }).end();
+      req.session.token = token;
+      return res.status(200).json({ token: req.session.token }).end();
     } catch (error) {
       console.error(error);
-
       return res
         .status(500)
         .json({ error: `Failed to authenticate ${this.itemName}.` })
+        .end();
+    }
+  };
+  logout = async (req, res) => {
+    try {
+      req.session.token = null;
+      return res.send(200).end();
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: `Failed to logout ${this.itemName}.` })
+        .end();
+    }
+  };
+  status = async (req, res) => {
+    try {
+      console.log(req.session);
+      if (req.session.token) return res.sendStatus(200);
+      else return res.sendStatus(401);
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: `Failed to verify ${this.itemName} auth status.` })
         .end();
     }
   };

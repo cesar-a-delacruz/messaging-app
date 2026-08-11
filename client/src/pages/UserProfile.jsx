@@ -1,5 +1,4 @@
 import { useParams, useNavigate } from "react-router-dom";
-import sessionHandler from "@/handlers/sessionHandler";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
 import Loader from "@/components/Loader";
@@ -8,13 +7,13 @@ import removeEmptyFields from "@/utils/js/removeEmptyFields";
 
 export default function UserProfile() {
   const id = useParams().id;
-  const [user] = useGet(`user/${id ? id : sessionHandler.user().id}`);
+  const [user] = useGet(`user/${id ? id : "profile"}`);
   const navigate = useNavigate();
 
   if (!Object.keys(user).length || user.error)
     return <Loader text={user.error || "Getting user..."} />;
 
-  const isLoggedUserProfile = user.id === sessionHandler.user().id;
+  const isLoggedUserProfile = !id;
 
   return (
     <div className="page">

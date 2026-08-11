@@ -7,7 +7,6 @@
 export default function prepareChatMembers(users, chatId) {
   const chatMembers = users.map((user) => {
     const member = { userId: user.id };
-    if (user.role) member.role = user.role;
     if (chatId) member.chatId = chatId;
     return member;
   });
