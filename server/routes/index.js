@@ -2,6 +2,7 @@ const CRUDRouter = require("./CRUDRouter.js");
 const Router = require("./Router.js");
 const controllers = require("../controllers/index.js");
 const authorizationMiddleware = require("../middlewares/authorizationMiddleware.js");
+const { authLimit } = require("../configs/rateLimitConfig.js");
 
 module.exports = {
   auth: new Router("auth", controllers.auth)
@@ -11,7 +12,7 @@ module.exports = {
       "credentials/:id",
       authorizationMiddleware,
     )
-    .route("post", "login")
+    .route("post", "login", "", authLimit)
     .route("get", "logout", "logout")
     .route("get", "refresh", "refresh/:id")
     .route("get", "status", "status"),
