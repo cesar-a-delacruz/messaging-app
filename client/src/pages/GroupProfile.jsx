@@ -29,15 +29,9 @@ export default function GroupProfile() {
     (async () => {
       const response = await requestHandler.get(`chatMember/group/${id}`);
 
-      if (response.error)
-        return dispatchChatMembers({
-          type: actions.load,
-          payload: response,
-        });
-
       dispatchChatMembers({
         type: actions.load,
-        payload: response.data,
+        payload: !response.error ? response.data : response,
       });
     })();
   }, []);

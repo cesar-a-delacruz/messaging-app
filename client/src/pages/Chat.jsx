@@ -42,15 +42,9 @@ export default function Chat() {
         }
       }
 
-      if (response.error)
-        return dispatchMessages({
-          type: actions.load,
-          payload: response,
-        });
-
       dispatchMessages({
         type: actions.load,
-        payload: response.data,
+        payload: !response.error ? response.data : response,
       });
     })();
   }, []);
