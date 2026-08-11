@@ -17,6 +17,7 @@ model User {
   messages   Message[]    @relation(name: "message_author")
   chatMember ChatMember[] @relation(name: "chat_member_user")
 
+  @@index([id])
   @@map("user")
 }
 
@@ -27,6 +28,7 @@ model Group {
   image String? @db.Text
   chats Chat[]  @relation(name: "group_chat")
 
+  @@index([id])
   @@map("group")
 }
 
@@ -37,6 +39,7 @@ model Chat {
   group       Group?       @relation(fields: [groupId], references: [id], name: "group_chat", onDelete: Cascade)
   groupId     String?      @map("group_id")
 
+  @@index([groupId])
   @@map("chat")
 }
 
@@ -62,6 +65,7 @@ model Message {
   author     User     @relation(fields: [authorId], references: [id], name: "message_author", onDelete: Cascade)
   authorId   String   @map("author_id")
 
+  @@index([chatId])
   @@map("message")
 }
 
