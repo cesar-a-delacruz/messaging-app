@@ -32,7 +32,14 @@ module.exports = {
     "message",
     controllers.message,
     authorizationMiddleware,
-  ).route("get", "findAllByChat", "chat/:chatId", authorizationMiddleware),
+  )
+    .route("get", "findAllByChat", "chat/:chatId", authorizationMiddleware)
+    .route(
+      "get",
+      "findAllByChat",
+      "chat/:chatId/:page",
+      authorizationMiddleware,
+    ),
   chat: new CRUDRouter("chat", controllers.chat, authorizationMiddleware)
     .route("get", "findAllByUser", "user/logged", authorizationMiddleware)
     .route(

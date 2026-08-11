@@ -4,7 +4,10 @@ const uploadMiddleware = require("../middlewares/uploadMiddleware.js");
 module.exports = class MessageController extends FileController {
   findAllByChat = async (req, res) => {
     try {
-      const rows = await this.repository.findAllByChat(req.params.chatId);
+      const rows = await this.repository.findAllByChat(
+        req.params.chatId,
+        Number(req.params.page),
+      );
 
       if (!rows.length)
         return res
