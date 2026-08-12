@@ -9,7 +9,7 @@ export default function Groups() {
 
   useEffect(() => {
     (async () => {
-      const response = await requestHandler.get("group/all/0");
+      const response = await requestHandler.get("group");
 
       dispatchGroups({
         type: actions.load,
@@ -38,7 +38,7 @@ export default function Groups() {
       />
       <button
         onClick={async () => {
-          const response = await requestHandler.get(`group/all/${groups.page}`);
+          const response = await requestHandler.get(`group?q=${groups.page}`);
           dispatchGroups({
             type: actions.fetch,
             payload: !response.error ? response.data : response,

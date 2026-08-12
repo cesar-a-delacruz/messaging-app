@@ -9,7 +9,7 @@ export default function Users() {
 
   useEffect(() => {
     (async () => {
-      const response = await requestHandler.get("user/not/logged/0");
+      const response = await requestHandler.get("user/not/logged");
 
       dispatchUsers({
         type: actions.load,
@@ -39,7 +39,7 @@ export default function Users() {
       <button
         onClick={async () => {
           const response = await requestHandler.get(
-            `user/not/logged/${users.page}`,
+            `user/not/logged?q=${users.page}`,
           );
           dispatchUsers({
             type: actions.fetch,

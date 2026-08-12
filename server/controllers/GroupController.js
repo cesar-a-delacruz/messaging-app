@@ -3,7 +3,7 @@ const FileController = require("./FileController.js");
 module.exports = class GroupController extends FileController {
   findAll = async (req, res) => {
     try {
-      const rows = await this.repository.findAll(req.params.page);
+      const rows = await this.repository.findAll(req.query.q);
 
       if (!rows.length)
         return res

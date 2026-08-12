@@ -11,7 +11,7 @@ export default function MyChats() {
 
   useEffect(() => {
     (async () => {
-      const response = await requestHandler.get("chat/user/logged/0");
+      const response = await requestHandler.get("chat/user/logged");
       if (response.error)
         return dispatchChats({
           type: actions.load,
@@ -53,7 +53,7 @@ export default function MyChats() {
       <button
         onClick={async () => {
           const response = await requestHandler.get(
-            `chat/user/logged/${chats.page}`,
+            `chat/user/logged?q=${chats.page}`,
           );
           dispatchChats({
             type: actions.fetch,

@@ -25,7 +25,7 @@ export default function Chat() {
 
       if (locationState.chat.id)
         response = await requestHandler.get(
-          `message/chat/${locationState.chat.id}/0`,
+          `message/chat/${locationState.chat.id}/`,
         );
       else {
         switch (locationState.chat.type) {
@@ -77,7 +77,7 @@ export default function Chat() {
         <button
           onClick={async () => {
             const response = await requestHandler.get(
-              `message/chat/${messages.chatId}/${messages.page}`,
+              `message/chat/${messages.chatId}?q=${messages.page}`,
             );
 
             dispatchMessages({

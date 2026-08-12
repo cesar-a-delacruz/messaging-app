@@ -5,7 +5,7 @@ module.exports = class ChatController extends CRUDController {
     try {
       const rows = await this.repository.findAllByUser(
         req.user.id,
-        req.params.page,
+        req.query.q,
       );
       if (!rows.length)
         return res

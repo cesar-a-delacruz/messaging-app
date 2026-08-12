@@ -4,7 +4,7 @@ const uploadMiddleware = require("../middlewares/uploadMiddleware.js");
 module.exports = class UserController extends FileController {
   findAll = async (req, res) => {
     try {
-      const rows = await this.repository.findAll(req.user.id, req.params.page);
+      const rows = await this.repository.findAll(req.user.id, req.query.q);
 
       if (!rows.length)
         return res
