@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const { compare } = require("bcryptjs");
-require("dotenv").config();
 
 module.exports = {
   authenticate: async (password, user) => {

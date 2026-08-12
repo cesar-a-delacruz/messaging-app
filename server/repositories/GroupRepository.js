@@ -1,5 +1,4 @@
 const Repository = require("./Repository.js");
-require("dotenv").config();
 
 module.exports = class GroupRepository extends Repository {
   findAll = async (page) => {

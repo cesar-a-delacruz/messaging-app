@@ -1,5 +1,4 @@
 const { cloudinary } = require("../configs/fileConfig.js");
-require("dotenv").config();
 
 module.exports = {
   upload: async (name, fileBuffer, path) => {

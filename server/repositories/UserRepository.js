@@ -1,6 +1,5 @@
 const Repository = require("./Repository.js");
 const { hash } = require("bcryptjs");
-require("dotenv").config();
 
 module.exports = class UserRepository extends Repository {
   findAll = async (userId, page) => {
