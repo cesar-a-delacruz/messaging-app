@@ -6,7 +6,7 @@ module.exports = class MessageController extends FileController {
     try {
       const rows = await this.repository.findAllByChat(
         req.params.chatId,
-        Number(req.params.page),
+        req.params.page,
       );
 
       if (!rows.length)

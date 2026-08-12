@@ -25,7 +25,7 @@ export default function Chat() {
 
       if (locationState.chat.id)
         response = await requestHandler.get(
-          `message/chat/${locationState.chat.id}`,
+          `message/chat/${locationState.chat.id}/0`,
         );
       else {
         switch (locationState.chat.type) {

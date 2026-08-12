@@ -73,6 +73,7 @@ module.exports = class ChatRepository extends Repository {
             chatId: true,
           },
           orderBy: { createdAt: "desc" },
+          take: 10,
         },
       },
     });
@@ -88,6 +89,7 @@ module.exports = class ChatRepository extends Repository {
             chatId: true,
           },
           orderBy: { createdAt: "desc" },
+          take: 10,
         },
       },
     });
