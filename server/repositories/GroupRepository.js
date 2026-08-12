@@ -1,12 +1,13 @@
 const Repository = require("./Repository.js");
+require("dotenv").config();
 
 module.exports = class GroupRepository extends Repository {
   findAll = async (page) => {
     let pagination = {};
-    if (page) pagination.skip = 10 * page;
+    if (page) pagination.skip = Number(process.env.PAGINATION_PROFILE) * page;
 
     return await this.entity.model.findMany({
-      take: 10,
+      take: Number(process.env.PAGINATION_PROFILE),
       ...pagination,
     });
   };

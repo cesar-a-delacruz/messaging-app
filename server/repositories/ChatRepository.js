@@ -1,9 +1,10 @@
 const Repository = require("./Repository.js");
+require("dotenv").config();
 
 module.exports = class ChatRepository extends Repository {
   findAllByUser = async (userId, page) => {
     let pagination = {};
-    if (page) pagination.skip = 10 * page;
+    if (page) pagination.skip = Number(process.env.PAGINATION_PROFILE) * page;
 
     return await this.entity.model.findMany({
       where: {
@@ -47,7 +48,7 @@ module.exports = class ChatRepository extends Repository {
           },
         },
       },
-      take: 10,
+      take: Number(process.env.PAGINATION_PROFILE),
       ...pagination,
     });
   };
@@ -79,7 +80,7 @@ module.exports = class ChatRepository extends Repository {
             chatId: true,
           },
           orderBy: { createdAt: "desc" },
-          take: 10,
+          take: Number(process.env.PAGINATION_MESSAGE),
         },
       },
     });
@@ -95,7 +96,7 @@ module.exports = class ChatRepository extends Repository {
             chatId: true,
           },
           orderBy: { createdAt: "desc" },
-          take: 10,
+          take: Number(process.env.PAGINATION_MESSAGE),
         },
       },
     });

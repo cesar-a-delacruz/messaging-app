@@ -1,14 +1,15 @@
 const Repository = require("./Repository.js");
 const { hash } = require("bcryptjs");
+require("dotenv").config();
 
 module.exports = class UserRepository extends Repository {
   findAll = async (userId, page) => {
     let pagination = {};
-    if (page) pagination.skip = 10 * page;
+    if (page) pagination.skip = Number(process.env.PAGINATION_PROFILE) * page;
 
     return await this.entity.model.findMany({
       where: { NOT: { id: userId } },
-      take: 10,
+      take: Number(process.env.PAGINATION_PROFILE),
       ...pagination,
     });
   };

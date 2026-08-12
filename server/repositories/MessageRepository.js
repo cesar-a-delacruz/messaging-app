@@ -1,9 +1,10 @@
 const Repository = require("./Repository.js");
+require("dotenv").config();
 
 module.exports = class MessageRepository extends Repository {
   findAllByChat = async (chatId, page) => {
     let pagination = {};
-    if (page) pagination.skip = 10 * page;
+    if (page) pagination.skip = Number(process.env.PAGINATION_MESSAGE) * page;
 
     return await this.entity.model.findMany({
       where: { chatId },
@@ -11,7 +12,7 @@ module.exports = class MessageRepository extends Repository {
       orderBy: {
         createdAt: "desc",
       },
-      take: 10,
+      take: Number(process.env.PAGINATION_MESSAGE),
       ...pagination,
     });
   };
