@@ -2,10 +2,16 @@ const Repository = require("./Repository.js");
 const { hash } = require("bcryptjs");
 
 module.exports = class UserRepository extends Repository {
-  findAll = async (userId) =>
-    await this.entity.model.findMany({
+  findAll = async (userId, page) => {
+    let pagination = {};
+    if (page) pagination.skip = 10 * page;
+
+    return await this.entity.model.findMany({
       where: { NOT: { id: userId } },
+      take: 10,
+      ...pagination,
     });
+  };
   findAllNotInChat = async (chatId) =>
     await this.entity.model.findMany({
       where: { NOT: { chatMember: { some: { chatId } } } },

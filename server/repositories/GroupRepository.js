@@ -1,6 +1,15 @@
 const Repository = require("./Repository.js");
 
 module.exports = class GroupRepository extends Repository {
+  findAll = async (page) => {
+    let pagination = {};
+    if (page) pagination.skip = 10 * page;
+
+    return await this.entity.model.findMany({
+      take: 10,
+      ...pagination,
+    });
+  };
   findOne = async (id) =>
     await this.entity.model.findUnique({
       where: { id },

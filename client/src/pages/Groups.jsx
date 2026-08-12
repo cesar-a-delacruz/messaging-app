@@ -1,9 +1,22 @@
-import useGet from "@/hooks/useGet";
+import { useEffect, useReducer } from "react";
+import { actions, dispatcher } from "@/reducers/profileListReducer";
+import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader";
 import ProfileList from "@/components/ProfileList";
 
 export default function Groups() {
-  const [groups] = useGet("group");
+  const [groups, dispatchGroups] = useReducer(dispatcher, {});
+
+  useEffect(() => {
+    (async () => {
+      const response = await requestHandler.get("group/all/0");
+
+      dispatchGroups({
+        type: actions.load,
+        payload: !response.error ? response.data : response,
+      });
+    })();
+  }, []);
 
   if (!Object.keys(groups).length || groups.error)
     return <Loader text={groups.error || "Getting groups..."} />;
@@ -11,7 +24,7 @@ export default function Groups() {
   return (
     <div className="page">
       <ProfileList
-        items={groups.map((group) => ({
+        items={groups.profiles.map((group) => ({
           id: group.id,
           image: group.image,
           title: group.name,
@@ -23,6 +36,17 @@ export default function Groups() {
         }))}
         clickHandler={(item) => location.assign(`/profile/group/${item.id}`)}
       />
+      <button
+        onClick={async () => {
+          const response = await requestHandler.get(`group/all/${groups.page}`);
+          dispatchGroups({
+            type: actions.fetch,
+            payload: !response.error ? response.data : response,
+          });
+        }}
+      >
+        Load more
+      </button>
     </div>
   );
 }

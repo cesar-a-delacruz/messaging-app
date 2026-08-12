@@ -1,8 +1,11 @@
 const Repository = require("./Repository.js");
 
 module.exports = class ChatRepository extends Repository {
-  findAllByUser = async (userId) =>
-    await this.entity.model.findMany({
+  findAllByUser = async (userId, page) => {
+    let pagination = {};
+    if (page) pagination.skip = 10 * page;
+
+    return await this.entity.model.findMany({
       where: {
         AND: [
           {
@@ -44,7 +47,10 @@ module.exports = class ChatRepository extends Repository {
           },
         },
       },
+      take: 10,
+      ...pagination,
     });
+  };
   findOneByUsers = async (loggedUserId, otherUserId) =>
     await this.entity.model.findFirst({
       where: {

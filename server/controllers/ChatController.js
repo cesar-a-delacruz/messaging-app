@@ -3,12 +3,16 @@ const CRUDController = require("./CRUDController.js");
 module.exports = class ChatController extends CRUDController {
   findAllByUser = async (req, res) => {
     try {
-      const rows = await this.repository.findAllByUser(req.user.id);
+      const rows = await this.repository.findAllByUser(
+        req.user.id,
+        req.params.page,
+      );
       if (!rows.length)
         return res
           .status(404)
           .json({ error: `No ${this.itemName} have been found.` })
           .end();
+
       const response = rows.map((chat) => {
         if (chat.group) chat.profile = chat.group;
         else {
@@ -19,6 +23,7 @@ module.exports = class ChatController extends CRUDController {
         }
         return chat;
       });
+
       console.table(rows);
       return res.status(200).json({ data: response }).end();
     } catch (error) {

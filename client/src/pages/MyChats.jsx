@@ -1,11 +1,34 @@
-import useChatList from "@/hooks/useChatList";
+import { useEffect, useReducer } from "react";
+import { actions, dispatcher } from "@/reducers/profileListReducer";
+import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader";
 import ProfileList from "@/components/ProfileList";
 import { useNavigate } from "react-router-dom";
 
 export default function MyChats() {
-  const chats = useChatList();
   const navigate = useNavigate();
+  const [chats, dispatchChats] = useReducer(dispatcher, {});
+
+  useEffect(() => {
+    (async () => {
+      const response = await requestHandler.get("chat/user/logged/0");
+      if (response.error)
+        return dispatchChats({
+          type: actions.load,
+          payload: response,
+        });
+
+      response.data.sort(
+        (a, b) =>
+          new Date(b.messages[0].createdAt).getTime() -
+          new Date(a.messages[0].createdAt).getTime(),
+      );
+      dispatchChats({
+        type: actions.load,
+        payload: response.data,
+      });
+    })();
+  }, []);
 
   if (!Object.keys(chats).length || chats.error)
     return <Loader text={chats.error || "Getting chats..."} />;
@@ -13,7 +36,7 @@ export default function MyChats() {
   return (
     <div className="page">
       <ProfileList
-        items={chats.map((chat) => ({
+        items={chats.profiles.map((chat) => ({
           id: chat.profile.id,
           image: chat.profile.image,
           title: !chat.group ? chat.profile.username : chat.profile.name,
@@ -27,6 +50,19 @@ export default function MyChats() {
         }))}
         clickHandler={(chat) => navigate("/chat", { state: chat })}
       />
+      <button
+        onClick={async () => {
+          const response = await requestHandler.get(
+            `chat/user/logged/${chats.page}`,
+          );
+          dispatchChats({
+            type: actions.fetch,
+            payload: !response.error ? response.data : response,
+          });
+        }}
+      >
+        Load more
+      </button>
     </div>
   );
 }

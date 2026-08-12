@@ -18,7 +18,7 @@ module.exports = {
     .route("get", "status", "status"),
   user: new Router("user", controllers.user)
     .route("get", "findOne", ":id", authorizationMiddleware)
-    .route("get", "findAll", "not/logged", authorizationMiddleware)
+    .route("get", "findAll", "not/logged/:page", authorizationMiddleware)
     .route(
       "get",
       "findAllNotInChat",
@@ -39,7 +39,7 @@ module.exports = {
     authorizationMiddleware,
   ),
   chat: new CRUDRouter("chat", controllers.chat, authorizationMiddleware)
-    .route("get", "findAllByUser", "user/logged", authorizationMiddleware)
+    .route("get", "findAllByUser", "user/logged/:page", authorizationMiddleware)
     .route(
       "get",
       "findOneByUsers",
@@ -52,5 +52,9 @@ module.exports = {
     controllers.chatMember,
     authorizationMiddleware,
   ).route("get", "findAll", "group/:groupId", authorizationMiddleware),
-  group: new CRUDRouter("group", controllers.group, authorizationMiddleware),
+  group: new CRUDRouter(
+    "group",
+    controllers.group,
+    authorizationMiddleware,
+  ).route("get", "findAll", "all/:page", authorizationMiddleware),
 };
