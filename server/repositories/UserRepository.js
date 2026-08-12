@@ -1,5 +1,5 @@
 const Repository = require("./Repository.js");
-const { hash } = require("bcryptjs");
+const { hash, genSaltSync } = require("bcryptjs");
 
 module.exports = class UserRepository extends Repository {
   findAll = async (userId, page) => {
@@ -27,7 +27,7 @@ module.exports = class UserRepository extends Repository {
     });
   create = async (data) => {
     data = this.entity.parseData(data);
-    data.password = await hash(data.password, 10);
+    data.password = await hash(data.password, genSaltSync());
 
     return await this.entity.model.create({
       data,
@@ -35,7 +35,7 @@ module.exports = class UserRepository extends Repository {
   };
   updateCredentials = async (id, data) => {
     data = this.entity.parseData(data);
-    if (data.password) data.password = await hash(data.password, 10);
+    if (data.password) data.password = await hash(data.password, genSaltSync());
 
     return await this.entity.model.update({
       where: { id },
