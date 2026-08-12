@@ -15,9 +15,10 @@ app.use(
   cookieSession({
     name: "session",
     secret: process.env.JWT_SECRET,
-    secure: false,
     httpOnly: true,
-    maxAge: 1000 * 60 * 60,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    // secure: true,
+    // sameSite: "none",
   }),
 );
 app.use(baseLimit);

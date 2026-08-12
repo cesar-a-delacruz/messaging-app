@@ -50,8 +50,8 @@ module.exports = class AuthController extends Controller {
           })
           .end();
 
-      const token = await AuthService.authenticate(password, user);
-      if (!token)
+      const refreshToken = await AuthService.authenticate(password, user);
+      if (!refreshToken)
         return res
           .status(400)
           .json({
@@ -59,7 +59,9 @@ module.exports = class AuthController extends Controller {
           })
           .end();
 
-      req.session.token = token;
+      req.session.refreshToken = refreshToken;
+      req.session.accessToken = AuthService.access(user.id);
+
       return res.status(200).end();
     } catch (error) {
       console.error(error);
@@ -83,30 +85,13 @@ module.exports = class AuthController extends Controller {
   };
   status = async (req, res) => {
     try {
-      if (req.session.token) return res.sendStatus(200);
+      if (req.session.accessToken) return res.sendStatus(200);
       else return res.sendStatus(401);
     } catch (error) {
       console.error(error);
       return res
         .status(500)
         .json({ error: `Failed to verify ${this.itemName} auth status.` })
-        .end();
-    }
-  };
-  refresh = async (req, res) => {
-    try {
-      const user = await this.repository.findOne(req.params.id);
-      if (!user) return res.sendStatus(401);
-
-      const token = AuthService.generateToken(user.id);
-
-      return res.status(200).json({ token: token }).end();
-    } catch (error) {
-      console.error(error);
-
-      return res
-        .status(500)
-        .json({ error: `Failed to authenticate ${this.itemName}.` })
         .end();
     }
   };

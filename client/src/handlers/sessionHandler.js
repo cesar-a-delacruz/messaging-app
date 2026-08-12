@@ -24,17 +24,4 @@ export default {
     }
     return formatErrors(response);
   },
-  refresh: async (id) => {
-    const response = await fetch(
-      `${import.meta.env.VITE_SERVER}/auth/refresh/${id}`,
-    );
-
-    if (response.ok) {
-      const json = await response.json();
-      localStorage.setItem("jwt", json.token);
-      return;
-    }
-
-    return formatErrors(response);
-  },
 };

@@ -14,7 +14,6 @@ module.exports = {
     )
     .route("post", "login", "", authLimit)
     .route("get", "logout", "logout")
-    .route("get", "refresh", "refresh/:id")
     .route("get", "status", "status"),
   user: new Router("user", controllers.user)
     .route("get", "findOne", ":id", authorizationMiddleware)
