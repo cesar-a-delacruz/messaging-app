@@ -10,7 +10,7 @@ export default function Login() {
     <div className="page">
       <h2>Login</h2>
       <Form
-        fields={loginFields}
+        fieldsets={loginFields}
         submit={{ text: "Enter", handler: submitHandler }}
       />
       <p className={styles.textBottom}>

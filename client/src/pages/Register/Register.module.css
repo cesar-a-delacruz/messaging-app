@@ -2,3 +2,16 @@
   text-align: center;
   font-size: var(--font-size-1);
 }
+
+.register {
+  & form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  & form button {
+    grid-area: 2 / 1 / 2 / span 2;
+    width: max-content;
+    justify-self: center;
+  }
+}

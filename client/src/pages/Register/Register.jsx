@@ -8,10 +8,10 @@ export default function Register() {
   document.title = `${import.meta.env.VITE_TITLE}: Register`;
 
   return (
-    <div className="page">
+    <div className={`page ${styles.register}`}>
       <h2>Register</h2>
       <Form
-        fields={registerFields}
+        fieldsets={registerFields}
         submit={{ text: "Create Account", handler: submitHandler }}
       />
       <p className={styles.textBottom}>
