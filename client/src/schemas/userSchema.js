@@ -7,12 +7,14 @@ export const allFields = [
   {
     id: "username",
     value: "",
+    placeholder: "johnsmith",
     label: "Username",
     type: "text",
   },
   {
     id: "fullname",
     value: "",
+    placeholder: "John Smith",
     label: "Full name",
     type: "text",
   },
@@ -25,17 +27,17 @@ export const allFields = [
   {
     id: "bio",
     value: "",
+    placeholder: "Hello everyone!",
     label: "Bio",
     type: "textarea",
   },
   {
     id: "image",
-    label: "Image",
     type: "file",
   },
 ];
 
-export const loginFields = [allFields[1], allFields[3]];
+export const loginFields = [{ fields: [allFields[1], allFields[3]] }];
 
 export const changeCredentialsFields = [
   allFields[0],
@@ -44,15 +46,18 @@ export const changeCredentialsFields = [
 ];
 
 export const registerFields = [
-  allFields[1],
-  allFields[2],
-  allFields[3],
   {
-    id: "confirm",
-    value: "",
-    label: "Confirm password",
-    type: "password",
+    legend: "Credentials",
+    fields: [
+      allFields[1],
+      allFields[3],
+      {
+        id: "confirm",
+        value: "",
+        label: "Confirm password",
+        type: "password",
+      },
+    ],
   },
-  allFields[4],
-  allFields[5],
+  { legend: "About you", fields: [allFields[5], allFields[2], allFields[4]] },
 ];

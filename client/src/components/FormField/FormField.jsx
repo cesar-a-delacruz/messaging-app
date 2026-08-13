@@ -20,29 +20,37 @@ export default function FormField({ properties, value, changeHandler }) {
             onChange={(e) =>
               changeHandler(e.currentTarget.id, e.currentTarget.value)
             }
+            placeholder={properties.placeholder || ""}
           ></textarea>
         );
       case "file":
         return (
           <>
             <input
+              style={{ display: "none" }}
               type={properties.type}
               id={properties.id}
               onChange={(e) => {
-                const img = document.getElementById(`${properties.id}Preview`);
                 const file = e.currentTarget.files[0];
-                img.src = file ? URL.createObjectURL(file) : null;
-                img.style.display = file ? "block" : "none";
+
+                const container = document.getElementById(
+                  properties.id + "Container",
+                );
+                container.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
+
                 changeHandler(e.currentTarget.id, e.currentTarget.files[0]);
               }}
               accept="image/*"
             />
-            <img
-              src={properties.value ? properties.value : null}
-              style={{ display: properties.value ? "block" : "none" }}
-              alt={`${properties.id} Preview`}
-              id={`${properties.id}Preview`}
-            />
+            <div
+              id={`${properties.id}Container`}
+              style={{ backgroundImage: `url("/user.webp")` }}
+              onClick={() => {
+                const input = document.getElementById(`${properties.id}`);
+                input.click();
+              }}
+              tabIndex={0}
+            ></div>
           </>
         );
       default:
@@ -51,6 +59,7 @@ export default function FormField({ properties, value, changeHandler }) {
             type={properties.type}
             id={properties.id}
             value={value}
+            placeholder={properties.placeholder || ""}
             onChange={(e) =>
               changeHandler(e.currentTarget.id, e.currentTarget.value)
             }

@@ -10,7 +10,8 @@ label {
 }
 
 input,
-textarea {
+textarea,
+.field > div {
   background-color: var(--color-primary-dark);
   border-radius: var(--border-radius);
   border: var(--border-size) solid var(--color-primary-light);
@@ -22,13 +23,29 @@ textarea {
     outline: var(--border-size-1) solid var(--color-secondary-light);
   }
 }
-input[type="file"],
-input + img {
-  max-width: var(--input-width);
-}
-input + img {
-  border-radius: var(--border-radius);
-  border: var(--border-size) var(--color-primary-light) solid;
+
+.field > div {
+  background-color: var(--color-primary-dark);
+  width: var(--input-width);
+  height: var(--input-width);
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  overflow: hidden;
+  background-position: center;
+  background-size: cover;
+
+  &::after {
+    background-color: black;
+    width: 100%;
+    text-align: center;
+    content: "Upload an image";
+    padding-top: 20px;
+    padding-bottom: 40px;
+    opacity: 0.75;
+  }
 }
 
 .field *:not(label) {
