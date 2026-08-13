@@ -9,15 +9,28 @@ label {
   font-weight: bold;
 }
 
-input {
+input,
+textarea {
   background-color: var(--color-primary-dark);
   border-radius: var(--border-radius);
   border: var(--border-size) solid var(--color-primary-light);
   padding: var(--padding);
-  min-width: 300px;
+  min-width: var(--input-width);
 
   &:focus {
     border-color: var(--color-primary-dark-1);
     outline: var(--border-size-1) solid var(--color-secondary-light);
   }
+}
+input[type="file"],
+input + img {
+  max-width: var(--input-width);
+}
+input + img {
+  border-radius: var(--border-radius);
+  border: var(--border-size) var(--color-primary-light) solid;
+}
+
+.field *:not(label) {
+  align-self: center;
 }

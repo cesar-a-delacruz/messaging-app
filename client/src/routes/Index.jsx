@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Default from "@/layouts/Default";
 import Main from "@/layouts/Main";
 import Login from "@/pages/Login/Login";
-import Register from "@/pages/Register";
+import Register from "@/pages/Register/Register";
 import MyChats from "@/pages/MyChats";
 import Users from "@/pages/Users";
 import UserProfile from "@/pages/UserProfile";

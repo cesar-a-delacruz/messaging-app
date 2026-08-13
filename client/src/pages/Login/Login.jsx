@@ -7,15 +7,15 @@ export default function Login() {
   document.title = `${import.meta.env.VITE_TITLE}: Login`;
 
   return (
-    <div className={styles.page}>
+    <div className="page">
       <h2>Login</h2>
       <Form
         fields={loginFields}
         submit={{ text: "Enter", handler: submitHandler }}
       />
-      <p>
+      <p className={styles.textBottom}>
         Don't have an account? Register{" "}
-        <a className={styles.link} href="/register">
+        <a href="/register" className="link">
           here
         </a>
       </p>

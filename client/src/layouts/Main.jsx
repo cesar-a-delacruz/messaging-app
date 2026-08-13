@@ -1,5 +1,4 @@
 import { Navigate, Outlet } from "react-router-dom";
-import "@/utils/css/layouts.css";
 import styles from "./styles/Main.module.css";
 import sessionHandler from "@/handlers/sessionHandler";
 import useSession from "@/hooks/useSession";

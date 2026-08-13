@@ -1,4 +1,7 @@
 @import url("normalize.css");
+@import url("src/utils/css/vars.css");
+@import url("src/utils/css/layouts.css");
+@import url("src/utils/css/pages.css");
 
 div#root {
   display: flex;
