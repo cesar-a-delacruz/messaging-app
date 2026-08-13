@@ -1,25 +1,40 @@
 :root {
-  --color-primary: grey;
-  --color-primary-light: white;
-  --color-primary-dark: black;
+  --color-primary-light: rgb(0, 255, 187);
+  --color-primary: rgb(0, 141, 103);
+  --color-primary-dark-2: rgb(0, 77, 55);
+  --color-primary-dark-1: rgb(0, 56, 40);
+  --color-primary-dark: rgb(0, 32, 23);
 
-  --color-secondary: grey;
-  --color-secondary-light: white;
-  --color-secondary-dark: black;
+  --color-secondary-light: rgb(255, 0, 255);
+  --color-secondary-light-1: rgb(224, 0, 224);
+  --color-secondary: rgb(141, 0, 141);
+  --color-secondary-dark: rgb(32, 0, 32);
+
+  --color-background-dark: rgb(10, 10, 10);
+  --color-background-dark-1: rgb(10, 50, 40);
+  --color-background-light: rgb(235, 235, 235);
+  --color-background-light-1: rgb(100, 235, 200);
+  --color-text-dark: white;
+  --color-text-light: black;
 
   --font-size: 1rem;
-  --font-size-50: 1.5rem;
-  --font-size-100: 2rem;
+  --font-size-1: 1.25rem;
+  --font-size-2: 1.5rem;
+  --font-size-3: 1.75rem;
+  --font-size-4: 2rem;
 
-  --padding: 1rem;
-  --padding-50: 1.5rem;
-  --padding-100: 2rem;
+  --padding: 0.5rem;
+  --padding-1: 2rem;
 
   --gap: 0.5rem;
-  --gap-50: 1rem;
-  --gap-100: 1.5rem;
+  --gap-1: 1rem;
+
+  --margin: 1rem;
+  --margin-1: 1.5rem;
+
+  --border-size: 0.1rem;
+  --border-size-1: 0.2rem;
 
   --border-radius: 0.5rem;
-  --border-radius-50: 1rem;
-  --border-radius-100: 1.5rem;
+  --border-radius-1: 1rem;
 }

@@ -9,7 +9,7 @@ import Member from "@/components/Member";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
 import ProfileList from "@/components/ProfileList";
-import FormField from "@/components/FormField";
+import FormField from "@/components/FormField/FormField";
 import Profile from "@/components/Profile";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";

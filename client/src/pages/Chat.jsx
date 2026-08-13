@@ -4,12 +4,12 @@ import requestHandler from "@/handlers/requestHandler";
 import { allFields } from "@/schemas/messageSchema";
 import { actions, dispatcher } from "@/reducers/messageReducer";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
-import Form from "@/components/Form";
+import Form from "@/components/Form/Form";
 import Menu from "@/components/Menu";
 import Dialog from "@/components/Dialog";
 import Loader from "@/components/Loader";
 import Message from "@/components/Message";
-import FormField from "@/components/FormField";
+import FormField from "@/components/FormField/FormField";
 import styles from "./styles/Chat.module.css";
 
 export default function Chat() {

@@ -1,6 +1,8 @@
+import styles from "./FormField.module.css";
+
 export default function FormField({ properties, value, changeHandler }) {
   return (
-    <div className={`field ${properties.type}`}>
+    <div className={styles.field}>
       {properties.label && (
         <label htmlFor={properties.id}>{properties.label}:</label>
       )}

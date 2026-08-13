@@ -1,6 +1,6 @@
 import requestHandler from "@/handlers/requestHandler";
 import { registerFields } from "@/schemas/userSchema";
-import Form from "@/components/Form";
+import Form from "@/components/Form/Form";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 
 export default function Register() {

@@ -1,6 +1,6 @@
-import { Navigate, Outlet } from "react-router-dom";
 import "@/utils/css/layouts.css";
 import styles from "./styles/Default.module.css";
+import { Navigate, Outlet } from "react-router-dom";
 import useSession from "@/hooks/useSession";
 
 export default function Default() {

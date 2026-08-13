@@ -6,7 +6,12 @@
   min-height: 100%;
 
   & * {
-    color: var(--color-primary-light);
+    color: var(--color-text-dark);
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  a:hover {
+    text-decoration: none;
+    color: var(--color-secondary-light);
   }
 }

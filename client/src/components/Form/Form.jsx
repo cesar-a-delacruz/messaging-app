@@ -1,5 +1,6 @@
+import "./Form.module.css";
 import { useRef, useState } from "react";
-import FormField from "./FormField";
+import FormField from "../FormField/FormField";
 
 export default function Form({ fields, submit = { text, handler } }) {
   const [data, setData] = useState(

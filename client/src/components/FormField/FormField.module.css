@@ -1,0 +1,23 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  font-size: var(--font-size-1);
+}
+
+label {
+  font-weight: bold;
+}
+
+input {
+  background-color: var(--color-primary-dark);
+  border-radius: var(--border-radius);
+  border: var(--border-size) solid var(--color-primary-light);
+  padding: var(--padding);
+  min-width: 300px;
+
+  &:focus {
+    border-color: var(--color-primary-dark-1);
+    outline: var(--border-size-1) solid var(--color-secondary-light);
+  }
+}

@@ -1,5 +1,5 @@
 import { changeCredentialsFields } from "@/schemas/userSchema";
-import Form from "@/components/Form";
+import Form from "@/components/Form/Form";
 import requestHandler from "@/handlers/requestHandler";
 import { useLocation } from "react-router-dom";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";

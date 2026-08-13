@@ -1,0 +1,32 @@
+.page {
+  animation: load forwards 1000ms;
+}
+@keyframes load {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+h2 {
+  text-align: center;
+  font-size: var(--font-size-3);
+  margin-top: var(--margin);
+  color: var(--color-primary-light);
+}
+
+p {
+  text-align: center;
+  font-size: var(--font-size-1);
+}
+
+.link {
+  color: var(--color-primary-light);
+
+  &:focus {
+    color: var(--color-secondary-light);
+    outline-style: none;
+  }
+}

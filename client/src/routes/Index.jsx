@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Default from "@/layouts/Default";
 import Main from "@/layouts/Main";
-import Login from "@/pages/Login";
+import Login from "@/pages/Login/Login";
 import Register from "@/pages/Register";
 import MyChats from "@/pages/MyChats";
 import Users from "@/pages/Users";
