@@ -5,7 +5,7 @@ import { allFields } from "@/schemas/messageSchema";
 import { actions, dispatcher } from "@/reducers/messageReducer";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import Form from "@/components/Form/Form";
-import Menu from "@/components/Menu";
+import Menu from "@/components/Menu/Menu";
 import Dialog from "@/components/Dialog";
 import Loader from "@/components/Loader";
 import Message from "@/components/Message";

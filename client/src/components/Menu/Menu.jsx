@@ -1,8 +1,11 @@
-import styles from "./styles/Menu.module.css";
+import styles from "./Menu.module.css";
 
-export default function Menu({ options = [] }) {
+export default function Menu({ options = [], visible = true }) {
   return (
-    <div className={styles.menu}>
+    <div
+      className={styles.menu}
+      style={{ display: visible ? "block" : "none" }}
+    >
       {options.map((option) => (
         <div
           key={option.text}

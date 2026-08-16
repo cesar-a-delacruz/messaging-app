@@ -41,6 +41,19 @@
     }
   }
 
+  & .menuButton {
+    font-size: var(--font-size-2);
+    font-weight: bold;
+    border-radius: var(--border-radius-1);
+    padding: var(--padding-1);
+    line-height: var(--font-size-2);
+    margin-top: var(--margin);
+
+    &:hover {
+      background-color: var(--color-primary-dark);
+    }
+  }
+
   & footer {
     margin-top: var(--margin-2);
     width: 60%;

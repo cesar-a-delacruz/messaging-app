@@ -1,10 +1,14 @@
-import { Navigate, Outlet } from "react-router-dom";
 import styles from "./styles/Main.module.css";
+import { Navigate, Outlet } from "react-router-dom";
+import { useState } from "react";
 import sessionHandler from "@/handlers/sessionHandler";
 import useSession from "@/hooks/useSession";
+import Menu from "@/components/Menu/Menu";
 
 export default function Main() {
   const isUserLogged = useSession(true);
+  const [showMenu, setShowMenu] = useState(false);
+
   if (!isUserLogged) return <Navigate to={"/login"} />;
 
   return (
@@ -19,14 +23,37 @@ export default function Main() {
           <span onClick={() => location.assign("/users")}>Users</span>
           <span onClick={() => location.assign("/groups")}>Groups</span>
         </nav>
-        <div className={styles.options}>
-          <button onClick={() => location.assign("/profile/user")}>
-            Profile
-          </button>
-          <button onClick={() => location.assign("/groups/new")}>
-            Create Group
-          </button>
-          <button onClick={() => sessionHandler.logout()}>Logout</button>
+        <Menu
+          options={[
+            {
+              text: "View profile",
+              handler: () => {
+                location.assign("/profile/user");
+                setShowMenu(false);
+              },
+            },
+            {
+              text: "Create group",
+              handler: () => {
+                location.assign("/groups/new");
+                setShowMenu(false);
+              },
+            },
+            {
+              text: "Logout",
+              handler: () => {
+                sessionHandler.logout();
+                setShowMenu(false);
+              },
+            },
+          ]}
+          visible={showMenu}
+        />
+        <div
+          className={styles.menuButton}
+          onClick={() => (!showMenu ? setShowMenu(true) : setShowMenu(false))}
+        >
+          . . .
         </div>
 
         <footer>

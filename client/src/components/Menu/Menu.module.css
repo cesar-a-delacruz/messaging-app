@@ -1,0 +1,17 @@
+.menu {
+  background-color: var(--color-primary-dark-2);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-1);
+  overflow: hidden;
+}
+
+.option {
+  padding: var(--padding);
+
+  &:hover {
+    background-color: var(--color-secondary-light-2);
+  }
+  &:active {
+    background-color: var(--color-secondary-light-1);
+  }
+}
