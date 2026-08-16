@@ -3,7 +3,7 @@ form {
   flex-direction: column;
   align-items: center;
   gap: var(--gap-1);
-  padding: var(--padding-1);
+  padding: var(--padding-2);
   background-color: var(--color-primary-dark-1);
   border-radius: var(--border-radius);
 

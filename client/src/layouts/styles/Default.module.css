@@ -7,21 +7,8 @@
   align-items: center;
 }
 
-.default h1 {
-  font-size: var(--font-size-4);
-  cursor: pointer;
-}
-
 .default main {
-  background-color: var(--color-background-dark);
   box-shadow: inset 0px 2px 2px black;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.default footer p {
-  font-size: var(--font-size);
 }

@@ -10,8 +10,24 @@
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
 
-  a:hover {
+  & h1 {
+    font-size: var(--font-size-4);
+    cursor: pointer;
+  }
+
+  & main {
+    background-color: var(--color-background-dark);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  & a:hover {
     text-decoration: none;
     color: var(--color-secondary-light);
+  }
+
+  & footer p {
+    font-size: var(--font-size);
   }
 }

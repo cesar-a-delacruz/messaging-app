@@ -13,22 +13,23 @@ export default function Main() {
         <h1 onClick={() => location.assign("/")}>
           {import.meta.env.VITE_TITLE}
         </h1>
+
         <nav>
-          <a href="/">My Chats</a>
-          <a href="/users">Users</a>
-          <a href="/groups">Groups</a>
+          <span onClick={() => location.assign("/")}>My Chats</span>
+          <span onClick={() => location.assign("/users")}>Users</span>
+          <span onClick={() => location.assign("/groups")}>Groups</span>
         </nav>
+        <div className={styles.options}>
+          <button onClick={() => location.assign("/profile/user")}>
+            Profile
+          </button>
+          <button onClick={() => location.assign("/groups/new")}>
+            Create Group
+          </button>
+          <button onClick={() => sessionHandler.logout()}>Logout</button>
+        </div>
 
         <footer>
-          <div className="options">
-            <button onClick={() => location.assign("/profile/user")}>
-              Profile
-            </button>
-            <button onClick={() => location.assign("/groups/new")}>
-              Create Group
-            </button>
-          </div>
-          <button onClick={() => sessionHandler.logout()}>Logout</button>
           <p>
             Developed by{" "}
             <a href="https://github.com/cesar-a-delacruz">César De La Cruz</a>
