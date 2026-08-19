@@ -6,7 +6,7 @@ import Register from "@/pages/Register/Register";
 import MyChats from "@/pages/MyChats";
 import Users from "@/pages/Users";
 import UserProfile from "@/pages/UserProfile/UserProfile";
-import GroupProfile from "@/pages/GroupProfile";
+import GroupProfile from "@/pages/GroupProfile/GroupProfile";
 import Chat from "@/pages/Chat";
 import Groups from "@/pages/Groups";
 import NewGroup from "@/pages/NewGroup";

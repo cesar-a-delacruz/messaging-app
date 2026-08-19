@@ -3,7 +3,7 @@ dialog:open {
   border-style: none;
 
   &::backdrop {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.501);
     backdrop-filter: blur(2px);
   }
 }
@@ -14,6 +14,11 @@ dialog:open {
   align-items: center;
   gap: var(--gap-3);
   padding: var(--padding-1);
+
+  h2,
+  button {
+    margin: 0;
+  }
 
   & button {
     height: fit-content;

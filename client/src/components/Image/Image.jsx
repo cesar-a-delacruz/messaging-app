@@ -1,10 +1,12 @@
+import styles from "./Image.module.css";
 import { useRef } from "react";
-import Dialog from "./Dialog/Dialog";
+import Dialog from "../Dialog/Dialog";
 
 export default function Image({ src, alt }) {
   const previewDialog = useRef(null);
+
   return (
-    <div>
+    <div className={styles.image}>
       <img
         src={src}
         alt={alt}
