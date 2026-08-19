@@ -21,6 +21,7 @@ export default function FormField({ properties, value, changeHandler }) {
               changeHandler(e.currentTarget.id, e.currentTarget.value)
             }
             placeholder={properties.placeholder || ""}
+            disabled={properties.disabled}
           ></textarea>
         );
       case "file":
@@ -41,10 +42,13 @@ export default function FormField({ properties, value, changeHandler }) {
                 changeHandler(e.currentTarget.id, e.currentTarget.files[0]);
               }}
               accept="image/*"
+              disabled={properties.disabled}
             />
             <div
               id={`${properties.id}Container`}
-              style={{ backgroundImage: `url("/user.webp")` }}
+              style={{
+                backgroundImage: value ? `url("${value}")` : `url("/user.web")`,
+              }}
               onClick={() => {
                 const input = document.getElementById(`${properties.id}`);
                 input.click();
@@ -63,6 +67,7 @@ export default function FormField({ properties, value, changeHandler }) {
             onChange={(e) =>
               changeHandler(e.currentTarget.id, e.currentTarget.value)
             }
+            disabled={properties.disabled}
           />
         );
     }

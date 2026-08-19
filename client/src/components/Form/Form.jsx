@@ -32,7 +32,14 @@ export default function Form({ fieldsets, submit = { text, handler } }) {
           </fieldset>
         ))}
       </div>
-      <button type="submit">{submit.text}</button>
+      <button
+        type="submit"
+        style={{
+          display: fieldsets[0].fields[0].disabled ? "none" : "initial",
+        }}
+      >
+        {submit.text}
+      </button>
     </form>
   );
 
