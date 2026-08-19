@@ -40,9 +40,7 @@ export const allFields = [
 export const loginFields = [{ fields: [allFields[1], allFields[3]] }];
 
 export const changeCredentialsFields = [
-  allFields[0],
-  allFields[1],
-  allFields[3],
+  { fields: [allFields[0], allFields[1], allFields[3]] },
 ];
 
 export const registerFields = [

@@ -1,19 +1,29 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
+import removeEmptyFields from "@/utils/js/removeEmptyFields";
+import { changeCredentialsFields } from "@/schemas/userSchema";
 import Loader from "@/components/Loader";
 import Profile from "@/components/Profile";
-import removeEmptyFields from "@/utils/js/removeEmptyFields";
+import Form from "@/components/Form/Form";
+import Dialog from "@/components/Dialog";
 
 export default function UserProfile() {
+  document.title = `${import.meta.env.VITE_TITLE}: Profile`;
+
   const id = useParams().id;
   const [user] = useGet(`user/${id ? id : "profile"}`);
   const navigate = useNavigate();
+  const credentialsDialog = useRef(null);
 
   if (!Object.keys(user).length || user.error)
     return <Loader text={user.error || "Getting user..."} />;
 
   const isLoggedUserProfile = !id;
+
+  changeCredentialsFields[0].fields[0].value = user.id;
+  changeCredentialsFields[0].fields[1].value = user.username;
 
   return (
     <div className="page">
@@ -34,13 +44,7 @@ export default function UserProfile() {
         options={[
           {
             text: "Change credentials",
-            handler: () =>
-              navigate("/credentials", {
-                state: {
-                  id: user.id,
-                  username: user.username,
-                },
-              }),
+            handler: () => credentialsDialog.current.showModal(),
             hide: !isLoggedUserProfile,
           },
           {
@@ -61,6 +65,25 @@ export default function UserProfile() {
           },
         ]}
       />
+      {isLoggedUserProfile && (
+        <Dialog ref={credentialsDialog}>
+          <h2>Change Credentials</h2>
+          <Form
+            fieldsets={changeCredentialsFields}
+            submit={{ text: "Enter", handler: submitHandler }}
+          />
+        </Dialog>
+      )}
     </div>
   );
+
+  async function submitHandler(data) {
+    const newCredentials = await requestHandler.put(
+      removeEmptyFields(data),
+      "auth/credentials",
+    );
+    if (newCredentials) return alert(newCredentials.error);
+
+    location.replace("/profile/user");
+  }
 }
