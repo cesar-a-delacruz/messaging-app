@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { allFields } from "@/schemas/groupSchema";
 import Form from "@/components/Form/Form";
-import Dialog from "@/components/Dialog";
+import Dialog from "@/components/Dialog/Dialog";
 import ProfileList from "@/components/ProfileList";
 import Member from "@/components/Member";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";

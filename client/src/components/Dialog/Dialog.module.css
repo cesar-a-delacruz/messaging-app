@@ -1,0 +1,21 @@
+dialog:open {
+  background-color: rgba(0, 0, 0, 0);
+  border-style: none;
+
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2px);
+  }
+}
+
+.top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--gap-3);
+  padding: var(--padding-1);
+
+  & button {
+    height: fit-content;
+  }
+}

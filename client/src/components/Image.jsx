@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import Dialog from "./Dialog";
+import Dialog from "./Dialog/Dialog";
 
 export default function Image({ src, alt }) {
   const previewDialog = useRef(null);

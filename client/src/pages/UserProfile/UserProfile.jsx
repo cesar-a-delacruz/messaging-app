@@ -7,7 +7,7 @@ import { changeCredentialsFields } from "@/schemas/userSchema";
 import Loader from "@/components/Loader";
 import Profile from "@/components/Profile";
 import Form from "@/components/Form/Form";
-import Dialog from "@/components/Dialog";
+import Dialog from "@/components/Dialog/Dialog";
 
 export default function UserProfile() {
   document.title = `${import.meta.env.VITE_TITLE}: Profile`;
@@ -66,8 +66,7 @@ export default function UserProfile() {
         ]}
       />
       {isLoggedUserProfile && (
-        <Dialog ref={credentialsDialog}>
-          <h2>Change Credentials</h2>
+        <Dialog name={"Change Credentials"} ref={credentialsDialog}>
           <Form
             fieldsets={changeCredentialsFields}
             submit={{ text: "Enter", handler: submitHandler }}
