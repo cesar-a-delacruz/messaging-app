@@ -3,14 +3,14 @@ import { useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
-import { changeCredentialsFields } from "@/schemas/userSchema";
+import { profileFields } from "@/schemas/userSchema";
 import Loader from "@/components/Loader";
-import Profile from "@/components/Profile";
+import Profile from "@/components/Profile/Profile";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
 
 export default function UserProfile() {
-  document.title = `${import.meta.env.VITE_TITLE}: Profile`;
+  document.title = `${import.meta.env.VITE_TITLE}: User Profile`;
 
   const id = useParams().id;
   const [user] = useGet(`user/${id ? id : "profile"}`);
@@ -22,22 +22,21 @@ export default function UserProfile() {
 
   const isLoggedUserProfile = !id;
 
-  changeCredentialsFields[0].fields[0].value = user.id;
-  changeCredentialsFields[0].fields[1].value = user.username;
+  profileFields[0].fields[0].value = user.image;
+  profileFields[0].fields[1].value = user.fullname;
+  profileFields[0].fields[2].value = user.bio;
+
+  profileFields[1].fields[0].value = user.id;
+  profileFields[1].fields[1].value = user.username;
 
   return (
     <div className="page">
       <Profile
-        initialData={{
-          image: { id: "image", value: user.image },
-          title: { id: "fullname", value: user.fullname },
-          subtitle: { id: "username", value: user.username },
-          content: { id: "bio", value: user.bio },
-        }}
+        initialData={[profileFields[0]]}
         edit={{
           isAllowed: isLoggedUserProfile,
           handler: async (data) => {
-            data.id = user.id;
+            data = { ...user, ...data };
             await requestHandler.put(removeEmptyFields(data), "user");
           },
         }}
@@ -68,7 +67,7 @@ export default function UserProfile() {
       {isLoggedUserProfile && (
         <Dialog name={"Change Credentials"} ref={credentialsDialog}>
           <Form
-            fieldsets={changeCredentialsFields}
+            fieldsets={[profileFields[1]]}
             submit={{ text: "Enter", handler: submitHandler }}
           />
         </Dialog>
@@ -83,6 +82,6 @@ export default function UserProfile() {
     );
     if (newCredentials) return alert(newCredentials.error);
 
-    location.replace("/profile/user");
+    credentialsDialog.current.close();
   }
 }

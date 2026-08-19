@@ -13,7 +13,12 @@ export const allFields = [
   },
   {
     id: "image",
-    label: "Image",
     type: "file",
+  },
+];
+
+export const profileFields = [
+  {
+    fields: [allFields[2], allFields[0], allFields[1]],
   },
 ];

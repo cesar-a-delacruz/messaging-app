@@ -39,7 +39,14 @@ export const allFields = [
 
 export const loginFields = [{ fields: [allFields[1], allFields[3]] }];
 
-export const changeCredentialsFields = [
+export const profileFields = [
+  {
+    fields: [
+      { ...allFields[5], disabled: false },
+      { ...allFields[2], disabled: false },
+      { ...allFields[4], disabled: false },
+    ],
+  },
   { fields: [allFields[0], allFields[1], allFields[3]] },
 ];
 

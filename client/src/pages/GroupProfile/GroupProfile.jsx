@@ -2,7 +2,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useReducer, useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { allFields } from "@/schemas/chatMemberSchema";
+import { profileFields } from "@/schemas/groupSchema";
 import { actions, dispatcher } from "@/reducers/chatMemberReducer";
+import removeEmptyFields from "@/utils/js/removeEmptyFields";
+import prepareChatMembers from "@/utils/js/prepareChatMembers";
 import useGet from "@/hooks/useGet";
 import Loader from "@/components/Loader";
 import Member from "@/components/Member";
@@ -10,11 +13,11 @@ import Menu from "@/components/Menu/Menu";
 import Dialog from "@/components/Dialog/Dialog";
 import ProfileList from "@/components/ProfileList";
 import FormField from "@/components/FormField/FormField";
-import Profile from "@/components/Profile";
-import removeEmptyFields from "@/utils/js/removeEmptyFields";
-import prepareChatMembers from "@/utils/js/prepareChatMembers";
+import Profile from "@/components/Profile/Profile";
 
 export default function GroupProfile() {
+  document.title = `${import.meta.env.VITE_TITLE}: Group Profile`;
+
   const id = useParams().id;
   const navigate = useNavigate();
   const [group] = useGet(`group/${id}`);
@@ -41,6 +44,10 @@ export default function GroupProfile() {
   if (!Object.keys(chatMembers).length || chatMembers.error)
     return <Loader text={chatMembers.error || "Getting chat members..."} />;
 
+  profileFields[0].fields[0].value = group.image;
+  profileFields[0].fields[1].value = group.name;
+  profileFields[0].fields[2].value = group.info;
+
   const isLoggedUserMember = chatMembers.currentMember;
   const isCurrentMemberAdmin =
     isLoggedUserMember && chatMembers.currentMember.role === "ADMIN";
@@ -55,15 +62,11 @@ export default function GroupProfile() {
   return (
     <div className="page">
       <Profile
-        initialData={{
-          image: { id: "image", value: group.image },
-          title: { id: "name", value: group.name },
-          content: { id: "info", value: group.info },
-        }}
+        initialData={[profileFields[0]]}
         edit={{
           isAllowed: isCurrentMemberAdmin,
           handler: async (data) => {
-            data.id = group.id;
+            data = { ...group, ...data };
             await requestHandler.put(removeEmptyFields(data), "group");
           },
         }}
