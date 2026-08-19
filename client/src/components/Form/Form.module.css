@@ -29,30 +29,4 @@ form {
       }
     }
   }
-
-  & > button {
-    margin-top: var(--margin);
-    background-color: var(--color-primary-light);
-    font-size: var(--font-size-1);
-    font-weight: bolder;
-    border-style: none;
-    border-radius: var(--border-radius);
-    padding: var(--padding);
-
-    &:focus {
-      background-color: var(--color-secondary-light);
-      outline-style: none;
-    }
-
-    &:hover {
-      background-color: var(--color-secondary-light);
-      transform: scale(1.05);
-      transition: transform 100ms;
-    }
-
-    &:active {
-      background-color: var(--color-secondary-light-1);
-      transform: scale(1);
-    }
-  }
 }
