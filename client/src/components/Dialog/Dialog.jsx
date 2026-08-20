@@ -4,9 +4,12 @@ export default function Dialog({ name, ref, children }) {
   return (
     <dialog ref={ref}>
       <div className={styles.top}>
-        <h2>{name ? name : ""}</h2>
+        {name ? <h2>{name}</h2> : ""}
         <button
-          onClick={(e) => e.currentTarget.parentElement.parentElement.close()}
+          onClick={(event) => {
+            event.currentTarget.parentElement.parentElement.close();
+            event.stopPropagation();
+          }}
         >
           X
         </button>
