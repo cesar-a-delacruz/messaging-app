@@ -35,18 +35,16 @@ export default function Groups() {
           },
         }))}
         clickHandler={(item) => location.assign(`/profile/group/${item.id}`)}
-      />
-      <button
-        onClick={async () => {
+        scrollHandler={async () => {
+          if (!groups.page) return console.log("There are no more groups.");
+
           const response = await requestHandler.get(`group?q=${groups.page}`);
           dispatchGroups({
             type: actions.fetch,
             payload: !response.error ? response.data : response,
           });
         }}
-      >
-        Load more
-      </button>
+      />
     </div>
   );
 }

@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import styles from "./ProfileList.module.css";
+import { useState, useEffect } from "react";
 import Image from "../Image/Image";
 
-export default function ProfileList({ items, clickHandler }) {
-  const navigate = useNavigate();
+export default function ProfileList({ items, clickHandler, scrollHandler }) {
   const [list, setList] = useState(items);
 
   useEffect(() => {
@@ -12,7 +10,14 @@ export default function ProfileList({ items, clickHandler }) {
   }, [items]);
 
   return (
-    <div className={styles.list}>
+    <div
+      className={styles.list}
+      onScroll={async (event) => {
+        const element = event.currentTarget;
+        if (element.scrollTop + element.offsetHeight >= element.scrollHeight)
+          await scrollHandler();
+      }}
+    >
       {list.map((item) => (
         <div
           key={item.id}

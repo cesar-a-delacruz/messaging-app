@@ -49,9 +49,9 @@ export default function MyChats() {
           },
         }))}
         clickHandler={(chat) => navigate("/chat", { state: chat })}
-      />
-      <button
-        onClick={async () => {
+        scrollHandler={async () => {
+          if (!chats.page) return console.log("There are no more chats.");
+
           const response = await requestHandler.get(
             `chat/user/logged?q=${chats.page}`,
           );
@@ -60,9 +60,7 @@ export default function MyChats() {
             payload: !response.error ? response.data : response,
           });
         }}
-      >
-        Load more
-      </button>
+      />
     </div>
   );
 }

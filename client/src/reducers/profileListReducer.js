@@ -19,8 +19,8 @@ export function dispatcher(state, action) {
 
     case actions.fetch:
       if (action.payload.error) {
-        alert("There are no more profiles.");
-        return state;
+        prev.page = 0;
+        return { ...prev };
       }
       const newProfiles = action.payload;
       prev.profiles = [...prev.profiles, ...newProfiles];

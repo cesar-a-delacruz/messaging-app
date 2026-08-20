@@ -35,9 +35,9 @@ export default function Users() {
           },
         }))}
         clickHandler={(item) => location.assign(`/profile/user/${item.id}`)}
-      />
-      <button
-        onClick={async () => {
+        scrollHandler={async () => {
+          if (!users.page) return console.log("There are no more users.");
+
           const response = await requestHandler.get(
             `user/not/logged?q=${users.page}`,
           );
@@ -46,9 +46,7 @@ export default function Users() {
             payload: !response.error ? response.data : response,
           });
         }}
-      >
-        Load more
-      </button>
+      />
     </div>
   );
 }
