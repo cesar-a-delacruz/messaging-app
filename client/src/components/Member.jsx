@@ -1,5 +1,3 @@
-import styles from "./styles/List.module.css";
-
 export default function Member({ data, children, contextMenuHandler }) {
   return (
     <div
