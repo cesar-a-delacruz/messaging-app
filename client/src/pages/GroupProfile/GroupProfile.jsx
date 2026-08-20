@@ -11,7 +11,7 @@ import Loader from "@/components/Loader";
 import Member from "@/components/Member";
 import Menu from "@/components/Menu/Menu";
 import Dialog from "@/components/Dialog/Dialog";
-import ProfileList from "@/components/ProfileList";
+import ProfileList from "@/components/ProfileList/ProfileList";
 import FormField from "@/components/FormField/FormField";
 import Profile from "@/components/Profile/Profile";
 

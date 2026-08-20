@@ -1,0 +1,32 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: var(--padding);
+}
+
+.item {
+  display: flex;
+  background-color: var(--color-primary-dark);
+  gap: var(--gap-2);
+  border-radius: var(--border-radius);
+  padding: var(--padding-1);
+
+  & div > img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: var(--font-size);
+
+    & h3 {
+      font-size: var(--font-size-1);
+      margin-top: 0;
+    }
+  }
+}

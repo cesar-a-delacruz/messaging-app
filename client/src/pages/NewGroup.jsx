@@ -3,7 +3,7 @@ import requestHandler from "@/handlers/requestHandler";
 import { allFields } from "@/schemas/groupSchema";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
-import ProfileList from "@/components/ProfileList";
+import ProfileList from "@/components/ProfileList/ProfileList";
 import Member from "@/components/Member";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";

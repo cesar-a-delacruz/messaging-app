@@ -1,4 +1,9 @@
 .image {
   display: flex;
   justify-content: center;
+
+  & dialog img {
+    width: 500px;
+    height: auto;
+  }
 }

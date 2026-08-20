@@ -10,7 +10,10 @@ export default function Image({ src, alt }) {
       <img
         src={src}
         alt={alt}
-        onClick={() => previewDialog.current.showModal()}
+        onClick={(event) => {
+          previewDialog.current.showModal();
+          event.stopPropagation();
+        }}
       />
       <Dialog ref={previewDialog}>
         <img src={src} alt={alt} />

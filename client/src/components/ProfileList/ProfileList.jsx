@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./styles/List.module.css";
+import styles from "./ProfileList.module.css";
+import Image from "../Image/Image";
 
 export default function ProfileList({ items, clickHandler }) {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function ProfileList({ items, clickHandler }) {
           onClick={() => clickHandler(item)}
           className={styles.item}
         >
-          <img src={item.image} alt={`${item.title} picture`} />
+          <Image src={item.image} alt={`${item.title} picture`} />
           <div className={styles.text}>
             <h3>{item.title}</h3>
             {item.content && <div>{item.content}</div>}
