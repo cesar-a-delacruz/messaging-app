@@ -38,6 +38,7 @@ textarea,
   background-size: cover;
 
   &::after {
+    display: var(--after-display);
     background-color: black;
     width: 100%;
     text-align: center;
