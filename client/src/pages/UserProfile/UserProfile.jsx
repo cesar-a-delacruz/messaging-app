@@ -9,12 +9,12 @@ import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
 
 export default function UserProfile() {
-  document.title = `${import.meta.env.VITE_TITLE}: User Profile`;
-
   const id = useParams().id;
-  const [user] = useGet(`user/${id ? id : "profile"}`);
+  const [user, setUser] = useGet(`user/${id ? id : "profile"}`);
   const navigate = useNavigate();
   const credentialsDialog = useRef(null);
+
+  document.title = `${import.meta.env.VITE_TITLE}: ${user.fullname ? user.fullname : "User"}'s profile`;
 
   if (!Object.keys(user).length || user.error)
     return <Loader text={user.error || "Getting user..."} />;
@@ -75,6 +75,7 @@ export default function UserProfile() {
   async function profileSubmitHandler(data) {
     data = { ...user, ...data };
     await requestHandler.put(data, "user");
+    setUser(data);
   }
   async function dialogSubmitHandler(data) {
     const newCredentials = await requestHandler.put(data, "auth/credentials");

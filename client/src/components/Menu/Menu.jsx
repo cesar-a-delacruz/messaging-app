@@ -1,7 +1,7 @@
 import styles from "./Menu.module.css";
 import { useState } from "react";
 
-export default function Menu({ options = [] }) {
+export default function Menu({ options = [], buttonHandler }) {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
@@ -10,22 +10,26 @@ export default function Menu({ options = [] }) {
         className={styles.menu}
         style={{ display: showMenu ? "initial" : "none" }}
       >
-        {options.map((option) => (
-          <div
-            key={option.text}
-            className={styles.option}
-            onClick={() => {
-              option.handler();
-              setShowMenu(false);
-            }}
-          >
-            {option.text}
-          </div>
-        ))}
+        {options.map(
+          (option) =>
+            !option.hide && (
+              <div
+                key={option.text}
+                className={styles.option}
+                onClick={() => {
+                  option.handler();
+                  setShowMenu(false);
+                }}
+              >
+                {option.text}
+              </div>
+            ),
+        )}
       </div>
       <div
         className={styles.button}
         onClick={(event) => {
+          if (buttonHandler) buttonHandler();
           setShowMenu(!showMenu);
           event.stopPropagation();
         }}
