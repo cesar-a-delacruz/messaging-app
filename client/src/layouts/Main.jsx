@@ -1,14 +1,11 @@
 import styles from "./styles/Main.module.css";
 import { Navigate, Outlet } from "react-router-dom";
-import { useState } from "react";
 import sessionHandler from "@/handlers/sessionHandler";
 import useSession from "@/hooks/useSession";
 import Menu from "@/components/Menu/Menu";
 
 export default function Main() {
   const isUserLogged = useSession(true);
-  const [showMenu, setShowMenu] = useState(false);
-
   if (!isUserLogged) return <Navigate to={"/login"} />;
 
   return (
@@ -27,34 +24,18 @@ export default function Main() {
           options={[
             {
               text: "View profile",
-              handler: () => {
-                location.assign("/profile/user");
-                setShowMenu(false);
-              },
+              handler: () => location.assign("/profile/user"),
             },
             {
               text: "Create group",
-              handler: () => {
-                location.assign("/groups/new");
-                setShowMenu(false);
-              },
+              handler: () => location.assign("/groups/new"),
             },
             {
               text: "Logout",
-              handler: () => {
-                sessionHandler.logout();
-                setShowMenu(false);
-              },
+              handler: () => sessionHandler.logout(),
             },
           ]}
-          visible={showMenu}
         />
-        <div
-          className={styles.menuButton}
-          onClick={() => (!showMenu ? setShowMenu(true) : setShowMenu(false))}
-        >
-          . . .
-        </div>
 
         <footer>
           <p>
