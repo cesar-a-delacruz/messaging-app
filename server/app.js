@@ -1,7 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const passport = require("passport");
-const authConfig = require("./configs/authConfig.js");
 const routes = require("./routes/index.js");
 const cookieSession = require("cookie-session");
 const { baseLimit } = require("./configs/rateLimitConfig.js");
@@ -10,7 +8,7 @@ require("dotenv").config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: process.env.CLIENT, credentials: true }));
-passport.use(authConfig.strategy);
+
 app.use(
   cookieSession({
     name: "session",

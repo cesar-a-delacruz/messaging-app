@@ -1,17 +1,18 @@
 const jwt = require("jsonwebtoken");
 const AuthService = require("../services/AuthService");
+const userRepository = require("../repositories/index.js").user;
 
 module.exports = async (req, res, next) => {
   const accessToken = req.session.accessToken;
   const refreshToken = req.session.refreshToken;
 
   if (!refreshToken) res.sendStatus(401);
+  const payload = jwt.verify(refreshToken, process.env.JWT_SECRET);
 
-  jwt.verify(refreshToken, process.env.JWT_SECRET, (error, user) => {
-    if (error) return res.sendStatus(403);
+  const user = await userRepository.findOne(payload.id);
+  if (!user) return res.sendStatus(403);
+  if (!accessToken) req.session.accessToken = AuthService.access(payload.id);
 
-    if (!accessToken) req.session.accessToken = AuthService.access(user.id);
-    req.user = user;
-    next();
-  });
+  req.user = payload;
+  next();
 };
