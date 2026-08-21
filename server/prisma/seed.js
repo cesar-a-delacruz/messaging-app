@@ -53,7 +53,6 @@ const { hash, genSaltSync } = require("bcryptjs");
       { userId: users[1].id, chatId: chats[0].id },
       { userId: users[0].id, chatId: chats[1].id },
       { userId: users[2].id, chatId: chats[1].id },
-      { userId: users[0].id, chatId: chats[2].id },
       { userId: users[1].id, chatId: chats[2].id, role: "ADMIN" },
       { userId: users[2].id, chatId: chats[2].id },
       { userId: users[0].id, chatId: chats[3].id },
