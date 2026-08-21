@@ -1,4 +1,8 @@
-export const allFields = [
+const fields = [
+  {
+    id: "image",
+    type: "file",
+  },
   {
     id: "name",
     value: "",
@@ -11,14 +15,16 @@ export const allFields = [
     label: "Info",
     type: "textarea",
   },
+];
+
+export const profile = [
   {
-    id: "image",
-    type: "file",
+    fields: [...fields],
   },
 ];
 
-export const profileFields = [
+export const create = [
   {
-    fields: [allFields[2], allFields[0], allFields[1]],
+    fields: [...fields],
   },
 ];

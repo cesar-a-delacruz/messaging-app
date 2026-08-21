@@ -1,4 +1,4 @@
-export const allFields = [
+export const fields = [
   {
     id: "id",
     value: "",
@@ -13,5 +13,11 @@ export const allFields = [
     id: "chatId",
     value: "",
     type: "hidden",
+  },
+];
+
+export const add = [
+  {
+    fields: [...fields],
   },
 ];
