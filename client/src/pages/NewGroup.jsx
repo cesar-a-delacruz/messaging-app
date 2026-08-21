@@ -1,14 +1,15 @@
 import { useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
-import { allFields } from "@/schemas/groupSchema";
+import { create } from "@/schemas/groupFieldsets";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
 import ProfileList from "@/components/ProfileList/ProfileList";
-import Member from "@/components/Member";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";
 
 export default function NewGroup() {
+  document.title = `${import.meta.env.VITE_TITLE}: New Group`;
+
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const usersDialog = useRef(null);
@@ -17,7 +18,8 @@ export default function NewGroup() {
     <div className="page">
       <h2>New Group</h2>
       <Form
-        fields={allFields}
+        fieldsets={create}
+        initialData={{}}
         submit={{ text: "Create Group", handler: submitHandler }}
       />
       <h3>Members</h3>
@@ -47,11 +49,14 @@ export default function NewGroup() {
       </Dialog>
       <div>
         {selectedUsers.map((user) => (
-          <Member
-            key={user.id}
-            data={{ ...user, username: user.title }}
-            contextMenuHandler={() => {}}
-          />
+          <div key={user.id}>
+            <Image src={user.image} alt={`${user.title} picture`} />
+            <div>
+              <h3>
+                {user.title} <span>{role === "ADMIN" ? "ADMIN" : ""}</span>
+              </h3>
+            </div>
+          </div>
         ))}
       </div>
     </div>

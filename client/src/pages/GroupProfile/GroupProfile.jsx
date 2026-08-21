@@ -1,32 +1,30 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useReducer, useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
-import { allFields } from "@/schemas/chatMemberSchema";
-import { profileFields } from "@/schemas/groupSchema";
+import { add } from "@/schemas/chatMemberFieldsets";
+import { profile } from "@/schemas/groupFieldsets";
 import { actions, dispatcher } from "@/reducers/chatMemberReducer";
-import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";
 import useGet from "@/hooks/useGet";
 import Loader from "@/components/Loader";
-import Member from "@/components/Member";
 import Menu from "@/components/Menu/Menu";
 import Dialog from "@/components/Dialog/Dialog";
 import ProfileList from "@/components/ProfileList/ProfileList";
 import FormField from "@/components/FormField/FormField";
 import Profile from "@/components/Profile/Profile";
+import Image from "@/components/Image/Image";
 
 export default function GroupProfile() {
-  document.title = `${import.meta.env.VITE_TITLE}: Group Profile`;
-
   const id = useParams().id;
   const navigate = useNavigate();
-  const [group] = useGet(`group/${id}`);
+  const [group, setGroup] = useGet(`group/${id}`);
   const [chatMembers, dispatchChatMembers] = useReducer(dispatcher, {});
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const usersDialog = useRef(null);
   const removeDialog = useRef(null);
-  const exitDialog = useRef(null);
+
+  document.title = `${import.meta.env.VITE_TITLE}: ${group.name ? group.name : "Group"}`;
 
   useEffect(() => {
     (async () => {
@@ -44,30 +42,24 @@ export default function GroupProfile() {
   if (!Object.keys(chatMembers).length || chatMembers.error)
     return <Loader text={chatMembers.error || "Getting chat members..."} />;
 
-  profileFields[0].fields[0].value = group.image;
-  profileFields[0].fields[1].value = group.name;
-  profileFields[0].fields[2].value = group.info;
-
   const isLoggedUserMember = chatMembers.currentMember;
   const isCurrentMemberAdmin =
     isLoggedUserMember && chatMembers.currentMember.role === "ADMIN";
 
   const isMemberSelected = chatMembers.selected.id;
-  const isCurrentMemberSelected =
-    isMemberSelected &&
-    chatMembers.selected.id === chatMembers.currentMember.id;
   const isSelectedMemberAdmin =
     isMemberSelected && chatMembers.selected.role === "ADMIN";
 
   return (
     <div className="page">
       <Profile
-        initialData={[profileFields[0]]}
+        form={{ fieldset: profile[0], data: group }}
         edit={{
           isAllowed: isCurrentMemberAdmin,
           handler: async (data) => {
             data = { ...group, ...data };
-            await requestHandler.put(removeEmptyFields(data), "group");
+            await requestHandler.put(data, "group");
+            setGroup(data);
           },
         }}
         options={[
@@ -91,7 +83,7 @@ export default function GroupProfile() {
                 type: actions.select,
                 payload: { selectedMember: chatMembers.currentMember },
               });
-              exitDialog.current.showModal();
+              removeDialog.current.showModal();
             },
             hide: !isLoggedUserMember,
           },
@@ -117,40 +109,49 @@ export default function GroupProfile() {
         <h3>Members</h3>
         <div>
           {chatMembers.members.map((member) => (
-            <Member
-              key={member.id}
-              data={{
-                ...member,
-                username: member.user.username,
-                image: member.user.image,
-              }}
-              contextMenuHandler={(member) =>
-                dispatchChatMembers({
-                  type: actions.select,
-                  payload: { selectedMember: member },
-                })
-              }
-            >
-              {chatMembers.selected.id === member.id &&
-                !isCurrentMemberSelected && (
-                  <Menu
-                    options={[
-                      { text: "Change role", handler: changeMemberRoleHandler },
-                      {
-                        text: "Remove member",
-                        handler: () => removeDialog.current.showModal(),
-                      },
-                      {
-                        text: "See profile",
-                        handler: () =>
-                          location.assign(
-                            `/profile/user/${chatMembers.selected.user.id}`,
-                          ),
-                      },
-                    ]}
-                  />
-                )}
-            </Member>
+            <div key={member.id}>
+              <Image
+                src={member.user.image}
+                alt={`${member.user.username} picture`}
+              />
+              <div>
+                <h3>
+                  {member.user.username}{" "}
+                  <span>{member.role === "ADMIN" ? "ADMIN" : ""}</span>
+                </h3>
+              </div>
+              {isLoggedUserMember && (
+                <Menu
+                  options={[
+                    {
+                      text: "Change role",
+                      handler: changeMemberRoleHandler,
+                      hide: !isCurrentMemberAdmin,
+                    },
+                    {
+                      text: "Remove member",
+                      handler: () => removeDialog.current.showModal(),
+                      hide:
+                        !isCurrentMemberAdmin ||
+                        chatMembers.currentMember.id === member.id,
+                    },
+                    {
+                      text: "See profile",
+                      handler: () =>
+                        location.assign(
+                          `/profile/user/${chatMembers.selected.user.id}`,
+                        ),
+                    },
+                  ]}
+                  buttonHandler={() =>
+                    dispatchChatMembers({
+                      type: actions.select,
+                      payload: { selectedMember: member },
+                    })
+                  }
+                />
+              )}
+            </div>
           ))}
         </div>
         {isCurrentMemberAdmin && (
@@ -168,27 +169,22 @@ export default function GroupProfile() {
             <button onClick={() => addMemberHandler()}>Add all</button>
           </Dialog>
         )}
-        {(!isSelectedMemberAdmin || isCurrentMemberAdmin) && (
+        {(!isSelectedMemberAdmin || isLoggedUserMember) && (
           <Dialog ref={removeDialog}>
-            <p>Are you sure you want to remove this member?</p>
+            <p>
+              {isLoggedUserMember &&
+              chatMembers.selected.id === chatMembers.currentMember.id
+                ? "Are you sure you want to exit this group?"
+                : "Are you sure you want to remove this member?"}
+            </p>
             <FormField
-              properties={allFields[0]}
+              properties={add[0].fields[0]}
               value={chatMembers.selected.id || ""}
-            />
-            <button onClick={() => removeMemberHandler()}>Yes</button>
-          </Dialog>
-        )}
-        {isLoggedUserMember && (
-          <Dialog ref={exitDialog}>
-            <p>Are you sure you want to exit this group?</p>
-            <FormField
-              properties={allFields[0]}
-              value={chatMembers.currentMember.id || ""}
             />
             <button
               onClick={() => {
                 removeMemberHandler();
-                exitDialog.current.close();
+                removeDialog.current.close();
               }}
             >
               Yes
@@ -251,7 +247,5 @@ export default function GroupProfile() {
       type: actions.remove,
       payload: { id: chatMembers.selected.id },
     });
-
-    removeDialog.current.close();
   }
 }
