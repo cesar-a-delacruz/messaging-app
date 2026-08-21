@@ -1,4 +1,4 @@
-export const allFields = [
+const fields = [
   {
     id: "id",
     value: "",
@@ -36,26 +36,14 @@ export const allFields = [
     type: "file",
   },
 ];
+export const login = [{ fields: [fields[1], fields[3]] }];
 
-export const loginFields = [{ fields: [allFields[1], allFields[3]] }];
-
-export const profileFields = [
-  {
-    fields: [
-      { ...allFields[5], disabled: false },
-      { ...allFields[2], disabled: false },
-      { ...allFields[4], disabled: false },
-    ],
-  },
-  { fields: [allFields[0], allFields[1], allFields[3]] },
-];
-
-export const registerFields = [
+export const register = [
   {
     legend: "Credentials",
     fields: [
-      allFields[1],
-      allFields[3],
+      fields[1],
+      fields[3],
       {
         id: "confirm",
         value: "",
@@ -64,5 +52,16 @@ export const registerFields = [
       },
     ],
   },
-  { legend: "About you", fields: [allFields[5], allFields[2], allFields[4]] },
+  { legend: "About you", fields: [fields[5], fields[2], fields[4]] },
+];
+
+export const profile = [
+  {
+    fields: [
+      { ...fields[5], disabled: false },
+      { ...fields[2], disabled: false },
+      { ...fields[4], disabled: false },
+    ],
+  },
+  { fields: [fields[0], fields[1], fields[3]] },
 ];

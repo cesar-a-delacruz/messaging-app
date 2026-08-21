@@ -1,8 +1,7 @@
 import styles from "./Register.module.css";
 import requestHandler from "@/handlers/requestHandler";
-import { registerFields } from "@/schemas/userSchema";
+import { register } from "@/schemas/userFieldsets";
 import Form from "@/components/Form/Form";
-import removeEmptyFields from "@/utils/js/removeEmptyFields";
 
 export default function Register() {
   document.title = `${import.meta.env.VITE_TITLE}: Register`;
@@ -11,7 +10,8 @@ export default function Register() {
     <div className={`page ${styles.register}`}>
       <h2>Register</h2>
       <Form
-        fieldsets={registerFields}
+        fieldsets={register}
+        initialData={{}}
         submit={{ text: "Create Account", handler: submitHandler }}
       />
       <p className={styles.textBottom}>
@@ -27,10 +27,7 @@ export default function Register() {
     if (data.password !== data.confirm)
       return alert("The passwords don't match");
 
-    const register = await requestHandler.postFile(
-      removeEmptyFields(data),
-      "user",
-    );
+    const register = await requestHandler.postFile(data, "user");
     if (register.error) return alert(register.error);
 
     location.replace("/login");

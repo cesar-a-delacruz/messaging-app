@@ -2,8 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
-import removeEmptyFields from "@/utils/js/removeEmptyFields";
-import { profileFields } from "@/schemas/userSchema";
+import { profile } from "@/schemas/userFieldsets";
 import Loader from "@/components/Loader";
 import Profile from "@/components/Profile/Profile";
 import Form from "@/components/Form/Form";
@@ -22,23 +21,20 @@ export default function UserProfile() {
 
   const isLoggedUserProfile = !id;
 
-  profileFields[0].fields[0].value = user.image;
-  profileFields[0].fields[1].value = user.fullname;
-  profileFields[0].fields[2].value = user.bio;
-
-  profileFields[1].fields[0].value = user.id;
-  profileFields[1].fields[1].value = user.username;
+  const profileData = {
+    image: user.image,
+    fullname: user.fullname,
+    bio: user.bio,
+  };
+  const dialogData = { id: user.id, username: user.username };
 
   return (
     <div className="page">
       <Profile
-        initialData={[profileFields[0]]}
+        form={{ fieldset: profile[0], data: profileData }}
         edit={{
           isAllowed: isLoggedUserProfile,
-          handler: async (data) => {
-            data = { ...user, ...data };
-            await requestHandler.put(removeEmptyFields(data), "user");
-          },
+          handler: profileSubmitHandler,
         }}
         options={[
           {
@@ -67,19 +63,21 @@ export default function UserProfile() {
       {isLoggedUserProfile && (
         <Dialog name={"Change Credentials"} ref={credentialsDialog}>
           <Form
-            fieldsets={[profileFields[1]]}
-            submit={{ text: "Enter", handler: submitHandler }}
+            fieldsets={[profile[1]]}
+            initialData={dialogData}
+            submit={{ text: "Enter", handler: dialogSubmitHandler }}
           />
         </Dialog>
       )}
     </div>
   );
 
-  async function submitHandler(data) {
-    const newCredentials = await requestHandler.put(
-      removeEmptyFields(data),
-      "auth/credentials",
-    );
+  async function profileSubmitHandler(data) {
+    data = { ...user, ...data };
+    await requestHandler.put(data, "user");
+  }
+  async function dialogSubmitHandler(data) {
+    const newCredentials = await requestHandler.put(data, "auth/credentials");
     if (newCredentials) return alert(newCredentials.error);
 
     credentialsDialog.current.close();

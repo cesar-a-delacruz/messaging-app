@@ -1,16 +1,17 @@
 import styles from "./Login.module.css";
 import sessionHandler from "@/handlers/sessionHandler";
-import { loginFields } from "@/schemas/userSchema";
+import { login } from "@/schemas/userFieldsets";
 import Form from "@/components/Form/Form";
 
 export default function Login() {
   document.title = `${import.meta.env.VITE_TITLE}: Login`;
 
   return (
-    <div className="page">
+    <div className={`page ${styles.login}`}>
       <h2>Login</h2>
       <Form
-        fieldsets={loginFields}
+        fieldsets={login}
+        initialData={{}}
         submit={{ text: "Enter", handler: submitHandler }}
       />
       <p className={styles.textBottom}>

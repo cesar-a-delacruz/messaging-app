@@ -1,18 +1,16 @@
 import styles from "./Form.module.css";
 import { useRef, useState } from "react";
 import FormField from "../FormField/FormField";
+import compareObjects from "@/utils/js/compareObjects";
+import removeEmptyFields from "@/utils/js/removeEmptyFields";
 
-export default function Form({ fieldsets, submit = { text, handler } }) {
-  const [data, setData] = useState(
-    fieldsets
-      .map((fieldset) =>
-        fieldset.fields.reduce((acc, curr) => {
-          acc[curr.id] = curr.value;
-          return acc;
-        }, {}),
-      )
-      .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
-  );
+export default function Form({
+  fieldsets,
+  initialData,
+  submit = { text, handler },
+}) {
+  const [data, setData] = useState(initialData);
+  const [disableSubmit, setDisableSubmit] = useState(true);
   const form = useRef(null);
 
   return (
@@ -37,6 +35,7 @@ export default function Form({ fieldsets, submit = { text, handler } }) {
         style={{
           display: fieldsets[0].fields[0].disabled ? "none" : "initial",
         }}
+        disabled={disableSubmit}
       >
         {submit.text}
       </button>
@@ -44,10 +43,14 @@ export default function Form({ fieldsets, submit = { text, handler } }) {
   );
 
   async function changeHandler(id, value) {
-    setData({
+    const newData = removeEmptyFields({
       ...data,
       [id]: value,
     });
+    setData(newData);
+
+    if (compareObjects(newData, initialData)) setDisableSubmit(true);
+    else setDisableSubmit(false);
   }
   async function submitHandler(event) {
     event.preventDefault();
