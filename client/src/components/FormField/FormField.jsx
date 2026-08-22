@@ -16,7 +16,7 @@ export default function FormField({ properties, value, changeHandler }) {
         return (
           <textarea
             id={properties.id}
-            value={value}
+            value={value || ""}
             onChange={(e) =>
               changeHandler(e.currentTarget.id, e.currentTarget.value)
             }
@@ -38,7 +38,6 @@ export default function FormField({ properties, value, changeHandler }) {
                   properties.id + "Container",
                 );
                 container.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
-
                 changeHandler(e.currentTarget.id, e.currentTarget.files[0]);
               }}
               accept="image/*"
@@ -47,7 +46,6 @@ export default function FormField({ properties, value, changeHandler }) {
             <div
               id={`${properties.id}Container`}
               style={{
-                backgroundImage: value ? `url("${value}")` : `url("/user.web")`,
                 "--after-display": properties.disabled ? "none" : "initial",
               }}
               onClick={() => {
@@ -63,7 +61,7 @@ export default function FormField({ properties, value, changeHandler }) {
           <input
             type={properties.type}
             id={properties.id}
-            value={value}
+            value={value || ""}
             placeholder={properties.placeholder || ""}
             onChange={(e) =>
               changeHandler(e.currentTarget.id, e.currentTarget.value)
