@@ -1,4 +1,9 @@
-export const allFields = [
+const fields = [
+  {
+    id: "id",
+    value: "",
+    type: "hidden",
+  },
   {
     id: "content",
     value: "",
@@ -18,9 +23,10 @@ export const allFields = [
     value: "",
     type: "hidden",
   },
-  {
-    id: "id",
-    value: "",
-    type: "hidden",
-  },
 ];
+
+export const create = [
+  { fields: [fields[1], fields[2], fields[3], fields[4]] },
+];
+
+export const edit = [{ fields: [fields[0]] }, { fields: [fields[1]] }];

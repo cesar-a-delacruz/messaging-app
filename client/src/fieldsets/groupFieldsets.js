@@ -17,7 +17,7 @@ const fields = [
   },
 ];
 
-export const profile = [
+export const edit = [
   {
     fields: [...fields],
   },

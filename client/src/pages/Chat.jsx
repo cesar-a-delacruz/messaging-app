@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useReducer, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
-import { allFields } from "@/schemas/messageSchema";
+import { create, edit } from "@/fieldsets/messageFieldsets";
 import { actions, dispatcher } from "@/reducers/messageReducer";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import Form from "@/components/Form/Form";
@@ -51,9 +51,6 @@ export default function Chat() {
 
   if (!Object.keys(messages).length || messages.error)
     return <Loader text={messages.error || "Getting messages..."} />;
-
-  allFields[2].value = messages.currentAuthorId;
-  allFields[3].value = messages.chatId;
 
   return (
     <div className={styles.chat}>
@@ -129,7 +126,7 @@ export default function Chat() {
         )}
         <Dialog ref={editDialog}>
           <FormField
-            properties={allFields[0]}
+            properties={edit[1].fields[0]}
             value={messages.selected.content || ""}
             changeHandler={(id, value) =>
               dispatchMessages({
@@ -143,7 +140,7 @@ export default function Chat() {
         <Dialog ref={deleteDialog}>
           <p>Are you sure you want to delete this message?</p>
           <FormField
-            properties={allFields[3]}
+            properties={edit[0].fields[0]}
             value={messages.selected.id || ""}
           />
           <button onClick={() => removeHandler()}>Yes</button>
@@ -151,7 +148,11 @@ export default function Chat() {
       </div>
       <div className={styles.footer}>
         <Form
-          fields={allFields.filter((field) => field.id !== "id")}
+          fieldsets={create}
+          initialData={{
+            authorId: messages.currentAuthorId,
+            chatId: messages.chatId,
+          }}
           submit={{ text: "Send", handler: submitHandler }}
         />
       </div>

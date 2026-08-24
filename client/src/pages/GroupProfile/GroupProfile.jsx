@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useReducer, useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
-import { add } from "@/schemas/chatMemberFieldsets";
-import { profile } from "@/schemas/groupFieldsets";
+import { create } from "@/fieldsets/chatMemberFieldsets";
+import { edit } from "@/fieldsets/groupFieldsets";
 import { actions, dispatcher } from "@/reducers/chatMemberReducer";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";
 import useGet from "@/hooks/useGet";
@@ -50,7 +50,7 @@ export default function GroupProfile() {
   return (
     <div className="page">
       <Profile
-        form={{ fieldset: profile[0], data: group }}
+        form={{ fieldset: edit[0], data: group }}
         edit={{
           isAllowed: isCurrentMemberAdmin,
           handler: async (data) => {
@@ -151,7 +151,7 @@ export default function GroupProfile() {
               : "Are you sure you want to remove this member?"}
           </p>
           <FormField
-            properties={add[0].fields[0]}
+            properties={create[0].fields[0]}
             value={chatMembers.selected.id || ""}
           />
           <button

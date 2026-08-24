@@ -38,7 +38,7 @@ const fields = [
 ];
 export const login = [{ fields: [fields[1], fields[3]] }];
 
-export const register = [
+export const create = [
   {
     legend: "Credentials",
     fields: [
@@ -55,7 +55,7 @@ export const register = [
   { legend: "About you", fields: [fields[5], fields[2], fields[4]] },
 ];
 
-export const profile = [
+export const edit = [
   {
     fields: [
       { ...fields[5], disabled: false },

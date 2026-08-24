@@ -1,6 +1,6 @@
 import styles from "./Login.module.css";
 import sessionHandler from "@/handlers/sessionHandler";
-import { login } from "@/schemas/userFieldsets";
+import { login } from "@/fieldsets/userFieldsets";
 import Form from "@/components/Form/Form";
 
 export default function Login() {

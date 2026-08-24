@@ -16,7 +16,7 @@ export const fields = [
   },
 ];
 
-export const add = [
+export const create = [
   {
     fields: [...fields],
   },

@@ -1,6 +1,6 @@
 import styles from "./Register.module.css";
 import requestHandler from "@/handlers/requestHandler";
-import { register } from "@/schemas/userFieldsets";
+import { create } from "@/fieldsets/userFieldsets";
 import Form from "@/components/Form/Form";
 
 export default function Register() {
@@ -10,7 +10,7 @@ export default function Register() {
     <div className={`page ${styles.register}`}>
       <h2>Register</h2>
       <Form
-        fieldsets={register}
+        fieldsets={create}
         initialData={{}}
         submit={{ text: "Create Account", handler: submitHandler }}
       />

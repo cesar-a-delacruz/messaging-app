@@ -1,7 +1,7 @@
 import styles from "./NewGroup.module.css";
 import { useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
-import { create } from "@/schemas/groupFieldsets";
+import { create } from "@/fieldsets/groupFieldsets";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";
 import Form from "@/components/Form/Form";

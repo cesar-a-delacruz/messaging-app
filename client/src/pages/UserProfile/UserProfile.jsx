@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
-import { profile } from "@/schemas/userFieldsets";
+import { edit } from "@/fieldsets/userFieldsets";
 import Loader from "@/components/Loader";
 import Profile from "@/components/Profile/Profile";
 import Form from "@/components/Form/Form";
@@ -31,7 +31,7 @@ export default function UserProfile() {
   return (
     <div className="page">
       <Profile
-        form={{ fieldset: profile[0], data: profileData }}
+        form={{ fieldset: edit[0], data: profileData }}
         edit={{
           isAllowed: isLoggedUserProfile,
           handler: profileSubmitHandler,
@@ -63,7 +63,7 @@ export default function UserProfile() {
       {isLoggedUserProfile && (
         <Dialog name={"Change Credentials"} ref={credentialsDialog}>
           <Form
-            fieldsets={[profile[1]]}
+            fieldsets={[edit[1]]}
             initialData={dialogData}
             submit={{ text: "Enter", handler: dialogSubmitHandler }}
           />
