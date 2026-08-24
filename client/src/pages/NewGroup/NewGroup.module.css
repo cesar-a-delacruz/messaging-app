@@ -1,0 +1,12 @@
+.newGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: var(--padding-2);
+
+  & button {
+    width: fit-content;
+    align-self: center;
+    margin-top: var(--margin-2);
+  }
+}

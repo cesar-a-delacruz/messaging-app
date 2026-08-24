@@ -1,3 +1,4 @@
+import styles from "./NewGroup.module.css";
 import { useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { create } from "@/schemas/groupFieldsets";
@@ -16,7 +17,7 @@ export default function NewGroup() {
   const [users, setUsers] = useState([]);
   const usersDialog = useRef(null);
   return (
-    <div className="page">
+    <div className={`page ${styles.newGroup}`}>
       <h2>New Group</h2>
       <Form
         fieldsets={create}
