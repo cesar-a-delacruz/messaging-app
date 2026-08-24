@@ -13,7 +13,6 @@ module.exports = class ChatMemberRepository extends Repository {
       include: {
         user: {
           omit: {
-            image: true,
             bio: true,
           },
         },
@@ -28,7 +27,6 @@ module.exports = class ChatMemberRepository extends Repository {
       include: {
         user: {
           omit: {
-            image: true,
             bio: true,
           },
         },
