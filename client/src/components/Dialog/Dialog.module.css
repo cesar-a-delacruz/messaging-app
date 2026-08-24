@@ -18,11 +18,32 @@ dialog:open {
 
   h2,
   button {
-    margin: 0;
+    margin: 0 !important;
   }
 
   & button {
     height: fit-content;
+  }
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-background-dark-1);
+  padding: var(--padding-1);
+  border-radius: var(--border-radius);
+
+  & h3 {
+    margin: 0;
+  }
+
+  & p {
+    font-size: var(--font-size-2);
+  }
+
+  & button {
+    width: fit-content;
   }
 }
 

@@ -14,7 +14,7 @@ export default function Dialog({ name, ref, children }) {
           X
         </button>
       </div>
-      <div>{children}</div>
+      <div className={styles.bottom}>{children}</div>
     </dialog>
   );
 }
