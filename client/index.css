@@ -11,3 +11,8 @@ div#root {
   height: 100vh;
   max-width: 100vw;
 }
+
+body {
+  color: white;
+  background-color: black;
+}
