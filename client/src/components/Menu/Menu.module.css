@@ -1,18 +1,29 @@
+.container {
+  width: 75px;
+  height: 50px;
+  overflow: visible;
+}
+
 .menu {
-  background-color: var(--color-primary-dark-2);
+  background-color: var(--color-primary-dark);
   border-radius: var(--border-radius);
   font-size: var(--font-size-1);
   overflow: hidden;
-}
+  width: max-content;
+  position: absolute;
+  justify-self: center;
+  align-self: end;
+  margin-bottom: var(--margin);
 
-.option {
-  padding: var(--padding);
+  .option {
+    padding: var(--padding);
 
-  &:hover {
-    background-color: var(--color-secondary-light-2);
-  }
-  &:active {
-    background-color: var(--color-secondary-light-1);
+    &:hover {
+      background-color: var(--color-secondary-light-2);
+    }
+    &:active {
+      background-color: var(--color-secondary-light-1);
+    }
   }
 }
 
@@ -22,9 +33,11 @@
   border-radius: var(--border-radius-1);
   padding: var(--padding-1);
   line-height: var(--font-size-2);
-  margin-top: var(--margin);
+  text-align: center;
+  position: absolute;
 
   &:hover {
     background-color: var(--color-primary-dark);
+    cursor: pointer;
   }
 }

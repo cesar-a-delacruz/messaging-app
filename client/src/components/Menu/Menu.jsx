@@ -5,10 +5,10 @@ export default function Menu({ options = [], buttonHandler }) {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <>
+    <div className={styles.container}>
       <div
         className={styles.menu}
-        style={{ display: showMenu ? "initial" : "none" }}
+        style={{ display: showMenu ? "block" : "none" }}
       >
         {options.map(
           (option) =>
@@ -36,6 +36,6 @@ export default function Menu({ options = [], buttonHandler }) {
       >
         . . .
       </div>
-    </>
+    </div>
   );
 }
