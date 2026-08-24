@@ -204,7 +204,7 @@ export default function GroupProfile() {
         "chatMember",
       );
       if (lastMemberRoleChange) return alert(lastMemberRoleChange.error);
-      return location.reload();
+      location.reload();
     }
 
     const removeMember = await requestHandler.delete(

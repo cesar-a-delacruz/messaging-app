@@ -1,3 +1,4 @@
+import styles from "./ChatMembers.module.css";
 import { useEffect, useState } from "react";
 import Dialog from "../Dialog/Dialog";
 import Menu from "../Menu/Menu";
@@ -16,20 +17,20 @@ export default function ChatMembers({
   }, [members]);
 
   return (
-    <div>
+    <>
       <h3>Members</h3>
-      <div>
+      <div className={styles.members}>
         {members.map((member) => (
-          <div key={member.user.id}>
+          <div key={member.user.id} className={styles.member}>
             <Image
               src={member.user.image}
               alt={`${member.user.username} picture`}
             />
             <div>
-              <h3>
-                {member.user.username}{" "}
-                <span>{member.role === "ADMIN" ? "ADMIN" : ""}</span>
-              </h3>
+              <h4>
+                {member.user.username}
+                {member.role === "ADMIN" && <span>ADMIN</span>}
+              </h4>
             </div>
             {memberMenu.render && (
               <Menu
@@ -63,6 +64,6 @@ export default function ChatMembers({
           </button>
         </Dialog>
       )}
-    </div>
+    </>
   );
 }

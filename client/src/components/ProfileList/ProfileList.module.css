@@ -16,8 +16,8 @@
   padding: var(--padding-1);
 
   & > div > img {
-    width: 100px;
-    height: 100px;
+    width: var(--image-size);
+    height: var(--image-size);
     border-radius: 50%;
   }
 
