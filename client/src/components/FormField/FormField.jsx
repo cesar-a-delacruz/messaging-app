@@ -47,6 +47,7 @@ export default function FormField({ properties, value, changeHandler }) {
               id={`${properties.id}Container`}
               style={{
                 "--after-display": properties.disabled ? "none" : "initial",
+                backgroundImage: value ? `url(${value})` : "none",
               }}
               onClick={() => {
                 const input = document.getElementById(`${properties.id}`);
