@@ -67,57 +67,60 @@ export default function Chat() {
           {locationState.title}
         </h3>
       </div>
-      <div
-        className={styles.messages}
-        onLoad={(e) => {
-          e.currentTarget.scrollTo({ top: e.currentTarget.scrollHeight });
-        }}
-      >
-        <button
-          onClick={async () => {
-            const response = await requestHandler.get(
-              `message/chat/${messages.chatId}?q=${messages.page}`,
-            );
-
-            dispatchMessages({
-              type: actions.fetch,
-              payload: !response.error ? response.data : response,
+      <div className={styles.container}>
+        <div
+          className={styles.messages}
+          onLoad={(event) => {
+            event.currentTarget.scrollTo({
+              top: event.currentTarget.scrollHeight,
             });
           }}
+          onScroll={async (event) => {
+            const element = event.currentTarget;
+            if (element.scrollTop === 0) {
+              const response = await requestHandler.get(
+                `message/chat/${messages.chatId}?q=${messages.page}`,
+              );
+
+              dispatchMessages({
+                type: actions.fetch,
+                payload: !response.error ? response.data : response,
+              });
+            }
+          }}
         >
-          Load more
-        </button>
-        {messages.messages.length ? (
-          messages.messages.map((message) => {
-            return (
-              <Message
-                key={message.id}
-                data={message}
-                options={[
-                  {
-                    text: "Edit",
-                    handler: () => editDialog.current.showModal(),
-                  },
-                  {
-                    text: "Delete",
-                    handler: () => deleteDialog.current.showModal(),
-                  },
-                ]}
-                isCurrentUserAuthor={
-                  message.authorId === messages.currentAuthorId
-                }
-                menuHandler={() => {
-                  dispatchMessages({
-                    type: actions.select,
-                    payload: { selectedMessage: message },
-                  });
-                }}
-              />
-            );
-          })
-        ) : (
-          <div>Start a convesation :)</div>
-        )}
+          {messages.messages.length ? (
+            messages.messages.map((message) => {
+              return (
+                <Message
+                  key={message.id}
+                  data={message}
+                  options={[
+                    {
+                      text: "Edit",
+                      handler: () => editDialog.current.showModal(),
+                    },
+                    {
+                      text: "Delete",
+                      handler: () => deleteDialog.current.showModal(),
+                    },
+                  ]}
+                  isCurrentUserAuthor={
+                    message.authorId === messages.currentAuthorId
+                  }
+                  menuHandler={() => {
+                    dispatchMessages({
+                      type: actions.select,
+                      payload: { selectedMessage: message },
+                    });
+                  }}
+                />
+              );
+            })
+          ) : (
+            <div>Start a convesation :)</div>
+          )}
+        </div>
       </div>
       <div className={styles.footer}>
         <Form

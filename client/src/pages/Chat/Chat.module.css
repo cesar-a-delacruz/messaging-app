@@ -21,12 +21,16 @@
   }
 }
 
+.container {
+  background-color: var(--color-background-dark);
+  min-height: 71vh;
+}
 .messages {
   display: flex;
   flex-direction: column;
-  background-color: var(--color-background-dark);
-  overflow-y: scroll;
-  min-height: 71vh;
+  height: 98%;
+  overflow-y: auto;
+  scrollbar-width: 0;
 }
 
 .footer {
@@ -65,3 +69,9 @@
     }
   }
 }
+
+/* @supports selector(::-webkit-scrollbar) {
+  .messages::-webkit-scrollbar {
+    width: 0;
+  }
+} */

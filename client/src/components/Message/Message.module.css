@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  padding: var(--padding);
+  padding: var(--padding) var(--padding-1);
 
   .message {
     display: flex;
