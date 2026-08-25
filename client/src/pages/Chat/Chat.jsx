@@ -8,8 +8,8 @@ import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
 import Loader from "@/components/Loader";
-import Message from "@/components/Message/Message";
 import FormField from "@/components/FormField/FormField";
+import Messages from "@/components/Messages/Messages";
 
 export default function Chat() {
   document.title = `${import.meta.env.VITE_TITLE}: Chat`;
@@ -67,61 +67,39 @@ export default function Chat() {
           {locationState.title}
         </h3>
       </div>
-      <div className={styles.container}>
-        <div
-          className={styles.messages}
-          onLoad={(event) => {
-            event.currentTarget.scrollTo({
-              top: event.currentTarget.scrollHeight,
-            });
-          }}
-          onScroll={async (event) => {
-            const element = event.currentTarget;
-            if (element.scrollTop === 0) {
-              const response = await requestHandler.get(
-                `message/chat/${messages.chatId}?q=${messages.page}`,
-              );
 
-              dispatchMessages({
-                type: actions.fetch,
-                payload: !response.error ? response.data : response,
-              });
-            }
-          }}
-        >
-          {messages.messages.length ? (
-            messages.messages.map((message) => {
-              return (
-                <Message
-                  key={message.id}
-                  data={message}
-                  options={[
-                    {
-                      text: "Edit",
-                      handler: () => editDialog.current.showModal(),
-                    },
-                    {
-                      text: "Delete",
-                      handler: () => deleteDialog.current.showModal(),
-                    },
-                  ]}
-                  isCurrentUserAuthor={
-                    message.authorId === messages.currentAuthorId
-                  }
-                  menuHandler={() => {
-                    dispatchMessages({
-                      type: actions.select,
-                      payload: { selectedMessage: message },
-                    });
-                  }}
-                />
-              );
-            })
-          ) : (
-            <div>Start a convesation :)</div>
-          )}
-        </div>
-      </div>
+      <Messages
+        messages={messages.messages}
+        currentUserId={messages.currentAuthorId}
+        scrollHandler={async () => {
+          const response = await requestHandler.get(
+            `message/chat/${messages.chatId}?q=${messages.page}`,
+          );
+
+          dispatchMessages({
+            type: actions.fetch,
+            payload: !response.error ? response.data : response,
+          });
+        }}
+        menu={{
+          options: [
+            {
+              text: "Edit",
+              handler: () => editDialog.current.showModal(),
+            },
+            {
+              text: "Delete",
+              handler: () => deleteDialog.current.showModal(),
+            },
+          ],
+          buttonHandler: (message) =>
+            dispatchMessages({
+              type: actions.select,
+              payload: { selectedMessage: message },
+            }),
+        }}
+      />
+
       <div className={styles.footer}>
         <Form
           fieldsets={create}

@@ -21,18 +21,6 @@
   }
 }
 
-.container {
-  background-color: var(--color-background-dark);
-  min-height: 71vh;
-}
-.messages {
-  display: flex;
-  flex-direction: column;
-  height: 98%;
-  overflow-y: auto;
-  scrollbar-width: 0;
-}
-
 .footer {
   box-sizing: content-box;
   bottom: 0;
