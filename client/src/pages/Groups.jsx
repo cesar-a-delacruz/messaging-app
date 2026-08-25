@@ -24,7 +24,7 @@ export default function Groups() {
   return (
     <div className="page">
       <ProfileList
-        items={groups.profiles.map((group) => ({
+        profiles={groups.profiles.map((group) => ({
           id: group.id,
           image: group.image,
           title: group.name,

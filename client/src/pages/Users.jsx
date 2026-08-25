@@ -24,7 +24,7 @@ export default function Users() {
   return (
     <div className="page">
       <ProfileList
-        items={users.profiles.map((user) => ({
+        profiles={users.profiles.map((user) => ({
           id: user.id,
           image: user.image,
           title: user.username,

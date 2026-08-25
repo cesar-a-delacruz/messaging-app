@@ -1,14 +1,7 @@
 import styles from "./ProfileList.module.css";
-import { useState, useEffect } from "react";
 import Image from "../Image/Image";
 
-export default function ProfileList({ items, clickHandler, scrollHandler }) {
-  const [list, setList] = useState(items);
-
-  useEffect(() => {
-    setList(items);
-  }, [items]);
-
+export default function ProfileList({ profiles, clickHandler, scrollHandler }) {
   return (
     <div
       className={styles.list}
@@ -18,16 +11,16 @@ export default function ProfileList({ items, clickHandler, scrollHandler }) {
           await scrollHandler();
       }}
     >
-      {list.map((item) => (
+      {profiles.map((profile) => (
         <div
-          key={item.id}
-          onClick={() => clickHandler(item)}
+          key={profile.id}
+          onClick={() => clickHandler(profile)}
           className={styles.item}
         >
-          <Image src={item.image} alt={`${item.title} picture`} />
+          <Image src={profile.image} alt={`${profile.title} picture`} />
           <div className={styles.text}>
-            <h3>{item.title}</h3>
-            {item.content && <div>{item.content}</div>}
+            <h3>{profile.title}</h3>
+            {profile.content && <div>{profile.content}</div>}
           </div>
         </div>
       ))}

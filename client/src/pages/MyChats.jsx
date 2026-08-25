@@ -36,7 +36,7 @@ export default function MyChats() {
   return (
     <div className="page">
       <ProfileList
-        items={chats.profiles.map((chat) => ({
+        profiles={chats.profiles.map((chat) => ({
           id: chat.profile.id,
           image: chat.profile.image,
           title: !chat.group ? chat.profile.username : chat.profile.name,
