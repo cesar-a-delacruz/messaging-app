@@ -1,3 +1,4 @@
+import styles from "./GroupProfile.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useReducer, useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
@@ -48,7 +49,7 @@ export default function GroupProfile() {
     isMemberSelected && chatMembers.selected.role === "ADMIN";
 
   return (
-    <div className="page">
+    <div className={`page ${styles.groupProfile}`}>
       <Profile
         form={{ fieldset: edit[0], data: group }}
         edit={{

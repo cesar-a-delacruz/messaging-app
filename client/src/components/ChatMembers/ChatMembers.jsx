@@ -45,7 +45,7 @@ export default function ChatMembers({
       {addDialog.render && (
         <Dialog name={"Add members"} ref={addDialog.ref}>
           <ProfileList
-            items={addDialog.users.map((user) => ({
+            profiles={addDialog.users.map((user) => ({
               id: user.id,
               image: user.image,
               title: user.username,

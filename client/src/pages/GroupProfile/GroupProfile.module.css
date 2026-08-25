@@ -1,0 +1,10 @@
+.groupProfile {
+  overflow-y: auto;
+  scrollbar-width: 0;
+}
+
+@supports selector(::-webkit-scrollbar) {
+  .groupProfile::-webkit-scrollbar {
+    width: 0;
+  }
+}
