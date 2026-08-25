@@ -2,6 +2,7 @@
   width: 75px;
   height: 50px;
   overflow: visible;
+  anchor-scope: --menu;
 }
 
 .menu {
@@ -11,10 +12,11 @@
   overflow: hidden;
   width: max-content;
   position: absolute;
-  justify-self: center;
-  align-self: end;
   margin-bottom: var(--margin);
   animation: load forwards 250ms;
+  position-anchor: --menu;
+  bottom: anchor(top);
+  position-area: center;
 
   .option {
     padding: var(--padding);
@@ -35,6 +37,7 @@
   padding: var(--padding-1);
   line-height: var(--font-size);
   text-align: center;
+  anchor-name: --menu;
 
   &:hover {
     background-color: var(--color-primary-dark);
