@@ -1,3 +1,4 @@
+import styles from "./Chat.module.css";
 import { useLocation } from "react-router-dom";
 import { useEffect, useReducer, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
@@ -5,14 +6,14 @@ import { create, edit } from "@/fieldsets/messageFieldsets";
 import { actions, dispatcher } from "@/reducers/messageReducer";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import Form from "@/components/Form/Form";
-import Menu from "@/components/Menu/Menu";
 import Dialog from "@/components/Dialog/Dialog";
 import Loader from "@/components/Loader";
-import Message from "@/components/Message";
+import Message from "@/components/Message/Message";
 import FormField from "@/components/FormField/FormField";
-import styles from "./styles/Chat.module.css";
 
 export default function Chat() {
+  document.title = `${import.meta.env.VITE_TITLE}: Chat`;
+
   const locationState = useLocation().state;
   if (!locationState) return location.replace("/");
   const [messages, dispatchMessages] = useReducer(dispatcher, {});
@@ -53,24 +54,25 @@ export default function Chat() {
     return <Loader text={messages.error || "Getting messages..."} />;
 
   return (
-    <div className={styles.chat}>
+    <div className={`page ${styles.chat}`}>
       <div className={styles.header}>
-        <div
-          className={styles.data}
+        <img src={locationState.image} alt={`${locationState.title} picture`} />
+        <h3
           onClick={() =>
             location.assign(
               `/profile/${locationState.chat.type}/${locationState.id}`,
             )
           }
         >
-          <img
-            src={locationState.image}
-            alt={`${locationState.title} picture`}
-          />
-          <h3>{locationState.title}</h3>
-        </div>
+          {locationState.title}
+        </h3>
       </div>
-      <div className={styles.messages}>
+      <div
+        className={styles.messages}
+        onLoad={(e) => {
+          e.currentTarget.scrollTo({ top: e.currentTarget.scrollHeight });
+        }}
+      >
         <button
           onClick={async () => {
             const response = await requestHandler.get(
@@ -91,60 +93,31 @@ export default function Chat() {
               <Message
                 key={message.id}
                 data={message}
-                styleJustifyContent={
+                options={[
+                  {
+                    text: "Edit",
+                    handler: () => editDialog.current.showModal(),
+                  },
+                  {
+                    text: "Delete",
+                    handler: () => deleteDialog.current.showModal(),
+                  },
+                ]}
+                isCurrentUserAuthor={
                   message.authorId === messages.currentAuthorId
-                    ? "end"
-                    : "start"
                 }
-                contextMenuHandler={(message) => {
-                  if (message.authorId === messages.currentAuthorId)
-                    dispatchMessages({
-                      type: actions.select,
-                      payload: { selectedMessage: message },
-                    });
+                menuHandler={() => {
+                  dispatchMessages({
+                    type: actions.select,
+                    payload: { selectedMessage: message },
+                  });
                 }}
-              >
-                {messages.selected.id === message.id && (
-                  <Menu
-                    options={[
-                      {
-                        text: "Edit",
-                        handler: () => editDialog.current.showModal(),
-                      },
-                      {
-                        text: "Delete",
-                        handler: () => deleteDialog.current.showModal(),
-                      },
-                    ]}
-                  />
-                )}
-              </Message>
+              />
             );
           })
         ) : (
           <div>Start a convesation :)</div>
         )}
-        <Dialog ref={editDialog}>
-          <FormField
-            properties={edit[1].fields[0]}
-            value={messages.selected.content || ""}
-            changeHandler={(id, value) =>
-              dispatchMessages({
-                type: actions.changeSelected,
-                payload: { id, value },
-              })
-            }
-          />
-          <button onClick={() => editHandler()}>Edit</button>
-        </Dialog>
-        <Dialog ref={deleteDialog}>
-          <p>Are you sure you want to delete this message?</p>
-          <FormField
-            properties={edit[0].fields[0]}
-            value={messages.selected.id || ""}
-          />
-          <button onClick={() => removeHandler()}>Yes</button>
-        </Dialog>
       </div>
       <div className={styles.footer}>
         <Form
@@ -156,6 +129,27 @@ export default function Chat() {
           submit={{ text: "Send", handler: submitHandler }}
         />
       </div>
+      <Dialog ref={editDialog}>
+        <FormField
+          properties={edit[1].fields[0]}
+          value={messages.selected.content || ""}
+          changeHandler={(id, value) =>
+            dispatchMessages({
+              type: actions.changeSelected,
+              payload: { id, value },
+            })
+          }
+        />
+        <button onClick={() => editHandler()}>Edit</button>
+      </Dialog>
+      <Dialog ref={deleteDialog}>
+        <p>Are you sure you want to delete this message?</p>
+        <FormField
+          properties={edit[0].fields[0]}
+          value={messages.selected.id || ""}
+        />
+        <button onClick={() => removeHandler()}>Yes</button>
+      </Dialog>
     </div>
   );
 

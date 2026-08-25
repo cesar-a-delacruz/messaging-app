@@ -11,6 +11,8 @@
   justify-content: start;
   align-items: center;
   flex-direction: column;
+  width: 12vw;
+  max-width: 12vw;
 
   & h1 {
     margin-bottom: var(--margin-2);
@@ -53,4 +55,5 @@
 
 .main main {
   box-shadow: inset 2px 0px 2px black;
+  max-width: 88vw;
 }
