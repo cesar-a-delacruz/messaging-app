@@ -7,7 +7,7 @@ const fields = [
   {
     id: "content",
     value: "",
-    type: "text",
+    type: "textarea",
   },
   {
     id: "attachment",
