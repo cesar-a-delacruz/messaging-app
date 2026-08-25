@@ -33,8 +33,8 @@ export function dispatcher(state, action) {
 
     case actions.fetch:
       if (action.payload.error) {
-        alert("There are no more messages.");
-        return state;
+        prev.page = 0;
+        return { ...prev };
       }
       const newMessages = action.payload.messages;
       newMessages.sort(

@@ -1,25 +1,38 @@
 import styles from "./Messages.module.css";
 import Image from "../Image/Image";
 import Menu from "../Menu/Menu";
+import { useState } from "react";
 
 export default function Messages({
   messages,
+  all,
   scrollHandler,
   currentUserId,
   menu = { options, buttonHandler },
 }) {
+  const [scrollPosition, setScrollPosition] = useState(0);
   return (
     <div className={styles.messagesContainer}>
       <div
         className={styles.messages}
         onLoad={(event) => {
-          event.currentTarget.scrollTo({
-            top: event.currentTarget.scrollHeight,
+          const element = event.currentTarget;
+          element.scrollTo({
+            top: scrollPosition || element.scrollHeight,
           });
         }}
         onScroll={async (event) => {
           const element = event.currentTarget;
-          if (element.scrollTop === 0) await scrollHandler();
+          if (element.scrollTop === 0 && !all) {
+            const height = element.scrollHeight;
+            const stop = await scrollHandler();
+
+            if (stop) return;
+            element.scrollTo({
+              top: scrollPosition,
+            });
+            setScrollPosition(height + 280);
+          }
         }}
       >
         {messages.length ? (

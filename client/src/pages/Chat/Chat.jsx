@@ -70,8 +70,11 @@ export default function Chat() {
 
       <Messages
         messages={messages.messages}
+        all={messages.page === 0}
         currentUserId={messages.currentAuthorId}
         scrollHandler={async () => {
+          if (!messages.page) return alert("There are no more messages.");
+
           const response = await requestHandler.get(
             `message/chat/${messages.chatId}?q=${messages.page}`,
           );
@@ -80,6 +83,8 @@ export default function Chat() {
             type: actions.fetch,
             payload: !response.error ? response.data : response,
           });
+
+          if (response.error) return true;
         }}
         menu={{
           options: [

@@ -48,3 +48,9 @@
     }
   }
 }
+
+@supports selector(::-webkit-scrollbar) {
+  .messages::-webkit-scrollbar {
+    width: 0;
+  }
+}
