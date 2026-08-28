@@ -1,6 +1,8 @@
 .chat {
   display: flex;
   flex-direction: column;
+  width: 66%;
+  max-height: 100vh;
 }
 
 .header {
@@ -44,8 +46,8 @@
           height: 75px;
         }
         & > textarea {
-          width: 50vw;
-          max-width: 50vw;
+          width: 30vw;
+          max-width: 30vw;
           height: 75px;
           max-height: 75px;
         }

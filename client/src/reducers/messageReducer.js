@@ -13,19 +13,7 @@ export function dispatcher(state, action) {
 
   switch (action.type) {
     case actions.load:
-      if (action.payload.error) return { ...action.payload };
-
-      const initial = {
-        selected: {},
-        page: 1,
-        ...action.payload,
-      };
-
-      initial.messages.sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      );
-      return { ...initial };
+      return { ...action.payload };
 
     case actions.add:
       prev.messages = [...prev.messages, action.payload.data];

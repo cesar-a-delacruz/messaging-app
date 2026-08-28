@@ -1,6 +1,7 @@
 .messagesContainer {
   background-color: var(--color-background-dark);
-  min-height: 71vh;
+  min-height: 70vh;
+  height: 70vh;
 
   & .messages {
     display: flex;

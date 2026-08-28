@@ -16,7 +16,7 @@ export default function Main() {
         </h1>
 
         <nav>
-          <span onClick={() => location.assign("/")}>My Chats</span>
+          <span onClick={() => location.assign("/")}>Chats</span>
           <span onClick={() => location.assign("/users")}>Users</span>
           <span onClick={() => location.assign("/groups")}>Groups</span>
         </nav>

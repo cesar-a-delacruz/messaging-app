@@ -21,17 +21,17 @@ export default function UserProfile() {
 
   const isLoggedUserProfile = !id;
 
-  const profileData = {
-    image: user.image,
-    fullname: user.fullname,
-    bio: user.bio,
-  };
-  const dialogData = { id: user.id, username: user.username };
-
   return (
     <div className="page">
       <Profile
-        form={{ fieldset: edit[0], data: profileData }}
+        form={{
+          fieldset: edit[0],
+          data: {
+            image: user.image,
+            fullname: user.fullname,
+            bio: user.bio,
+          },
+        }}
         edit={{
           isAllowed: isLoggedUserProfile,
           handler: profileSubmitHandler,
@@ -64,7 +64,7 @@ export default function UserProfile() {
         <Dialog name={"Change Credentials"} ref={credentialsDialog}>
           <Form
             fieldsets={[edit[1]]}
-            initialData={dialogData}
+            initialData={{ id: user.id, username: user.username }}
             submit={{ text: "Enter", handler: dialogSubmitHandler }}
           />
         </Dialog>

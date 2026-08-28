@@ -1,5 +1,4 @@
 import styles from "./Chat.module.css";
-import { useLocation } from "react-router-dom";
 import { useEffect, useReducer, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { create, edit } from "@/fieldsets/messageFieldsets";
@@ -7,64 +6,33 @@ import { actions, dispatcher } from "@/reducers/messageReducer";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
-import Loader from "@/components/Loader/Loader";
 import FormField from "@/components/FormField/FormField";
 import Messages from "@/components/Messages/Messages";
 
-export default function Chat() {
-  document.title = `${import.meta.env.VITE_TITLE}: Chat`;
-
-  const locationState = useLocation().state;
-  if (!locationState) return location.replace("/");
-  const [messages, dispatchMessages] = useReducer(dispatcher, {});
+export default function Chat({ initialChat, initialData }) {
+  const [messages, dispatchMessages] = useReducer(dispatcher, initialChat);
   const editDialog = useRef(null);
   const deleteDialog = useRef(null);
 
   useEffect(() => {
-    (async () => {
-      let response = {};
-
-      if (locationState.chat.id)
-        response = await requestHandler.get(
-          `message/chat/${locationState.chat.id}/`,
-        );
-      else {
-        switch (locationState.chat.type) {
-          case "user":
-            response = await requestHandler.get(
-              `chat/otherUser/${locationState.id}`,
-            );
-            break;
-          case "group":
-            response = await requestHandler.get(
-              `chat/group/${locationState.id}`,
-            );
-            break;
-        }
-      }
-
-      dispatchMessages({
-        type: actions.load,
-        payload: !response.error ? response.data : response,
-      });
-    })();
-  }, []);
-
-  if (!Object.keys(messages).length || messages.error)
-    return <Loader text={messages.error || "Getting messages..."} />;
+    dispatchMessages({
+      type: actions.load,
+      payload: initialChat,
+    });
+  }, [initialChat.chatId]);
 
   return (
-    <div className={`page ${styles.chat}`}>
+    <div className={styles.chat}>
       <div className={styles.header}>
-        <img src={locationState.image} alt={`${locationState.title} picture`} />
+        <img src={initialData.image} alt={`${initialData.title} picture`} />
         <h3
           onClick={() =>
             location.assign(
-              `/profile/${locationState.chat.type}/${locationState.id}`,
+              `/profile/${initialChat.chat.type}/${initialChat.id}`,
             )
           }
         >
-          {locationState.title}
+          {initialData.title}
         </h3>
       </div>
 
@@ -73,7 +41,7 @@ export default function Chat() {
         all={messages.page === 0}
         currentUserId={messages.currentAuthorId}
         scrollHandler={async () => {
-          if (!messages.page) return alert("There are no more messages.");
+          if (!messages.page) return console.log("There are no more messages.");
 
           const response = await requestHandler.get(
             `message/chat/${messages.chatId}?q=${messages.page}`,
@@ -140,13 +108,10 @@ export default function Chat() {
   );
 
   async function submitHandler(message) {
-    if (!messages.chatId && locationState.chat.type === "user") {
+    if (!messages.chatId && initialChat.chat.type === "user") {
       const chat = await requestHandler.post({}, "chat");
 
-      const users = [
-        { id: messages.currentAuthorId },
-        { id: locationState.id },
-      ];
+      const users = [{ id: messages.currentAuthorId }, { id: initialChat.id }];
 
       const addMembers = await requestHandler.post(
         {
