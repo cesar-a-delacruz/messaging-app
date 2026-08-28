@@ -1,44 +1,31 @@
 import styles from "./GroupProfile.module.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useReducer, useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
-import { create } from "@/fieldsets/chatMemberFieldsets";
+import { remove } from "@/fieldsets/chatMemberFieldsets";
 import { edit } from "@/fieldsets/groupFieldsets";
 import { actions, dispatcher } from "@/reducers/chatMemberReducer";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";
-import useGet from "@/hooks/useGet";
-import Loader from "@/components/Loader";
 import Dialog from "@/components/Dialog/Dialog";
-import FormField from "@/components/FormField/FormField";
 import Profile from "@/components/Profile/Profile";
 import ChatMembers from "@/components/ChatMembers/ChatMembers";
+import Form from "@/components/Form/Form";
 
-export default function GroupProfile() {
-  const id = useParams().id;
+export default function GroupProfile({ initialGroup, initialChatMembers }) {
   const navigate = useNavigate();
-  const [group, setGroup] = useGet(`group/${id}`);
-  const [chatMembers, dispatchChatMembers] = useReducer(dispatcher, {});
+  const [group, setGroup] = useState(initialGroup);
+  const [chatMembers, dispatchChatMembers] = useReducer(
+    dispatcher,
+    initialChatMembers,
+  );
   const [users, setUsers] = useState([]);
   const usersDialog = useRef(null);
   const removeDialog = useRef(null);
 
-  document.title = `${import.meta.env.VITE_TITLE}: ${group.name ? group.name : "Group"}`;
-
   useEffect(() => {
-    (async () => {
-      const response = await requestHandler.get(`chatMember/group/${id}`);
-
-      dispatchChatMembers({
-        type: actions.load,
-        payload: !response.error ? response.data : response,
-      });
-    })();
-  }, []);
-
-  if (!Object.keys(group).length || group.error)
-    return <Loader text={group.error || "Getting group..."} />;
-  if (!Object.keys(chatMembers).length || chatMembers.error)
-    return <Loader text={chatMembers.error || "Getting chat members..."} />;
+    setGroup(initialGroup);
+    dispatchChatMembers({ type: actions.load, payload: initialChatMembers });
+  }, [initialChatMembers.members]);
 
   const isLoggedUserMember = chatMembers.currentMember;
   const isCurrentMemberAdmin =
@@ -49,7 +36,7 @@ export default function GroupProfile() {
     isMemberSelected && chatMembers.selected.role === "ADMIN";
 
   return (
-    <div className={`page ${styles.groupProfile}`}>
+    <div className={` ${styles.groupProfile}`}>
       <Profile
         form={{ fieldset: edit[0], data: group }}
         edit={{
@@ -151,18 +138,18 @@ export default function GroupProfile() {
               ? "Are you sure you want to exit this group?"
               : "Are you sure you want to remove this member?"}
           </p>
-          <FormField
-            properties={create[0].fields[0]}
-            value={chatMembers.selected.id || ""}
-          />
-          <button
-            onClick={() => {
-              removeMemberHandler();
-              removeDialog.current.close();
+          <Form
+            fieldsets={remove}
+            initialData={{ id: chatMembers.selected.id || "" }}
+            submit={{
+              text: "Yes",
+              handler: () => {
+                removeMemberHandler();
+                removeDialog.current.close();
+              },
             }}
-          >
-            Yes
-          </button>
+            disable={false}
+          />
         </Dialog>
       )}
     </div>

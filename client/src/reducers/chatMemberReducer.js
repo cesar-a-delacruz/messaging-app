@@ -1,5 +1,3 @@
-import sessionHandler from "@/handlers/sessionHandler";
-
 export const actions = {
   load: "LOAD",
   add: "ADD",
@@ -13,14 +11,7 @@ export function dispatcher(state, action) {
 
   switch (action.type) {
     case actions.load:
-      if (action.payload.error) return { ...action.payload };
-
-      const initial = {
-        selected: {},
-        ...action.payload,
-      };
-
-      return initial;
+      return { ...action.payload };
 
     case actions.add:
       prev.members = [...prev.members, ...action.payload.data];

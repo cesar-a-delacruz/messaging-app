@@ -1,0 +1,16 @@
+.groups {
+  display: flex;
+  flex-direction: row;
+
+  & dialog > div:last-child > div {
+    width: 100%;
+  }
+
+  & > p {
+    font-size: var(--font-size-3);
+    text-align: center;
+    width: 50%;
+    height: fit-content;
+    align-self: center;
+  }
+}

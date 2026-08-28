@@ -1,6 +1,16 @@
 .groupProfile {
   overflow-y: auto;
   scrollbar-width: 0;
+  width: 50%;
+
+  & dialog form {
+    background-color: inherit;
+    padding: 0;
+
+    & button {
+      margin: 0;
+    }
+  }
 }
 
 @supports selector(::-webkit-scrollbar) {

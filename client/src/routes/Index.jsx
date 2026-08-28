@@ -6,9 +6,8 @@ import Register from "@/pages/Register/Register";
 import MyChats from "@/pages/MyChats";
 import Users from "@/pages/Users";
 import UserProfile from "@/pages/UserProfile/UserProfile";
-import GroupProfile from "@/pages/GroupProfile/GroupProfile";
 import Chat from "@/pages/Chat/Chat";
-import Groups from "@/pages/Groups";
+import Groups from "@/pages/Groups/Groups";
 import NewGroup from "@/pages/NewGroup/NewGroup";
 
 export default function Index() {
@@ -24,7 +23,6 @@ export default function Index() {
         <Route path="groups" element={<Groups />} />
         <Route path="groups/new" element={<NewGroup />} />
         <Route path="profile/user/:id?" element={<UserProfile />} />
-        <Route path="profile/group/:id" element={<GroupProfile />} />
         <Route path="chat" element={<Chat />} />
       </Route>
     </Routes>

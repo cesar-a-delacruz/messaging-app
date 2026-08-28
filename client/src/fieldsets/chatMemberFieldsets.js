@@ -16,8 +16,8 @@ export const fields = [
   },
 ];
 
-export const create = [
+export const remove = [
   {
-    fields: [...fields],
+    fields: [fields[0]],
   },
 ];
