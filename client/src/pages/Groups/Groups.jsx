@@ -2,7 +2,7 @@ import styles from "./Groups.module.css";
 import { useEffect, useReducer, useState } from "react";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
-import Loader from "@/components/Loader";
+import Loader from "@/components/Loader/Loader";
 import ProfileList from "@/components/ProfileList/ProfileList";
 import GroupProfile from "../../components/GroupProfile/GroupProfile";
 

@@ -3,7 +3,7 @@ import { useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
 import { edit } from "@/fieldsets/userFieldsets";
-import Loader from "@/components/Loader";
+import Loader from "@/components/Loader/Loader";
 import Profile from "@/components/Profile/Profile";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";

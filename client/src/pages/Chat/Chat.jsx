@@ -7,7 +7,7 @@ import { actions, dispatcher } from "@/reducers/messageReducer";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
-import Loader from "@/components/Loader";
+import Loader from "@/components/Loader/Loader";
 import FormField from "@/components/FormField/FormField";
 import Messages from "@/components/Messages/Messages";
 
