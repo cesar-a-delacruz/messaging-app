@@ -4,7 +4,7 @@ import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader/Loader";
 import ProfileList from "@/components/ProfileList/ProfileList";
-import GroupProfile from "../../components/GroupProfile/GroupProfile";
+import GroupProfile from "@/components/GroupProfile/GroupProfile";
 
 export default function Groups() {
   document.title = `${import.meta.env.VITE_TITLE}: Groups`;
