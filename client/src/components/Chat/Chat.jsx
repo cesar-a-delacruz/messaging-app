@@ -1,18 +1,17 @@
 import styles from "./Chat.module.css";
 import { useEffect, useReducer, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
-import { create, edit } from "@/fieldsets/messageFieldsets";
+import { create, edit, remove } from "@/fieldsets/messageFieldsets";
 import { actions, dispatcher } from "@/reducers/messageReducer";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
-import FormField from "@/components/FormField/FormField";
 import Messages from "@/components/Messages/Messages";
 
 export default function Chat({ initialChat, initialData }) {
   const [messages, dispatchMessages] = useReducer(dispatcher, initialChat);
   const editDialog = useRef(null);
-  const deleteDialog = useRef(null);
+  const removeDialog = useRef(null);
 
   useEffect(() => {
     dispatchMessages({
@@ -62,7 +61,7 @@ export default function Chat({ initialChat, initialData }) {
             },
             {
               text: "Delete",
-              handler: () => deleteDialog.current.showModal(),
+              handler: () => removeDialog.current.showModal(),
             },
           ],
           buttonHandler: (message) =>
@@ -84,25 +83,20 @@ export default function Chat({ initialChat, initialData }) {
         />
       </div>
       <Dialog ref={editDialog}>
-        <FormField
-          properties={edit[1].fields[0]}
-          value={messages.selected.content || ""}
-          changeHandler={(id, value) =>
-            dispatchMessages({
-              type: actions.changeSelected,
-              payload: { id, value },
-            })
-          }
+        <Form
+          fieldsets={edit}
+          initialData={{ content: messages.selected.content || "" }}
+          submit={{ text: "Edit", handler: editHandler }}
         />
-        <button onClick={() => editHandler()}>Edit</button>
       </Dialog>
-      <Dialog ref={deleteDialog}>
+      <Dialog ref={removeDialog}>
         <p>Are you sure you want to delete this message?</p>
-        <FormField
-          properties={edit[0].fields[0]}
-          value={messages.selected.id || ""}
+        <Form
+          fieldsets={remove}
+          initialData={{ id: messages.selected.id || "" }}
+          submit={{ text: "Yes", handler: removeHandler }}
+          disable={false}
         />
-        <button onClick={() => removeHandler()}>Yes</button>
       </Dialog>
     </div>
   );
@@ -155,6 +149,6 @@ export default function Chat({ initialChat, initialData }) {
     dispatchMessages({
       type: actions.remove,
     });
-    deleteDialog.current.close();
+    removeDialog.current.close();
   }
 }

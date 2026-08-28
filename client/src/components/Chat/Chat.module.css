@@ -3,6 +3,15 @@
   flex-direction: column;
   width: 66%;
   max-height: 100vh;
+
+  & dialog form {
+    background-color: inherit;
+    padding: 0;
+
+    & button {
+      margin: 0;
+    }
+  }
 }
 
 .header {

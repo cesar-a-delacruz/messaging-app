@@ -37,10 +37,6 @@ export function dispatcher(state, action) {
       prev.selected = action.payload.selectedMessage;
       return { ...prev };
 
-    case actions.changeSelected:
-      prev.selected[action.payload.id] = action.payload.value;
-      return { ...prev };
-
     case actions.edit:
       prev.messages = prev.messages.map((message) => {
         if (message.id === state.selected.id)
