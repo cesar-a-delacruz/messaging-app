@@ -36,7 +36,7 @@ export default function GroupProfile({ initialGroup, initialChatMembers }) {
     isMemberSelected && chatMembers.selected.role === "ADMIN";
 
   return (
-    <div className={` ${styles.groupProfile}`}>
+    <div className={styles.groupProfile}>
       <Profile
         form={{ fieldset: edit[0], data: group }}
         edit={{

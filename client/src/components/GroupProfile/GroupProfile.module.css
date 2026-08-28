@@ -1,7 +1,7 @@
 .groupProfile {
   overflow-y: auto;
   scrollbar-width: 0;
-  width: 50%;
+  width: 66%;
 
   & dialog form {
     background-color: inherit;
