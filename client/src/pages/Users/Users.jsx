@@ -1,11 +1,19 @@
-import { useEffect, useReducer } from "react";
+import styles from "./Users.module.css";
+import { useEffect, useReducer, useState } from "react";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader/Loader";
 import ProfileList from "@/components/ProfileList/ProfileList";
+import UserProfile from "@/components/UserProfile/UserProfile";
 
 export default function Users() {
+  document.title = `${import.meta.env.VITE_TITLE}: Users`;
+
   const [users, dispatchUsers] = useReducer(dispatcher, {});
+  const [profile, setProfile] = useState({
+    user: {},
+    selected: false,
+  });
 
   useEffect(() => {
     (async () => {
@@ -22,7 +30,7 @@ export default function Users() {
     return <Loader text={users.error || "Getting users..."} />;
 
   return (
-    <div className="page">
+    <div className={`page ${styles.users}`}>
       <ProfileList
         profiles={users.profiles.map((user) => ({
           id: user.id,
@@ -34,7 +42,15 @@ export default function Users() {
             id: "",
           },
         }))}
-        clickHandler={(item) => location.assign(`/profile/user/${item.id}`)}
+        clickHandler={async (item) => {
+          const response = await requestHandler.get(`user/${item.id}`);
+          const result = !response.error ? response.data : response;
+
+          setProfile({
+            user: result,
+            selected: true,
+          });
+        }}
         scrollHandler={async () => {
           if (!users.page) return console.log("There are no more users.");
 
@@ -47,6 +63,13 @@ export default function Users() {
           });
         }}
       />
+      {!profile.selected ? (
+        <p>Select a user to view it here</p>
+      ) : profile.user.error ? (
+        <Loader text={profile.user.error} />
+      ) : (
+        <UserProfile initialUser={profile.user} />
+      )}
     </div>
   );
 }

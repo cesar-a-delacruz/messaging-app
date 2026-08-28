@@ -1,0 +1,57 @@
+import styles from "./UserProfile.module.css";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import requestHandler from "@/handlers/requestHandler";
+import { edit } from "@/fieldsets/userFieldsets";
+import Profile from "@/components/Profile/Profile";
+
+export default function UserProfile({ initialUser }) {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(initialUser);
+
+  useEffect(() => {
+    setUser(initialUser);
+  }, [initialUser.id]);
+
+  return (
+    <div className={styles.userProfile}>
+      <Profile
+        form={{
+          fieldset: edit[0],
+          data: {
+            image: user.image,
+            fullname: user.fullname,
+            bio: user.bio,
+          },
+        }}
+        edit={{
+          isAllowed: false,
+          handler: editHandler,
+        }}
+        options={[
+          {
+            text: "View chat",
+            handler: async () =>
+              navigate(`/chat`, {
+                state: {
+                  id: user.id,
+                  image: user.image,
+                  title: user.name,
+                  chat: {
+                    type: "user",
+                    id: "",
+                  },
+                },
+              }),
+          },
+        ]}
+      />
+    </div>
+  );
+
+  async function editHandler(data) {
+    data = { ...user, ...data };
+    await requestHandler.put(data, "user");
+    setUser(data);
+  }
+}

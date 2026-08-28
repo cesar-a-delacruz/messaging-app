@@ -4,8 +4,7 @@ import Main from "@/layouts/Main";
 import Login from "@/pages/Login/Login";
 import Register from "@/pages/Register/Register";
 import Chats from "@/pages/Chats/Chats";
-import Users from "@/pages/Users";
-import UserProfile from "@/pages/UserProfile/UserProfile";
+import Users from "@/pages/Users/Users";
 import Groups from "@/pages/Groups/Groups";
 import NewGroup from "@/pages/NewGroup/NewGroup";
 
@@ -21,7 +20,6 @@ export default function Index() {
         <Route path="users" element={<Users />} />
         <Route path="groups" element={<Groups />} />
         <Route path="groups/new" element={<NewGroup />} />
-        <Route path="profile/user/:id?" element={<UserProfile />} />
       </Route>
     </Routes>
   );
