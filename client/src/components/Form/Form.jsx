@@ -1,5 +1,5 @@
 import styles from "./Form.module.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FormField from "../FormField/FormField";
 import compareObjects from "@/utils/js/compareObjects";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
@@ -8,10 +8,15 @@ export default function Form({
   fieldsets,
   initialData,
   submit = { text, handler },
+  disable = true,
 }) {
   const [data, setData] = useState(initialData);
-  const [disableSubmit, setDisableSubmit] = useState(true);
+  const [disableSubmit, setDisableSubmit] = useState(disable);
   const form = useRef(null);
+
+  useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
 
   return (
     <form onSubmit={submitHandler} ref={form}>
