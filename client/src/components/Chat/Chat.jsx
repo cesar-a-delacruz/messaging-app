@@ -9,7 +9,7 @@ import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
 import Messages from "@/components/Messages/Messages";
 
-export default function Chat({ initialChat, initialData }) {
+export default function Chat({ initialChat, initialData, profileDialogRef }) {
   const [messages, dispatchMessages] = useReducer(dispatcher, initialChat);
   const editDialog = useRef(null);
   const removeDialog = useRef(null);
@@ -25,13 +25,7 @@ export default function Chat({ initialChat, initialData }) {
     <div className={styles.chat}>
       <div className={styles.header}>
         <img src={initialData.image} alt={`${initialData.title} picture`} />
-        <h3
-          onClick={() =>
-            location.assign(
-              `/profile/${initialChat.chat.type}/${initialChat.id}`,
-            )
-          }
-        >
+        <h3 onClick={() => profileDialogRef.current.showModal()}>
           {initialData.title}
         </h3>
       </div>

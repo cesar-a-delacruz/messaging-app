@@ -1,11 +1,15 @@
 import styles from "./Chats.module.css";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
+import { edit as groupEdit } from "@/fieldsets/groupFieldsets";
+import { edit as userEdit } from "@/fieldsets/userFieldsets";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader/Loader";
 import Chat from "@/components/Chat/Chat";
 import ProfileList from "@/components/ProfileList/ProfileList";
+import Dialog from "@/components/Dialog/Dialog";
+import Profile from "@/components/Profile/Profile";
 
 export default function Chats() {
   document.title = `${import.meta.env.VITE_TITLE}: Chats`;
@@ -13,10 +17,12 @@ export default function Chats() {
   const locationState = useLocation().state;
   const [chats, dispatchChats] = useReducer(dispatcher, {});
   const [profile, setProfile] = useState({
+    profile: {},
     chat: {},
     data: {},
     selected: false,
   });
+  const profileDialog = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -58,7 +64,9 @@ export default function Chats() {
             id: chat.id,
           },
         }))}
-        clickHandler={async (item) => await profileListClickHandler(item)}
+        clickHandler={async (item) => {
+          await profileListClickHandler(item);
+        }}
         scrollHandler={async () => {
           if (!chats.page) return console.log("There are no more chats.");
 
@@ -74,17 +82,37 @@ export default function Chats() {
       {!profile.selected ? (
         <p>Select a chat to view it here</p>
       ) : (
-        <Chat initialChat={profile.chat} initialData={profile.data} />
+        <Chat
+          initialChat={profile.chat}
+          initialData={profile.data}
+          profileDialogRef={profileDialog}
+        />
+      )}
+      {profile.profile.data && (
+        <Dialog ref={profileDialog}>
+          <Profile
+            form={{
+              data: profile.profile.data,
+              fieldset:
+                profile.profile.type === "user" ? userEdit[0] : groupEdit[0],
+            }}
+            edit={{ isAllowed: false, handler: () => {} }}
+          />
+        </Dialog>
       )}
     </div>
   );
 
   async function profileListClickHandler(item) {
     let response = {};
+    let profileData = {};
 
-    if (item.chat.id)
+    if (item.chat.id) {
       response = await requestHandler.get(`message/chat/${item.chat.id}/`);
-    else {
+      if (item.chat.type === "user")
+        profileData = await requestHandler.get(`user/${item.id}`);
+      else profileData = await requestHandler.get(`group/${item.id}`);
+    } else {
       switch (item.chat.type) {
         case "user":
           response = await requestHandler.get(`chat/otherUser/${item.id}`);
@@ -105,6 +133,7 @@ export default function Chats() {
     } else result = response;
 
     setProfile({
+      profile: { type: item.chat.type, data: profileData.data },
       chat: result,
       data: item,
       selected: true,
