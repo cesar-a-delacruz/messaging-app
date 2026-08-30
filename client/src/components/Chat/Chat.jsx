@@ -4,6 +4,7 @@ import requestHandler from "@/handlers/requestHandler";
 import { create, edit, remove } from "@/fieldsets/messageFieldsets";
 import { actions, dispatcher } from "@/reducers/messageReducer";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
+import prepareChatMembers from "@/utils/js/prepareChatMembers";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
 import Messages from "@/components/Messages/Messages";
@@ -82,30 +83,34 @@ export default function Chat({ initialChat, initialData }) {
           submit={{ text: "Send", handler: submitHandler }}
         />
       </div>
-      <Dialog ref={editDialog}>
-        <Form
-          fieldsets={edit}
-          initialData={{ content: messages.selected.content || "" }}
-          submit={{ text: "Edit", handler: editHandler }}
-        />
-      </Dialog>
-      <Dialog ref={removeDialog}>
-        <p>Are you sure you want to delete this message?</p>
-        <Form
-          fieldsets={remove}
-          initialData={{ id: messages.selected.id || "" }}
-          submit={{ text: "Yes", handler: removeHandler }}
-          disable={false}
-        />
-      </Dialog>
+      {!messages.error && (
+        <>
+          <Dialog ref={editDialog}>
+            <Form
+              fieldsets={edit}
+              initialData={{ content: messages.selected.content || "" }}
+              submit={{ text: "Edit", handler: editHandler }}
+            />
+          </Dialog>
+          <Dialog ref={removeDialog}>
+            <p>Are you sure you want to delete this message?</p>
+            <Form
+              fieldsets={remove}
+              initialData={{ id: messages.selected.id || "" }}
+              submit={{ text: "Yes", handler: removeHandler }}
+              disable={false}
+            />
+          </Dialog>
+        </>
+      )}
     </div>
   );
 
   async function submitHandler(message) {
-    if (!messages.chatId && initialChat.chat.type === "user") {
+    if (!messages.chatId && initialData.chat.type === "user") {
       const chat = await requestHandler.post({}, "chat");
 
-      const users = [{ id: messages.currentAuthorId }, { id: initialChat.id }];
+      const users = [{ id: "current" }, { id: initialData.id }];
 
       const addMembers = await requestHandler.post(
         {
@@ -117,6 +122,7 @@ export default function Chat({ initialChat, initialData }) {
 
       message.chatId = chat.data.id;
     }
+
     const send = await requestHandler.postFile(
       removeEmptyFields(message),
       "message",

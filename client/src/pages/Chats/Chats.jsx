@@ -1,14 +1,16 @@
 import styles from "./Chats.module.css";
 import { useEffect, useReducer, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader/Loader";
-import ProfileList from "@/components/ProfileList/ProfileList";
 import Chat from "@/components/Chat/Chat";
+import ProfileList from "@/components/ProfileList/ProfileList";
 
 export default function Chats() {
   document.title = `${import.meta.env.VITE_TITLE}: Chats`;
 
+  const locationState = useLocation().state;
   const [chats, dispatchChats] = useReducer(dispatcher, {});
   const [profile, setProfile] = useState({
     chat: {},
@@ -34,6 +36,7 @@ export default function Chats() {
         type: actions.load,
         payload: response.data,
       });
+      if (locationState) await profileListClickHandler(locationState);
     })();
   }, []);
 
@@ -55,42 +58,7 @@ export default function Chats() {
             id: chat.id,
           },
         }))}
-        clickHandler={async (item) => {
-          let response = {};
-
-          if (item.chat.id)
-            response = await requestHandler.get(
-              `message/chat/${item.chat.id}/`,
-            );
-          else {
-            switch (item.chat.type) {
-              case "user":
-                response = await requestHandler.get(
-                  `chat/otherUser/${item.id}`,
-                );
-                break;
-              case "group":
-                response = await requestHandler.get(`chat/group/${item.id}`);
-                break;
-            }
-          }
-
-          let result;
-          if (!response.error) {
-            result = { selected: {}, page: 1, ...response.data };
-            result.messages.sort(
-              (a, b) =>
-                new Date(a.createdAt).getTime() -
-                new Date(b.createdAt).getTime(),
-            );
-          } else result = response;
-
-          setProfile({
-            chat: result,
-            data: item,
-            selected: true,
-          });
-        }}
+        clickHandler={async (item) => await profileListClickHandler(item)}
         scrollHandler={async () => {
           if (!chats.page) return console.log("There are no more chats.");
 
@@ -105,11 +73,41 @@ export default function Chats() {
       />
       {!profile.selected ? (
         <p>Select a chat to view it here</p>
-      ) : profile.chat.error ? (
-        <Loader text={profile.chat.error} />
       ) : (
         <Chat initialChat={profile.chat} initialData={profile.data} />
       )}
     </div>
   );
+
+  async function profileListClickHandler(item) {
+    let response = {};
+
+    if (item.chat.id)
+      response = await requestHandler.get(`message/chat/${item.chat.id}/`);
+    else {
+      switch (item.chat.type) {
+        case "user":
+          response = await requestHandler.get(`chat/otherUser/${item.id}`);
+          break;
+        case "group":
+          response = await requestHandler.get(`chat/group/${item.id}`);
+          break;
+      }
+    }
+
+    let result;
+    if (!response.error) {
+      result = { selected: {}, page: 1, ...response.data };
+      result.messages.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      );
+    } else result = response;
+
+    setProfile({
+      chat: result,
+      data: item,
+      selected: true,
+    });
+  }
 }

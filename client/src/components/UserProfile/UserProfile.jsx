@@ -32,11 +32,11 @@ export default function UserProfile({ initialUser }) {
           {
             text: "View chat",
             handler: async () =>
-              navigate(`/chat`, {
+              navigate(`/`, {
                 state: {
                   id: user.id,
                   image: user.image,
-                  title: user.name,
+                  title: user.fullname,
                   chat: {
                     type: "user",
                     id: "",
