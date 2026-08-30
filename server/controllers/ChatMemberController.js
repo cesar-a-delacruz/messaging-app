@@ -33,9 +33,11 @@ module.exports = class ChatMemberController extends CRUDController {
     async (req, res, next) => await this.validator(req, res, next),
     async (req, res) => {
       try {
-        const rows = await this.repository.create(
-          JSON.parse(req.body.chatMembers),
-        );
+        const chatMembers = JSON.parse(req.body.chatMembers);
+        if (chatMembers[0].userId === "current")
+          chatMembers[0].userId = req.user.id;
+
+        const rows = await this.repository.create(chatMembers);
         console.info(rows);
         return res.status(201).json({ data: rows }).end();
       } catch (error) {
