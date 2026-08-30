@@ -1,7 +1,6 @@
 import styles from "./UserProfile.module.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import requestHandler from "@/handlers/requestHandler";
 import { edit } from "@/fieldsets/userFieldsets";
 import Profile from "@/components/Profile/Profile";
 
@@ -26,7 +25,7 @@ export default function UserProfile({ initialUser }) {
         }}
         edit={{
           isAllowed: false,
-          handler: editHandler,
+          handler: () => {},
         }}
         options={[
           {
@@ -48,10 +47,4 @@ export default function UserProfile({ initialUser }) {
       />
     </div>
   );
-
-  async function editHandler(data) {
-    data = { ...user, ...data };
-    await requestHandler.put(data, "user");
-    setUser(data);
-  }
 }

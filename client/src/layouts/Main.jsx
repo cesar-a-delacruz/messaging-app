@@ -24,7 +24,7 @@ export default function Main() {
           options={[
             {
               text: "View profile",
-              handler: () => location.assign("/profile/user"),
+              handler: () => location.assign("/profile"),
             },
             {
               text: "Create group",
