@@ -11,6 +11,7 @@ export default function Messages({
   menu = { options, buttonHandler },
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
+
   return (
     <div className={styles.messagesContainer}>
       <div
@@ -35,7 +36,7 @@ export default function Messages({
           }
         }}
       >
-        {messages.length ? (
+        {messages && messages.length ? (
           messages.map((message) => (
             <div
               key={message.id}
@@ -59,7 +60,7 @@ export default function Messages({
             </div>
           ))
         ) : (
-          <div>Start a convesation :)</div>
+          <p className={styles.emptyChat}>Start a conversation :)</p>
         )}
       </div>
     </div>
