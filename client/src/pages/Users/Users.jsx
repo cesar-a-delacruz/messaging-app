@@ -4,7 +4,9 @@ import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader/Loader";
 import ProfileList from "@/components/ProfileList/ProfileList";
-import UserProfile from "@/components/UserProfile/UserProfile";
+import UserProfile from "@/components/User/User";
+import ProfileContext from "@/contexts/ProfileContext";
+import { edit } from "@/fieldsets/userFieldsets";
 
 export default function Users() {
   document.title = `${import.meta.env.VITE_TITLE}: Users`;
@@ -63,13 +65,16 @@ export default function Users() {
           });
         }}
       />
-      {!profile.selected ? (
-        <p>Select a user to view it here</p>
-      ) : profile.user.error ? (
-        <Loader text={profile.user.error} />
-      ) : (
-        <UserProfile initialUser={profile.user} />
-      )}
+
+      <ProfileContext value={{ data: profile.user, fieldset: edit[0] }}>
+        {!profile.selected ? (
+          <p>Select a user to view it here</p>
+        ) : profile.user.error ? (
+          <Loader text={profile.user.error} />
+        ) : (
+          <UserProfile initialUser={profile.user} />
+        )}
+      </ProfileContext>
     </div>
   );
 }

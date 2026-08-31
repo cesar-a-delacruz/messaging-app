@@ -4,7 +4,9 @@ import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader/Loader";
 import ProfileList from "@/components/ProfileList/ProfileList";
-import GroupProfile from "@/components/GroupProfile/GroupProfile";
+import GroupProfile from "@/components/Group/Group";
+import ProfileContext from "@/contexts/ProfileContext";
+import { edit } from "@/fieldsets/groupFieldsets";
 
 export default function Groups() {
   document.title = `${import.meta.env.VITE_TITLE}: Groups`;
@@ -71,18 +73,21 @@ export default function Groups() {
           });
         }}
       />
-      {!profile.selected ? (
-        <p>Select a group to view it here</p>
-      ) : profile.group.error ? (
-        <Loader text={profile.group.error} />
-      ) : profile.chatMembers.error ? (
-        <Loader text={profile.chatMembers.error} />
-      ) : (
-        <GroupProfile
-          initialGroup={profile.group}
-          initialChatMembers={profile.chatMembers}
-        />
-      )}
+
+      <ProfileContext value={{ data: profile.group, fieldset: edit[0] }}>
+        {!profile.selected ? (
+          <p>Select a group to view it here</p>
+        ) : profile.group.error ? (
+          <Loader text={profile.group.error} />
+        ) : profile.chatMembers.error ? (
+          <Loader text={profile.chatMembers.error} />
+        ) : (
+          <GroupProfile
+            initialGroup={profile.group}
+            initialChatMembers={profile.chatMembers}
+          />
+        )}
+      </ProfileContext>
     </div>
   );
 }

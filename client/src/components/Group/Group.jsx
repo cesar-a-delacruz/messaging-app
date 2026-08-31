@@ -1,9 +1,8 @@
-import styles from "./GroupProfile.module.css";
+import styles from "./Group.module.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useReducer, useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { remove } from "@/fieldsets/chatMemberFieldsets";
-import { edit } from "@/fieldsets/groupFieldsets";
 import { actions, dispatcher } from "@/reducers/chatMemberReducer";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";
 import Dialog from "@/components/Dialog/Dialog";
@@ -11,7 +10,7 @@ import Profile from "@/components/Profile/Profile";
 import ChatMembers from "@/components/ChatMembers/ChatMembers";
 import Form from "@/components/Form/Form";
 
-export default function GroupProfile({ initialGroup, initialChatMembers }) {
+export default function Group({ initialGroup, initialChatMembers }) {
   const navigate = useNavigate();
   const [group, setGroup] = useState(initialGroup);
   const [chatMembers, dispatchChatMembers] = useReducer(
@@ -38,14 +37,11 @@ export default function GroupProfile({ initialGroup, initialChatMembers }) {
   return (
     <div className={styles.groupProfile}>
       <Profile
-        form={{ fieldset: edit[0], data: group }}
-        edit={{
-          isAllowed: isCurrentMemberAdmin,
-          handler: async (data) => {
-            data = { ...group, ...data };
-            await requestHandler.put(data, "group");
-            setGroup(data);
-          },
+        readOnly={!isCurrentMemberAdmin}
+        editHandler={async (data) => {
+          data = { ...group, ...data };
+          await requestHandler.put(data, "group");
+          setGroup(data);
         }}
         options={[
           {
