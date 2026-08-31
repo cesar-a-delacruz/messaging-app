@@ -5,17 +5,9 @@ export default function Profile({ form, edit, options = [] }) {
   return (
     <div className={styles.profile}>
       <Form
-        fieldsets={[
-          edit.isAllowed
-            ? form.fieldset
-            : {
-                fields: form.fieldset.fields.map((field) => ({
-                  ...field,
-                  disabled: true,
-                })),
-              },
-        ]}
+        fieldsets={[form.fieldset]}
         initialData={form.data}
+        readOnly={!edit.isAllowed}
         submit={{ text: "Edit", handler: (data) => edit.handler(data) }}
       />
       <div className={styles.options}>

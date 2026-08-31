@@ -1,6 +1,11 @@
 import styles from "./FormField.module.css";
 
-export default function FormField({ properties, value, changeHandler }) {
+export default function FormField({
+  properties,
+  value,
+  changeHandler,
+  readOnly,
+}) {
   return (
     <div className={styles.field}>
       {properties.label && (
@@ -21,7 +26,7 @@ export default function FormField({ properties, value, changeHandler }) {
               changeHandler(e.currentTarget.id, e.currentTarget.value)
             }
             placeholder={properties.placeholder || ""}
-            disabled={properties.disabled}
+            disabled={readOnly}
           ></textarea>
         );
       case "file":
@@ -41,12 +46,12 @@ export default function FormField({ properties, value, changeHandler }) {
                 changeHandler(e.currentTarget.id, e.currentTarget.files[0]);
               }}
               accept="image/*"
-              disabled={properties.disabled}
+              disabled={readOnly}
             />
             <div
               id={`${properties.id}Container`}
               style={{
-                "--after-display": properties.disabled ? "none" : "initial",
+                "--after-display": readOnly ? "none" : "initial",
                 backgroundImage: value ? `url(${value})` : "none",
               }}
               onClick={() => {
@@ -67,7 +72,7 @@ export default function FormField({ properties, value, changeHandler }) {
             onChange={(e) =>
               changeHandler(e.currentTarget.id, e.currentTarget.value)
             }
-            disabled={properties.disabled}
+            disabled={readOnly}
           />
         );
     }

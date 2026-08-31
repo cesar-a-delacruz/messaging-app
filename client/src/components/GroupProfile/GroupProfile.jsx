@@ -147,8 +147,8 @@ export default function GroupProfile({ initialGroup, initialChatMembers }) {
                 removeMemberHandler();
                 removeDialog.current.close();
               },
+              disable: false,
             }}
-            disable={false}
           />
         </Dialog>
       )}

@@ -91,8 +91,7 @@ export default function Chat({ initialChat, initialData, profileDialogRef }) {
             <Form
               fieldsets={remove}
               initialData={{ id: messages.selected.id || "" }}
-              submit={{ text: "Yes", handler: removeHandler }}
-              disable={false}
+              submit={{ text: "Yes", handler: removeHandler, disable: false }}
             />
           </Dialog>
         </>

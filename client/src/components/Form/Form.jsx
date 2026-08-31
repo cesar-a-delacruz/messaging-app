@@ -7,11 +7,11 @@ import removeEmptyFields from "@/utils/js/removeEmptyFields";
 export default function Form({
   fieldsets,
   initialData,
-  submit = { text, handler },
-  disable = true,
+  readOnly = false,
+  submit = { text, handler, disable },
 }) {
   const [data, setData] = useState(initialData);
-  const [disableSubmit, setDisableSubmit] = useState(disable);
+  const [disableSubmit, setDisableSubmit] = useState(submit.disable || true);
   const form = useRef(null);
 
   useEffect(() => {
@@ -29,6 +29,7 @@ export default function Form({
                 properties={field}
                 value={data[field.id]}
                 changeHandler={changeHandler}
+                readOnly={readOnly}
                 key={field.id}
               />
             ))}
@@ -38,7 +39,7 @@ export default function Form({
       <button
         type="submit"
         style={{
-          display: fieldsets[0].fields[0].disabled ? "none" : "initial",
+          display: readOnly ? "none" : "initial",
         }}
         disabled={disableSubmit}
       >
