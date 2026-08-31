@@ -1,6 +1,6 @@
 import styles from "./Group.module.css";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { remove } from "@/fieldsets/chatMemberFieldsets";
 import { actions, dispatcher } from "@/reducers/chatMemberReducer";
@@ -9,10 +9,11 @@ import Dialog from "@/components/Dialog/Dialog";
 import Profile from "@/components/Profile/Profile";
 import ChatMembers from "@/components/ChatMembers/ChatMembers";
 import Form from "@/components/Form/Form";
+import ProfileContext from "@/contexts/ProfileContext";
 
-export default function Group({ initialGroup, initialChatMembers }) {
+export default function Group({ initialChatMembers }) {
   const navigate = useNavigate();
-  const [group, setGroup] = useState(initialGroup);
+  const { data, setData } = useContext(ProfileContext);
   const [chatMembers, dispatchChatMembers] = useReducer(
     dispatcher,
     initialChatMembers,
@@ -22,7 +23,6 @@ export default function Group({ initialGroup, initialChatMembers }) {
   const removeDialog = useRef(null);
 
   useEffect(() => {
-    setGroup(initialGroup);
     dispatchChatMembers({ type: actions.load, payload: initialChatMembers });
   }, [initialChatMembers.members]);
 
@@ -38,17 +38,17 @@ export default function Group({ initialGroup, initialChatMembers }) {
     <div className={styles.groupProfile}>
       <Profile
         readOnly={!isCurrentMemberAdmin}
-        editHandler={async (data) => {
-          data = { ...group, ...data };
-          await requestHandler.put(data, "group");
-          setGroup(data);
+        editHandler={async (newData) => {
+          newData = { ...data, ...newData };
+          await requestHandler.put(newData, "group");
+          setData(newData);
         }}
         options={[
           {
             text: "Add member",
             handler: async () => {
               const response = await requestHandler.get(
-                `user/not/chat/${group.chats[0].id}`,
+                `user/not/chat/${data.chats[0].id}`,
               );
               if (response.data) setUsers(response.data);
               else alert(response.error);
@@ -73,9 +73,9 @@ export default function Group({ initialGroup, initialChatMembers }) {
             handler: async () =>
               navigate(`/chat`, {
                 state: {
-                  id: group.id,
-                  image: group.image,
-                  title: group.name,
+                  id: data.id,
+                  image: data.image,
+                  title: data.name,
                   chat: {
                     type: "group",
                     id: "",
@@ -154,7 +154,7 @@ export default function Group({ initialGroup, initialChatMembers }) {
   async function addMemberHandler(users) {
     const addMember = await requestHandler.post(
       {
-        chatMembers: prepareChatMembers(users, group.chats[0].id),
+        chatMembers: prepareChatMembers(users, data.chats[0].id),
       },
       "chatMember",
     );

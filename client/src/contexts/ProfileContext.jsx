@@ -1,3 +1,3 @@
 import { createContext } from "react";
 
-export default createContext({ data: {}, fieldset: {} });
+export default createContext({ data: {}, fieldset: {}, setData: () => {} });

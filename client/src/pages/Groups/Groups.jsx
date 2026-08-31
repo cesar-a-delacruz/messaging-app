@@ -4,7 +4,7 @@ import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader/Loader";
 import ProfileList from "@/components/ProfileList/ProfileList";
-import GroupProfile from "@/components/Group/Group";
+import Group from "@/components/Group/Group";
 import ProfileContext from "@/contexts/ProfileContext";
 import { edit } from "@/fieldsets/groupFieldsets";
 
@@ -74,7 +74,9 @@ export default function Groups() {
         }}
       />
 
-      <ProfileContext value={{ data: profile.group, fieldset: edit[0] }}>
+      <ProfileContext
+        value={{ data: profile.group, fieldset: edit[0], setData: setProfile }}
+      >
         {!profile.selected ? (
           <p>Select a group to view it here</p>
         ) : profile.group.error ? (
@@ -82,10 +84,7 @@ export default function Groups() {
         ) : profile.chatMembers.error ? (
           <Loader text={profile.chatMembers.error} />
         ) : (
-          <GroupProfile
-            initialGroup={profile.group}
-            initialChatMembers={profile.chatMembers}
-          />
+          <Group initialChatMembers={profile.chatMembers} />
         )}
       </ProfileContext>
     </div>

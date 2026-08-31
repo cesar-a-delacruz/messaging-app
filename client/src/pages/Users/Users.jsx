@@ -4,7 +4,7 @@ import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader/Loader";
 import ProfileList from "@/components/ProfileList/ProfileList";
-import UserProfile from "@/components/User/User";
+import User from "@/components/User/User";
 import ProfileContext from "@/contexts/ProfileContext";
 import { edit } from "@/fieldsets/userFieldsets";
 
@@ -72,7 +72,7 @@ export default function Users() {
         ) : profile.user.error ? (
           <Loader text={profile.user.error} />
         ) : (
-          <UserProfile initialUser={profile.user} />
+          <User />
         )}
       </ProfileContext>
     </div>
