@@ -9,4 +9,8 @@
     align-self: center;
     margin-top: var(--margin-2);
   }
+
+  & dialog > div:last-child > div {
+    width: 100%;
+  }
 }
