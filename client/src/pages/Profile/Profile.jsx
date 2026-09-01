@@ -6,6 +6,7 @@ import Loader from "@/components/Loader/Loader";
 import Profile from "@/components/Profile/Profile";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
+import ProfileContext from "@/contexts/ProfileContext";
 
 export default function UserProfile() {
   const [user, setUser] = useGet("user/profile");
@@ -18,26 +19,29 @@ export default function UserProfile() {
 
   return (
     <div className="page">
-      <Profile
-        form={{
-          fieldset: edit[0],
+      <ProfileContext
+        value={{
           data: {
             image: user.image,
             fullname: user.fullname,
             bio: user.bio,
           },
+          fieldset: edit[0],
+          setData: setUser,
         }}
-        edit={{
-          isAllowed: true,
-          handler: profileSubmitHandler,
-        }}
-        options={[
-          {
-            text: "Change credentials",
-            handler: () => credentialsDialog.current.showModal(),
-          },
-        ]}
-      />
+      >
+        <Profile
+          readOnly={false}
+          editHandler={profileEditHandler}
+          options={[
+            {
+              text: "Change credentials",
+              handler: () => credentialsDialog.current.showModal(),
+            },
+          ]}
+        />
+      </ProfileContext>
+
       <Dialog name={"Change Credentials"} ref={credentialsDialog}>
         <Form
           fieldsets={[edit[1]]}
@@ -48,7 +52,7 @@ export default function UserProfile() {
     </div>
   );
 
-  async function profileSubmitHandler(data) {
+  async function profileEditHandler(data) {
     data = { ...user, ...data };
     await requestHandler.put(data, "user");
     setUser(data);

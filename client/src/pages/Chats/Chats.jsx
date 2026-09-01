@@ -10,6 +10,7 @@ import Chat from "@/components/Chat/Chat";
 import ProfileList from "@/components/ProfileList/ProfileList";
 import Dialog from "@/components/Dialog/Dialog";
 import Profile from "@/components/Profile/Profile";
+import ProfileContext from "@/contexts/ProfileContext";
 
 export default function Chats() {
   document.title = `${import.meta.env.VITE_TITLE}: Chats`;
@@ -88,18 +89,19 @@ export default function Chats() {
           profileDialogRef={profileDialog}
         />
       )}
-      {profile.profile.data && (
-        <Dialog ref={profileDialog}>
-          <Profile
-            form={{
-              data: profile.profile.data,
-              fieldset:
-                profile.profile.type === "user" ? userEdit[0] : groupEdit[0],
-            }}
-            edit={{ isAllowed: false, handler: () => {} }}
-          />
-        </Dialog>
-      )}
+      <ProfileContext
+        value={{
+          data: profile.profile.data,
+          fieldset:
+            profile.profile.type === "user" ? userEdit[0] : groupEdit[0],
+        }}
+      >
+        {profile.profile.data && (
+          <Dialog ref={profileDialog}>
+            <Profile />
+          </Dialog>
+        )}
+      </ProfileContext>
     </div>
   );
 
