@@ -100,7 +100,7 @@ export default function Chat({ initialChat, initialData, profileDialogRef }) {
   );
 
   async function submitHandler(message) {
-    if (!messages.chatId && initialData.chat.type === "user") {
+    if (!messages.chatId && initialData.type === "user") {
       const chat = await requestHandler.post({}, "chat");
 
       const users = [{ id: "current" }, { id: initialData.id }];

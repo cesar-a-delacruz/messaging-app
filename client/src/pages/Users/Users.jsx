@@ -12,10 +12,7 @@ export default function Users() {
   document.title = `${import.meta.env.VITE_TITLE}: Users`;
 
   const [users, dispatchUsers] = useReducer(dispatcher, {});
-  const [profile, setProfile] = useState({
-    user: {},
-    selected: false,
-  });
+  const [profile, setProfile] = useState({ user: {} });
 
   useEffect(() => {
     (async () => {
@@ -39,19 +36,12 @@ export default function Users() {
           image: user.image,
           title: user.username,
           content: user.bio,
-          chat: {
-            type: "user",
-            id: "",
-          },
         }))}
         clickHandler={async (item) => {
           const response = await requestHandler.get(`user/${item.id}`);
           const result = !response.error ? response.data : response;
 
-          setProfile({
-            user: result,
-            selected: true,
-          });
+          setProfile({ user: result });
         }}
         scrollHandler={async () => {
           if (!users.page) return console.log("There are no more users.");
@@ -67,7 +57,7 @@ export default function Users() {
       />
 
       <ProfileContext value={{ data: profile.user, fieldset: edit[0] }}>
-        {!profile.selected ? (
+        {!Object.keys(profile.user).length ? (
           <p>Select a user to view it here</p>
         ) : profile.user.error ? (
           <Loader text={profile.user.error} />

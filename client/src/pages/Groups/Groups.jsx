@@ -15,7 +15,6 @@ export default function Groups() {
   const [profile, setProfile] = useState({
     group: {},
     chatMembers: {},
-    selected: false,
   });
 
   useEffect(() => {
@@ -40,10 +39,6 @@ export default function Groups() {
           image: group.image,
           title: group.name,
           content: group.info,
-          chat: {
-            type: "group",
-            id: "",
-          },
         }))}
         clickHandler={async (item) => {
           const groupResponse = await requestHandler.get(`group/${item.id}`);
@@ -60,7 +55,6 @@ export default function Groups() {
           setProfile({
             group: groupResult,
             chatMembers: chatMembersResult,
-            selected: true,
           });
         }}
         scrollHandler={async () => {
@@ -77,12 +71,10 @@ export default function Groups() {
       <ProfileContext
         value={{ data: profile.group, fieldset: edit[0], setData: setProfile }}
       >
-        {!profile.selected ? (
+        {!Object.keys(profile.group).length ? (
           <p>Select a group to view it here</p>
-        ) : profile.group.error ? (
-          <Loader text={profile.group.error} />
-        ) : profile.chatMembers.error ? (
-          <Loader text={profile.chatMembers.error} />
+        ) : profile.group.error || profile.chatMembers.error ? (
+          <Loader text={profile.group.error || profile.chatMembers.error} />
         ) : (
           <Group initialChatMembers={profile.chatMembers} />
         )}

@@ -71,15 +71,12 @@ export default function Group({ initialChatMembers }) {
           {
             text: "View chat",
             handler: async () =>
-              navigate(`/chat`, {
+              navigate(`/`, {
                 state: {
                   id: data.id,
                   image: data.image,
                   title: data.name,
-                  chat: {
-                    type: "group",
-                    id: "",
-                  },
+                  type: "group",
                 },
               }),
             hide: !isLoggedUserMember,

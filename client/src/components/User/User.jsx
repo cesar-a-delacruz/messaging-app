@@ -19,11 +19,8 @@ export default function User() {
                 state: {
                   id: user.id,
                   image: user.image,
-                  title: user.fullname,
-                  chat: {
-                    type: "user",
-                    id: "",
-                  },
+                  title: user.username,
+                  type: "user",
                 },
               }),
           },
