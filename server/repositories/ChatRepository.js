@@ -24,12 +24,7 @@ module.exports = class ChatRepository extends Repository {
         chatMembers: {
           select: {
             id: true,
-            user: {
-              omit: {
-                fullname: true,
-                bio: true,
-              },
-            },
+            user: true,
           },
         },
         messages: {
@@ -41,11 +36,7 @@ module.exports = class ChatRepository extends Repository {
           orderBy: { createdAt: "desc" },
           take: 1,
         },
-        group: {
-          omit: {
-            info: true,
-          },
-        },
+        group: true,
       },
       take: Number(process.env.PAGINATION_PROFILE),
       ...pagination,
