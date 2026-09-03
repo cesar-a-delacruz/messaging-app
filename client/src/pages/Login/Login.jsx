@@ -12,7 +12,7 @@ export default function Login() {
       <Form
         fieldsets={login}
         initialData={{}}
-        submit={{ text: "Enter", handler: submitHandler }}
+        submit={{ text: "Enter", handler: submitHandler, disable: true }}
       />
       <p className={styles.textBottom}>
         Don't have an account? Register{" "}

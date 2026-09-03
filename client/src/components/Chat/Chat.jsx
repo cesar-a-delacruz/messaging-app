@@ -74,7 +74,7 @@ export default function Chat({ initialChat, initialData, profileDialogRef }) {
             authorId: messages.currentAuthorId,
             chatId: messages.chatId,
           }}
-          submit={{ text: "Send", handler: submitHandler }}
+          submit={{ text: "Send", handler: submitHandler, disable: true }}
         />
       </div>
       {!messages.error && (
@@ -83,7 +83,7 @@ export default function Chat({ initialChat, initialData, profileDialogRef }) {
             <Form
               fieldsets={edit}
               initialData={{ content: messages.selected.content || "" }}
-              submit={{ text: "Edit", handler: editHandler }}
+              submit={{ text: "Edit", handler: editHandler, disable: true }}
             />
           </Dialog>
           <Dialog ref={removeDialog}>
@@ -116,6 +116,7 @@ export default function Chat({ initialChat, initialData, profileDialogRef }) {
       message.chatId = chat.data.id;
     }
 
+    console.log(message);
     const send = await requestHandler.postFile(
       removeEmptyFields(message),
       "message",

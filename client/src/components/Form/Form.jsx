@@ -11,7 +11,7 @@ export default function Form({
   submit = { text, handler, disable },
 }) {
   const [data, setData] = useState(initialData);
-  const [disableSubmit, setDisableSubmit] = useState(submit.disable || true);
+  const [disableSubmit, setDisableSubmit] = useState(submit.disable);
   const form = useRef(null);
 
   useEffect(() => {

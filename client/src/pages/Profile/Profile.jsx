@@ -46,7 +46,11 @@ export default function UserProfile() {
         <Form
           fieldsets={[edit[1]]}
           initialData={{ id: user.id, username: user.username }}
-          submit={{ text: "Enter", handler: dialogSubmitHandler }}
+          submit={{
+            text: "Enter",
+            handler: dialogSubmitHandler,
+            disable: true,
+          }}
         />
       </Dialog>
     </div>

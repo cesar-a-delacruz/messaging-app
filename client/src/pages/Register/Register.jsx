@@ -12,7 +12,11 @@ export default function Register() {
       <Form
         fieldsets={create}
         initialData={{}}
-        submit={{ text: "Create Account", handler: submitHandler }}
+        submit={{
+          text: "Create Account",
+          handler: submitHandler,
+          disable: true,
+        }}
       />
       <p className={styles.textBottom}>
         Already have an account? Login{" "}

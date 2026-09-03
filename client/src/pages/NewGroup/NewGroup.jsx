@@ -22,7 +22,7 @@ export default function NewGroup() {
       <Form
         fieldsets={create}
         initialData={{}}
-        submit={{ text: "Create Group", handler: submitHandler }}
+        submit={{ text: "Create Group", handler: submitHandler, disable: true }}
       />
       <button
         onClick={async () => {

@@ -20,6 +20,7 @@ export default function Profile({
           text: "Edit",
           handler: async (data) =>
             editHandler ? await editHandler(data) : null,
+          disable: true,
         }}
       />
       <div className={styles.options}>
