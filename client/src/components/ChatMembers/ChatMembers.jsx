@@ -7,7 +7,7 @@ import Image from "../Image/Image";
 
 export default function ChatMembers({
   members,
-  memberMenu = { render, options, buttonHandler },
+  selectionHandler,
   addDialog = { render, ref, users, handler },
 }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -32,12 +32,7 @@ export default function ChatMembers({
                 {member.role === "ADMIN" && <span>ADMIN</span>}
               </h4>
             </div>
-            {memberMenu.render && (
-              <Menu
-                options={memberMenu.options}
-                buttonHandler={() => memberMenu.buttonHandler(member)}
-              />
-            )}
+            <Menu selectionHandler={() => selectionHandler(member)} />
           </div>
         ))}
       </div>

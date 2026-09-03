@@ -26,10 +26,6 @@
     height: var(--image-size);
     border-radius: 50%;
   }
-
-  & h3 {
-    cursor: pointer;
-  }
 }
 
 .footer {

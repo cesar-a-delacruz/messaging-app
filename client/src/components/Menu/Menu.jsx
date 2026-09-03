@@ -1,8 +1,12 @@
+import MenuContext from "@/contexts/MenuContext";
 import styles from "./Menu.module.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
-export default function Menu({ options = [], buttonHandler }) {
+export default function Menu({ selectionHandler }) {
+  const { options, render } = useContext(MenuContext);
   const [showMenu, setShowMenu] = useState(false);
+
+  if (!render) return <></>;
 
   return (
     <div className={styles.container}>
@@ -29,7 +33,7 @@ export default function Menu({ options = [], buttonHandler }) {
       <div
         className={styles.button}
         onClick={(event) => {
-          if (buttonHandler) buttonHandler();
+          if (selectionHandler) selectionHandler();
           setShowMenu(!showMenu);
           event.stopPropagation();
         }}

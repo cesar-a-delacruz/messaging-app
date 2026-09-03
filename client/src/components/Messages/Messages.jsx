@@ -1,15 +1,16 @@
 import styles from "./Messages.module.css";
 import Image from "../Image/Image";
 import Menu from "../Menu/Menu";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import MenuContext from "@/contexts/MenuContext";
 
 export default function Messages({
   messages,
   all,
   scrollHandler,
-  currentUserId,
-  menu = { options, buttonHandler },
+  selectionHandler,
 }) {
+  const render = useContext(MenuContext).render;
   const [scrollPosition, setScrollPosition] = useState(0);
 
   return (
@@ -42,16 +43,12 @@ export default function Messages({
               key={message.id}
               className={styles.messageContainer}
               style={{
-                justifyContent:
-                  currentUserId === message.authorId ? "end" : "start",
+                justifyContent: render(message.authorId) ? "end" : "start",
               }}
             >
               <div className={styles.message}>
-                {currentUserId === message.authorId && (
-                  <Menu
-                    options={menu.options}
-                    buttonHandler={() => menu.buttonHandler(message)}
-                  />
+                {render(message.authorId) && (
+                  <Menu selectionHandler={() => selectionHandler(message)} />
                 )}
                 {message.content && <p>{message.content}</p>}
                 {message.attachment && <Image src={message.attachment} />}

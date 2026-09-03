@@ -1,5 +1,5 @@
 import styles from "./Chat.module.css";
-import { useEffect, useReducer, useRef } from "react";
+import { useContext, useEffect, useReducer, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { create, edit, remove } from "@/fieldsets/messageFieldsets";
 import { actions, dispatcher } from "@/reducers/messageReducer";
@@ -8,47 +8,39 @@ import prepareChatMembers from "@/utils/js/prepareChatMembers";
 import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
 import Messages from "@/components/Messages/Messages";
+import MenuContext from "@/contexts/MenuContext";
+import loadChat from "@/utils/js/loadChat";
+import ProfileContext from "@/contexts/ProfileContext";
 
-export default function Chat({ initialChat, initialData, profileDialogRef }) {
-  const [messages, dispatchMessages] = useReducer(dispatcher, initialChat);
+export default function Chat() {
+  const data = useContext(ProfileContext).data;
+  const [messages, dispatchMessages] = useReducer(dispatcher, {});
   const editDialog = useRef(null);
   const removeDialog = useRef(null);
+  const profileDialog = useRef(null);
 
   useEffect(() => {
-    dispatchMessages({
-      type: actions.load,
-      payload: initialChat,
-    });
-  }, [initialChat.chatId]);
+    (async () => {
+      const response = await loadChat(data);
+
+      dispatchMessages({
+        type: actions.load,
+        payload: response,
+      });
+    })();
+  }, [data.id]);
+
+  if (!Object.keys(messages).length) return <></>;
 
   return (
     <div className={styles.chat}>
       <div className={styles.header}>
-        <img src={initialData.image} alt={`${initialData.title} picture`} />
-        <h3 onClick={() => profileDialogRef.current.showModal()}>
-          {initialData.title}
-        </h3>
+        <img src={data.image} alt={`${data.title} picture`} />
+        <h3>{data.title}</h3>
       </div>
 
-      <Messages
-        messages={messages.messages}
-        all={messages.page === 0}
-        currentUserId={messages.currentAuthorId}
-        scrollHandler={async () => {
-          if (!messages.page) return console.log("There are no more messages.");
-
-          const response = await requestHandler.get(
-            `message/chat/${messages.chatId}?q=${messages.page}`,
-          );
-
-          dispatchMessages({
-            type: actions.fetch,
-            payload: !response.error ? response.data : response,
-          });
-
-          if (response.error) return true;
-        }}
-        menu={{
+      <MenuContext
+        value={{
           options: [
             {
               text: "Edit",
@@ -59,13 +51,36 @@ export default function Chat({ initialChat, initialData, profileDialogRef }) {
               handler: () => removeDialog.current.showModal(),
             },
           ],
-          buttonHandler: (message) =>
+          render: (messageAuthorId) =>
+            messageAuthorId === messages.currentAuthorId,
+        }}
+      >
+        <Messages
+          messages={messages.messages}
+          all={messages.page === 0}
+          scrollHandler={async () => {
+            if (!messages.page)
+              return console.log("There are no more messages.");
+
+            const response = await requestHandler.get(
+              `message/chat/${messages.chatId}?q=${messages.page}`,
+            );
+
+            dispatchMessages({
+              type: actions.fetch,
+              payload: !response.error ? response.data : response,
+            });
+
+            if (response.error) return true;
+          }}
+          selectionHandler={(message) =>
             dispatchMessages({
               type: actions.select,
               payload: { selectedMessage: message },
-            }),
-        }}
-      />
+            })
+          }
+        />
+      </MenuContext>
 
       <div className={styles.footer}>
         <Form

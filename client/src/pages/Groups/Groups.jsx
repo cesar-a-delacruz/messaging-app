@@ -12,10 +12,7 @@ export default function Groups() {
   document.title = `${import.meta.env.VITE_TITLE}: Groups`;
 
   const [groups, dispatchGroups] = useReducer(dispatcher, {});
-  const [profile, setProfile] = useState({
-    group: {},
-    chatMembers: {},
-  });
+  const [group, setGroup] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -41,21 +38,9 @@ export default function Groups() {
           content: group.info,
         }))}
         clickHandler={async (item) => {
-          const groupResponse = await requestHandler.get(`group/${item.id}`);
-          const chatMembersResponse = await requestHandler.get(
-            `chatMember/group/${item.id}`,
-          );
-          const groupResult = !groupResponse.error
-            ? groupResponse.data
-            : groupResponse;
-          const chatMembersResult = !chatMembersResponse.error
-            ? { selected: {}, ...chatMembersResponse.data }
-            : chatMembersResponse;
-
-          setProfile({
-            group: groupResult,
-            chatMembers: chatMembersResult,
-          });
+          const response = await requestHandler.get(`group/${item.id}`);
+          const result = !response.error ? response.data : response;
+          setGroup(result);
         }}
         scrollHandler={async () => {
           if (!groups.page) return console.log("There are no more groups.");
@@ -69,14 +54,14 @@ export default function Groups() {
       />
 
       <ProfileContext
-        value={{ data: profile.group, fieldset: edit[0], setData: setProfile }}
+        value={{ data: group, fieldset: edit[0], setData: setGroup }}
       >
-        {!Object.keys(profile.group).length ? (
+        {!Object.keys(group).length ? (
           <p>Select a group to view it here</p>
-        ) : profile.group.error || profile.chatMembers.error ? (
-          <Loader text={profile.group.error || profile.chatMembers.error} />
+        ) : group.error ? (
+          <Loader text={group.error} />
         ) : (
-          <Group initialChatMembers={profile.chatMembers} />
+          <Group />
         )}
       </ProfileContext>
     </div>

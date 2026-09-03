@@ -1,5 +1,5 @@
 import styles from "./Chats.module.css";
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import { edit as groupEdit } from "@/fieldsets/groupFieldsets";
@@ -8,8 +8,6 @@ import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader/Loader";
 import Chat from "@/components/Chat/Chat";
 import ProfileList from "@/components/ProfileList/ProfileList";
-import Dialog from "@/components/Dialog/Dialog";
-import Profile from "@/components/Profile/Profile";
 import ProfileContext from "@/contexts/ProfileContext";
 
 export default function Chats() {
@@ -17,12 +15,7 @@ export default function Chats() {
 
   const locationState = useLocation().state;
   const [chats, dispatchChats] = useReducer(dispatcher, {});
-  const [profile, setProfile] = useState({
-    profile: {},
-    chat: {},
-    data: {},
-  });
-  const profileDialog = useRef(null);
+  const [chat, setChat] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -60,9 +53,8 @@ export default function Chats() {
             ? chat.messages[0].content
             : "attachment",
           type: !chat.group ? "user" : "group",
-          item: chat.profile,
         }))}
-        clickHandler={async (item) => await loadChat(item)}
+        clickHandler={(item) => setChat(item)}
         scrollHandler={async () => {
           if (!chats.page) return console.log("There are no more chats.");
 
@@ -75,53 +67,19 @@ export default function Chats() {
           });
         }}
       />
-      {!Object.keys(profile.chat).length ? (
-        <p>Select a chat to view it here</p>
-      ) : (
-        <Chat
-          initialChat={profile.chat}
-          initialData={{ ...profile.data, type: profile.type }}
-          profileDialogRef={profileDialog}
-        />
-      )}
+
       <ProfileContext
         value={{
-          data: profile.data.item || {},
-          fieldset: profile.type === "user" ? userEdit[0] : groupEdit[0],
+          data: chat,
+          fieldset: chat.type === "user" ? userEdit[0] : groupEdit[0],
         }}
       >
-        <Dialog ref={profileDialog}>
-          <Profile />
-        </Dialog>
+        {!Object.keys(chat).length ? (
+          <p>Select a chat to view it here</p>
+        ) : (
+          <Chat />
+        )}
       </ProfileContext>
     </div>
   );
-
-  async function loadChat(item) {
-    let response = {};
-
-    switch (item.type) {
-      case "user":
-        response = await requestHandler.get(`chat/otherUser/${item.id}`);
-        break;
-      case "group":
-        response = await requestHandler.get(`chat/group/${item.id}`);
-        break;
-    }
-
-    let result;
-    if (!response.error) {
-      result = { selected: {}, page: 1, ...response.data };
-      result.messages.sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      );
-    } else result = response;
-
-    setProfile({
-      chat: result,
-      data: item,
-      type: item.type,
-    });
-  }
 }

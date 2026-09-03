@@ -3,6 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import sessionHandler from "@/handlers/sessionHandler";
 import useSession from "@/hooks/useSession";
 import Menu from "@/components/Menu/Menu";
+import MenuContext from "@/contexts/MenuContext";
 
 export default function Main() {
   const isUserLogged = useSession(true);
@@ -20,22 +21,27 @@ export default function Main() {
           <span onClick={() => location.assign("/users")}>Users</span>
           <span onClick={() => location.assign("/groups")}>Groups</span>
         </nav>
-        <Menu
-          options={[
-            {
-              text: "View profile",
-              handler: () => location.assign("/profile"),
-            },
-            {
-              text: "Create group",
-              handler: () => location.assign("/groups/new"),
-            },
-            {
-              text: "Logout",
-              handler: () => sessionHandler.logout(),
-            },
-          ]}
-        />
+        <MenuContext
+          value={{
+            options: [
+              {
+                text: "View profile",
+                handler: () => location.assign("/profile"),
+              },
+              {
+                text: "Create group",
+                handler: () => location.assign("/groups/new"),
+              },
+              {
+                text: "Logout",
+                handler: () => sessionHandler.logout(),
+              },
+            ],
+            render: true,
+          }}
+        >
+          <Menu />
+        </MenuContext>
 
         <footer>
           <p>

@@ -10,21 +10,31 @@ import Profile from "@/components/Profile/Profile";
 import ChatMembers from "@/components/ChatMembers/ChatMembers";
 import Form from "@/components/Form/Form";
 import ProfileContext from "@/contexts/ProfileContext";
+import MenuContext from "@/contexts/MenuContext";
 
-export default function Group({ initialChatMembers }) {
+export default function Group() {
   const navigate = useNavigate();
   const { data, setData } = useContext(ProfileContext);
-  const [chatMembers, dispatchChatMembers] = useReducer(
-    dispatcher,
-    initialChatMembers,
-  );
+  const [chatMembers, dispatchChatMembers] = useReducer(dispatcher, {});
   const [users, setUsers] = useState([]);
   const usersDialog = useRef(null);
   const removeDialog = useRef(null);
 
   useEffect(() => {
-    dispatchChatMembers({ type: actions.load, payload: initialChatMembers });
-  }, [initialChatMembers.members]);
+    (async () => {
+      const chatMembers = await requestHandler.get(
+        `chatMember/group/${data.id}`,
+      );
+      dispatchChatMembers({
+        type: actions.load,
+        payload: !chatMembers.error
+          ? { selected: {}, ...chatMembers.data }
+          : chatMembers,
+      });
+    })();
+  }, [data.id]);
+
+  if (!Object.keys(chatMembers).length) return <></>;
 
   const isLoggedUserMember = chatMembers.currentMember;
   const isCurrentMemberAdmin =
@@ -83,16 +93,8 @@ export default function Group({ initialChatMembers }) {
           },
         ]}
       />
-
-      <ChatMembers
-        members={chatMembers.members}
-        memberMenu={{
-          render: isLoggedUserMember,
-          buttonHandler: (member) =>
-            dispatchChatMembers({
-              type: actions.select,
-              payload: { selectedMember: member },
-            }),
+      <MenuContext
+        value={{
           options: [
             {
               text: "Change role",
@@ -114,14 +116,26 @@ export default function Group({ initialChatMembers }) {
                 ),
             },
           ],
+          render: isLoggedUserMember,
         }}
-        addDialog={{
-          render: isCurrentMemberAdmin,
-          ref: usersDialog,
-          users: users,
-          handler: addMemberHandler,
-        }}
-      />
+      >
+        <ChatMembers
+          members={chatMembers.members}
+          selectionHandler={{
+            buttonHandler: (member) =>
+              dispatchChatMembers({
+                type: actions.select,
+                payload: { selectedMember: member },
+              }),
+          }}
+          addDialog={{
+            render: isCurrentMemberAdmin,
+            ref: usersDialog,
+            users: users,
+            handler: addMemberHandler,
+          }}
+        />
+      </MenuContext>
 
       {(!isSelectedMemberAdmin || isLoggedUserMember) && (
         <Dialog ref={removeDialog}>

@@ -6,6 +6,7 @@ import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";
 import Form from "@/components/Form/Form";
 import ChatMembers from "@/components/ChatMembers/ChatMembers";
+import MenuContext from "@/contexts/MenuContext";
 
 export default function NewGroup() {
   document.title = `${import.meta.env.VITE_TITLE}: New Group`;
@@ -36,12 +37,8 @@ export default function NewGroup() {
         Add members
       </button>
 
-      <ChatMembers
-        members={chatMembers.members}
-        memberMenu={{
-          render: true,
-          buttonHandler: (member) =>
-            setChatMembers({ ...chatMembers, selected: member }),
+      <MenuContext
+        value={{
           options: [
             {
               text: "Change role",
@@ -49,17 +46,25 @@ export default function NewGroup() {
             },
             {
               text: "Remove member",
-              handler: () => removeMemberHandler(),
+              handler: removeMemberHandler,
             },
           ],
-        }}
-        addDialog={{
           render: true,
-          ref: usersDialog,
-          users: users,
-          handler: addMemberHandler,
         }}
-      />
+      >
+        <ChatMembers
+          members={chatMembers.members}
+          selectionHandler={(member) =>
+            setChatMembers({ ...chatMembers, selected: member })
+          }
+          addDialog={{
+            render: true,
+            ref: usersDialog,
+            users: users,
+            handler: addMemberHandler,
+          }}
+        />
+      </MenuContext>
     </div>
   );
 
