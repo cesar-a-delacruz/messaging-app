@@ -58,7 +58,7 @@ export default function Chats() {
                 type: !chat.group ? "user" : "group",
               }
             : {
-                // id: null,
+                id: null,
                 chatId: chat.id,
                 image: null,
                 title: "deleted",

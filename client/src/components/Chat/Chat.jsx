@@ -20,7 +20,7 @@ export default function Chat() {
 
   useEffect(() => {
     (async () => {
-      const response = await (!data.chatId
+      const response = await (data.id
         ? loadChat(data)
         : loadChat({ id: data.chatId }));
 
@@ -82,17 +82,18 @@ export default function Chat() {
           }
         />
       </MenuContext>
-
-      <div className={styles.footer}>
-        <Form
-          fieldsets={create}
-          initialData={{
-            authorId: messages.currentAuthorId,
-            chatId: messages.chatId,
-          }}
-          submit={{ text: "Send", handler: submitHandler, disable: true }}
-        />
-      </div>
+      {data.id && (
+        <div className={styles.footer}>
+          <Form
+            fieldsets={create}
+            initialData={{
+              authorId: messages.currentAuthorId,
+              chatId: messages.chatId,
+            }}
+            submit={{ text: "Send", handler: submitHandler, disable: true }}
+          />
+        </div>
+      )}
       {!messages.error && (
         <>
           <Dialog ref={editDialog}>
