@@ -65,3 +65,9 @@ export const edit = [
   },
   { fields: [fields[0], fields[1], fields[3]] },
 ];
+
+export const remove = [
+  {
+    fields: [fields[0]],
+  },
+];

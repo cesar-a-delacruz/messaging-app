@@ -33,4 +33,8 @@ module.exports = class ChatMemberRepository extends Repository {
       },
     });
   };
+  deleteByUserId = async (userId) =>
+    await this.entity.model.delete({
+      where: { userId },
+    });
 };

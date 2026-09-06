@@ -17,7 +17,7 @@ module.exports = class ChatController extends CRUDController {
         if (chat.group) chat.profile = chat.group;
         else {
           for (const chatMember of chat.chatMembers) {
-            if (chatMember.user.id !== req.user.id)
+            if (chatMember.user && chatMember.user.id !== req.user.id)
               chat.profile = chatMember.user;
           }
         }

@@ -9,6 +9,7 @@ import Loader from "@/components/Loader/Loader";
 import Chat from "@/components/Chat/Chat";
 import ProfileList from "@/components/ProfileList/ProfileList";
 import ProfileContext from "@/contexts/ProfileContext";
+import loadChat from "@/utils/js/loadChat";
 
 export default function Chats() {
   document.title = `${import.meta.env.VITE_TITLE}: Chats`;
@@ -45,15 +46,28 @@ export default function Chats() {
   return (
     <div className={`page ${styles.chats}`}>
       <ProfileList
-        profiles={chats.profiles.map((chat) => ({
-          id: chat.profile.id,
-          image: chat.profile.image,
-          title: !chat.group ? chat.profile.username : chat.profile.name,
-          content: chat.messages[0].content
-            ? chat.messages[0].content
-            : "attachment",
-          type: !chat.group ? "user" : "group",
-        }))}
+        profiles={chats.profiles.map((chat) =>
+          chat.profile
+            ? {
+                id: chat.profile.id,
+                image: chat.profile.image,
+                title: !chat.group ? chat.profile.username : chat.profile.name,
+                content: chat.messages[0].content
+                  ? chat.messages[0].content
+                  : "attachment",
+                type: !chat.group ? "user" : "group",
+              }
+            : {
+                // id: null,
+                chatId: chat.id,
+                image: null,
+                title: "deleted",
+                content: chat.messages[0].content
+                  ? chat.messages[0].content
+                  : "attachment",
+                type: !chat.group ? "user" : "group",
+              },
+        )}
         clickHandler={(item) => setChat(item)}
         scrollHandler={async () => {
           if (!chats.page) return console.log("There are no more chats.");

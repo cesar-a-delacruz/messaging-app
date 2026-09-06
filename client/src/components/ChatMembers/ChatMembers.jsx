@@ -20,21 +20,24 @@ export default function ChatMembers({
     <>
       <h3>Members</h3>
       <div className={styles.members}>
-        {members.map((member) => (
-          <div key={member.user.id} className={styles.member}>
-            <Image
-              src={member.user.image}
-              alt={`${member.user.username} picture`}
-            />
-            <div>
-              <h4>
-                {member.user.username}
-                {member.role === "ADMIN" && <span>ADMIN</span>}
-              </h4>
-            </div>
-            <Menu selectionHandler={() => selectionHandler(member)} />
-          </div>
-        ))}
+        {members.map((member) => {
+          if (member.user)
+            return (
+              <div key={member.id} className={styles.member}>
+                <Image
+                  src={member.user.image}
+                  alt={`${member.user.username} picture`}
+                />
+                <div>
+                  <h4>
+                    {member.user.username}
+                    {member.role === "ADMIN" && <span>ADMIN</span>}
+                  </h4>
+                </div>
+                <Menu selectionHandler={() => selectionHandler(member)} />
+              </div>
+            );
+        })}
       </div>
 
       {addDialog.render && (

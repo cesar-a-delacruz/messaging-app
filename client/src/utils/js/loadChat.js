@@ -15,6 +15,9 @@ export default async function loadChat(profile) {
     case "group":
       response = await requestHandler.get(`chat/group/${profile.id}`);
       break;
+    default:
+      response = await requestHandler.get(`message/chat/${profile.id}`);
+      break;
   }
 
   let result;

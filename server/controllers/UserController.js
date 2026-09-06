@@ -1,5 +1,5 @@
 const FileController = require("./FileController.js");
-const uploadMiddleware = require("../middlewares/uploadMiddleware.js");
+const chatMemberRepository = require("../repositories/index.js").chatMember;
 
 module.exports = class UserController extends FileController {
   findAll = async (req, res) => {
@@ -60,6 +60,27 @@ module.exports = class UserController extends FileController {
       return res
         .status(500)
         .json({ error: `Failed to find ${this.itemName}.` })
+        .end();
+    }
+  };
+  delete = async (req, res) => {
+    try {
+      const row = await this.repository.delete(req.params.id);
+      // await chatMemberRepository.deleteByUserId(req.params.id);
+      console.info(row);
+      return res.status(204).end();
+    } catch (error) {
+      console.error(error);
+
+      if (error.code === "P2025")
+        return res
+          .status(400)
+          .json({ error: `Can't find ${this.itemName} to delete.` })
+          .end();
+
+      return res
+        .status(500)
+        .json({ error: `Failed to delete ${this.itemName}.` })
         .end();
     }
   };

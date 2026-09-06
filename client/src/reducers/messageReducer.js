@@ -3,7 +3,6 @@ export const actions = {
   add: "ADD",
   fetch: "FETCH",
   select: "SELECT",
-  changeSelected: "CHANGE_SELECTED",
   edit: "EDIT",
   remove: "REMOVE",
 };

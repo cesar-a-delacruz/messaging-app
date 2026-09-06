@@ -17,11 +17,12 @@ export default function Chat() {
   const [messages, dispatchMessages] = useReducer(dispatcher, {});
   const editDialog = useRef(null);
   const removeDialog = useRef(null);
-  const profileDialog = useRef(null);
 
   useEffect(() => {
     (async () => {
-      const response = await loadChat(data);
+      const response = await (!data.chatId
+        ? loadChat(data)
+        : loadChat({ id: data.chatId }));
 
       dispatchMessages({
         type: actions.load,
@@ -115,10 +116,10 @@ export default function Chat() {
   );
 
   async function submitHandler(message) {
-    if (!messages.chatId && initialData.type === "user") {
+    if (!messages.chatId && data.type === "user") {
       const chat = await requestHandler.post({}, "chat");
 
-      const users = [{ id: "current" }, { id: initialData.id }];
+      const users = [{ id: "current" }, { id: data.id }];
 
       const addMembers = await requestHandler.post(
         {
