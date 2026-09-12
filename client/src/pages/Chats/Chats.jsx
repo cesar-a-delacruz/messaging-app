@@ -1,6 +1,5 @@
 import styles from "./Chats.module.css";
 import { useEffect, useReducer, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import { edit as groupEdit } from "@/fieldsets/groupFieldsets";
 import { edit as userEdit } from "@/fieldsets/userFieldsets";
@@ -9,12 +8,10 @@ import Loader from "@/components/Loader/Loader";
 import Chat from "@/components/Chat/Chat";
 import ProfileList from "@/components/ProfileList/ProfileList";
 import ProfileContext from "@/contexts/ProfileContext";
-import loadChat from "@/utils/js/loadChat";
 
 export default function Chats() {
   document.title = `${import.meta.env.VITE_TITLE}: Chats`;
 
-  const locationState = useLocation().state;
   const [chats, dispatchChats] = useReducer(dispatcher, {});
   const [chat, setChat] = useState({});
 
@@ -36,7 +33,10 @@ export default function Chats() {
         type: actions.load,
         payload: response.data,
       });
-      if (locationState) setChat(locationState);
+      if (localStorage.getItem("chat")) {
+        setChat(JSON.parse(localStorage.getItem("chat")));
+        localStorage.removeItem("chat");
+      }
     })();
   }, []);
 

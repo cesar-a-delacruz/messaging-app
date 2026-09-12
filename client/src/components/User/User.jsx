@@ -1,11 +1,9 @@
 import styles from "./User.module.css";
-import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import Profile from "@/components/Profile/Profile";
 import ProfileContext from "@/contexts/ProfileContext";
 
 export default function User() {
-  const navigate = useNavigate();
   const user = useContext(ProfileContext).data;
 
   return (
@@ -14,15 +12,18 @@ export default function User() {
         options={[
           {
             text: "View chat",
-            handler: async () =>
-              navigate(`/`, {
-                state: {
+            handler: async () => {
+              location.assign("/");
+              localStorage.setItem(
+                "chat",
+                JSON.stringify({
                   id: user.id,
                   image: user.image,
                   title: user.username,
                   type: "user",
-                },
-              }),
+                }),
+              );
+            },
           },
         ]}
       />
