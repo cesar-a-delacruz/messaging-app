@@ -15,7 +15,9 @@ export function dispatcher(state, action) {
       return { ...action.payload };
 
     case actions.add:
-      prev.messages = [...prev.messages, action.payload.data];
+      prev.messages = prev.messages
+        ? [...prev.messages, action.payload.data]
+        : [action.payload.data];
       return { ...prev };
 
     case actions.fetch:

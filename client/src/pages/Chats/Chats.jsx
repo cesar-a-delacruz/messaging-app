@@ -36,7 +36,7 @@ export default function Chats() {
         type: actions.load,
         payload: response.data,
       });
-      if (locationState) await loadChat(locationState);
+      if (locationState) setChat(locationState);
     })();
   }, []);
 

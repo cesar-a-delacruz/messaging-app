@@ -133,7 +133,6 @@ export default function Chat() {
       message.chatId = chat.data.id;
     }
 
-    console.log(message);
     const send = await requestHandler.postFile(
       removeEmptyFields(message),
       "message",
