@@ -11,4 +11,5 @@
   box-shadow: inset 0px 2px 2px black;
   justify-content: center;
   align-items: center;
+  padding: var(--padding);
 }
