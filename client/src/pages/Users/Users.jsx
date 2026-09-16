@@ -1,4 +1,4 @@
-import styles from "./Users.module.css";
+import listPageStyles from "@/utils/css/modules/listPage.module.css";
 import { useEffect, useReducer, useState } from "react";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
@@ -30,7 +30,7 @@ export default function Users() {
     return <Loader text={users.error || "Getting users..."} />;
 
   return (
-    <div className={`page ${styles.users}`}>
+    <div className={`page ${listPageStyles.list}`}>
       <ProfileList
         profiles={users.profiles.map((user) => ({
           id: user.id,
@@ -59,7 +59,7 @@ export default function Users() {
 
       <ProfileContext value={{ data: user, fieldset: edit[0] }}>
         {!Object.keys(user).length ? (
-          <div className={styles.empty}>
+          <div className={listPageStyles.empty}>
             <UserIcon />
             <p>Select a user to view it here</p>
           </div>

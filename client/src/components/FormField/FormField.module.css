@@ -46,8 +46,8 @@ textarea,
     gap: var(--gap);
     background-color: black;
     width: 100%;
-    padding-top: 15px;
-    padding-bottom: 25px;
+    padding-top: var(--padding-1);
+    padding-bottom: var(--padding-2);
     font-size: var(--font-size);
     opacity: 0.75;
     cursor: pointer;

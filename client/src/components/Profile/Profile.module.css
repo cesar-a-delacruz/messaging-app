@@ -12,8 +12,8 @@
 
   & .option {
     & svg {
-      width: 30px;
-      height: 30px;
+      width: var(--svg-size-1);
+      height: var(--svg-size-1);
       vertical-align: middle;
       margin-right: var(--gap);
     }

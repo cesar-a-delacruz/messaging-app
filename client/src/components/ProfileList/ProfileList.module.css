@@ -39,8 +39,8 @@
         vertical-align: middle;
       }
       & svg {
-        width: 24px;
-        height: 24px;
+        width: var(--svg-size);
+        height: var(--svg-size);
       }
     }
   }

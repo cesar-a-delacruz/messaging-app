@@ -1,4 +1,6 @@
+import listPageStyles from "@/utils/css/modules/listPage.module.css";
 import styles from "./Groups.module.css";
+
 import { useEffect, useReducer, useState } from "react";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
@@ -30,7 +32,7 @@ export default function Groups() {
     return <Loader text={groups.error || "Getting groups..."} />;
 
   return (
-    <div className={`page ${styles.groups}`}>
+    <div className={`page ${listPageStyles.list} ${styles.groups}`}>
       <ProfileList
         profiles={groups.profiles.map((group) => ({
           id: group.id,
@@ -58,7 +60,7 @@ export default function Groups() {
         value={{ data: group, fieldset: edit[0], setData: setGroup }}
       >
         {!Object.keys(group).length ? (
-          <div className={styles.empty}>
+          <div className={listPageStyles.empty}>
             <UserGroup />
             <p>Select a group to view it here</p>
           </div>

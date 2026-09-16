@@ -1,4 +1,4 @@
-.users {
+.list {
   display: flex;
   flex-direction: row;
 
@@ -14,8 +14,8 @@
     align-items: center;
 
     & svg {
-      width: 72px;
-      height: 72px;
+      width: var(--svg-size-2);
+      height: var(--svg-size-2);
     }
   }
 }

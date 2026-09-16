@@ -24,8 +24,11 @@
   --font-size-3: 1.75rem;
   --font-size-4: 2rem;
 
-  --image-size: 100px;
+  --svg-size: 24px;
+  --svg-size-1: 30px;
+  --svg-size-2: 72px;
 
+  --image-size: 100px;
   --input-width: 300px;
 
   --padding: 0.5rem;

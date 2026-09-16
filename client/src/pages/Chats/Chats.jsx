@@ -1,4 +1,4 @@
-import styles from "./Chats.module.css";
+import listPagestyles from "@/utils/css/modules/listPage.module.css";
 import { useEffect, useReducer, useState } from "react";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import { edit as groupEdit } from "@/fieldsets/groupFieldsets";
@@ -45,7 +45,7 @@ export default function Chats() {
     return <Loader text={chats.error || "Getting chats..."} />;
 
   return (
-    <div className={`page ${styles.chats}`}>
+    <div className={`page ${listPagestyles.list}`}>
       <ProfileList
         profiles={chats.profiles.map((chat) =>
           chat.profile
@@ -94,7 +94,7 @@ export default function Chats() {
         }}
       >
         {!Object.keys(chat).length ? (
-          <div className={styles.empty}>
+          <div className={listPagestyles.empty}>
             <MessageSquareText />
             <p>Select a chat to view it here</p>
           </div>

@@ -1,25 +1,5 @@
 .groups {
-  display: flex;
-  flex-direction: row;
-
   & dialog > div:last-child > div {
     width: 100%;
-  }
-
-  & .empty {
-    font-size: var(--font-size-3);
-    text-align: center;
-    width: 66%;
-    height: 100%;
-    align-self: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    & svg {
-      width: 72px;
-      height: 72px;
-    }
   }
 }
