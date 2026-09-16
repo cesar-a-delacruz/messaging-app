@@ -52,7 +52,9 @@ export default function Messages({
                 )}
                 {message.content && <p>{message.content}</p>}
                 {message.attachment && <Image src={message.attachment} />}
-                <span>{new Date(message.createdAt).toLocaleString()}</span>
+                <span className={styles.date}>
+                  {new Date(message.createdAt).toLocaleString()}
+                </span>
               </div>
             </div>
           ))

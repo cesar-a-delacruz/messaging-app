@@ -4,6 +4,15 @@ import sessionHandler from "@/handlers/sessionHandler";
 import useSession from "@/hooks/useSession";
 import Menu from "@/components/Menu/Menu";
 import MenuContext from "@/contexts/MenuContext";
+import {
+  CircleUser,
+  LogOut,
+  MessageSquareMore,
+  MessagesSquare,
+  UserGroup,
+  Users,
+  UsersIcon,
+} from "lucide-react";
 
 export default function Main() {
   const isUserLogged = useSession(true);
@@ -14,12 +23,19 @@ export default function Main() {
       <aside>
         <h1 onClick={() => location.assign("/")}>
           {import.meta.env.VITE_TITLE}
+          <MessagesSquare />
         </h1>
 
         <nav>
-          <span onClick={() => location.assign("/")}>Chats</span>
-          <span onClick={() => location.assign("/users")}>Users</span>
-          <span onClick={() => location.assign("/groups")}>Groups</span>
+          <span onClick={() => location.assign("/")}>
+            <MessageSquareMore /> Chats
+          </span>
+          <span onClick={() => location.assign("/users")}>
+            <Users /> Users
+          </span>
+          <span onClick={() => location.assign("/groups")}>
+            <UserGroup /> Groups
+          </span>
         </nav>
         <MenuContext
           value={{
@@ -27,14 +43,17 @@ export default function Main() {
               {
                 text: "View profile",
                 handler: () => location.assign("/profile"),
+                icon: <CircleUser />,
               },
               {
                 text: "Create group",
                 handler: () => location.assign("/groups/new"),
+                icon: <UsersIcon />,
               },
               {
                 text: "Logout",
                 handler: () => sessionHandler.logout(),
+                icon: <LogOut />,
               },
             ],
             render: true,

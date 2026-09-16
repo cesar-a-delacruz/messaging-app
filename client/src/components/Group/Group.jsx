@@ -1,5 +1,4 @@
 import styles from "./Group.module.css";
-import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useReducer, useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { remove } from "@/fieldsets/chatMemberFieldsets";
@@ -11,9 +10,16 @@ import ChatMembers from "@/components/ChatMembers/ChatMembers";
 import Form from "@/components/Form/Form";
 import ProfileContext from "@/contexts/ProfileContext";
 import MenuContext from "@/contexts/MenuContext";
+import {
+  DoorOpen,
+  ExternalLink,
+  MessageSquareShare,
+  UserLock,
+  UserMinus,
+  UserPlus,
+} from "lucide-react";
 
 export default function Group() {
-  const navigate = useNavigate();
   const { data, setData } = useContext(ProfileContext);
   const [chatMembers, dispatchChatMembers] = useReducer(dispatcher, {});
   const [users, setUsers] = useState([]);
@@ -66,6 +72,7 @@ export default function Group() {
               usersDialog.current.showModal();
             },
             hide: !isCurrentMemberAdmin,
+            icon: <UserPlus />,
           },
           {
             text: "Exit group",
@@ -77,19 +84,24 @@ export default function Group() {
               removeDialog.current.showModal();
             },
             hide: !isLoggedUserMember,
+            icon: <DoorOpen />,
           },
           {
             text: "View chat",
-            handler: async () =>
-              navigate(`/`, {
-                state: {
+            handler: async () => {
+              location.assign("/");
+              localStorage.setItem(
+                "chat",
+                JSON.stringify({
                   id: data.id,
                   image: data.image,
                   title: data.name,
                   type: "group",
-                },
-              }),
+                }),
+              );
+            },
             hide: !isLoggedUserMember,
+            icon: <MessageSquareShare />,
           },
         ]}
       />
@@ -100,6 +112,7 @@ export default function Group() {
               text: "Change role",
               handler: changeMemberRoleHandler,
               hide: !isCurrentMemberAdmin,
+              icon: <UserLock />,
             },
             {
               text: "Remove member",
@@ -107,6 +120,7 @@ export default function Group() {
               hide:
                 !isCurrentMemberAdmin ||
                 chatMembers.currentMember.id === chatMembers.selected.id,
+              icon: <UserMinus />,
             },
             {
               text: "See profile",
@@ -114,6 +128,7 @@ export default function Group() {
                 location.assign(
                   `/profile/user/${chatMembers.selected.user.id}`,
                 ),
+              icon: <ExternalLink />,
             },
           ],
           render: isLoggedUserMember,
@@ -121,13 +136,12 @@ export default function Group() {
       >
         <ChatMembers
           members={chatMembers.members}
-          selectionHandler={{
-            buttonHandler: (member) =>
-              dispatchChatMembers({
-                type: actions.select,
-                payload: { selectedMember: member },
-              }),
-          }}
+          selectionHandler={(member) =>
+            dispatchChatMembers({
+              type: actions.select,
+              payload: { selectedMember: member },
+            })
+          }
           addDialog={{
             render: isCurrentMemberAdmin,
             ref: usersDialog,

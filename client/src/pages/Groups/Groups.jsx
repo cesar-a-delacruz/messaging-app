@@ -7,6 +7,7 @@ import ProfileList from "@/components/ProfileList/ProfileList";
 import Group from "@/components/Group/Group";
 import ProfileContext from "@/contexts/ProfileContext";
 import { edit } from "@/fieldsets/groupFieldsets";
+import { UserGroup } from "lucide-react";
 
 export default function Groups() {
   document.title = `${import.meta.env.VITE_TITLE}: Groups`;
@@ -57,7 +58,10 @@ export default function Groups() {
         value={{ data: group, fieldset: edit[0], setData: setGroup }}
       >
         {!Object.keys(group).length ? (
-          <p>Select a group to view it here</p>
+          <div className={styles.empty}>
+            <UserGroup />
+            <p>Select a group to view it here</p>
+          </div>
         ) : group.error ? (
           <Loader text={group.error} />
         ) : (

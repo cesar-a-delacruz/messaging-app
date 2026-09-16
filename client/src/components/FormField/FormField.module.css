@@ -16,7 +16,7 @@ textarea,
   border-radius: var(--border-radius);
   border: var(--border-size) solid var(--color-primary-light);
   padding: var(--padding);
-  min-width: var(--input-width);
+  width: var(--input-width);
 
   &:focus {
     border-color: var(--color-primary-dark-1);
@@ -31,21 +31,26 @@ textarea,
   padding: 0;
   border-radius: 50%;
   display: flex;
-  justify-content: center;
-  align-items: end;
+  justify-content: end;
+  align-items: center;
   overflow: hidden;
+  flex-direction: column;
   background-position: center;
   background-size: cover;
 
-  &::after {
-    display: var(--after-display);
+  & .icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap);
     background-color: black;
     width: 100%;
-    text-align: center;
-    content: "Upload an image";
-    padding-top: 20px;
-    padding-bottom: 40px;
+    padding-top: 15px;
+    padding-bottom: 25px;
+    font-size: var(--font-size);
     opacity: 0.75;
+    cursor: pointer;
   }
 }
 

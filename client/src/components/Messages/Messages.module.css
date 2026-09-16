@@ -44,7 +44,7 @@
       margin: 0;
     }
 
-    & span {
+    & .date {
       font-size: var(--font-size);
       text-align: end;
     }

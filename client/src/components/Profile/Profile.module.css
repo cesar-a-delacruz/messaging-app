@@ -9,4 +9,13 @@
   display: flex;
   justify-content: center;
   gap: var(--gap-1);
+
+  & .option {
+    & svg {
+      width: 30px;
+      height: 30px;
+      vertical-align: middle;
+      margin-right: var(--gap);
+    }
+  }
 }

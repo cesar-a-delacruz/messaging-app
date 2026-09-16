@@ -34,6 +34,10 @@
       font-size: var(--font-size-2);
       padding: var(--padding-1);
 
+      & svg {
+        vertical-align: middle;
+      }
+
       &:hover {
         background-color: var(--color-secondary);
       }

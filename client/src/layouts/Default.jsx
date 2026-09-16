@@ -1,6 +1,7 @@
 import styles from "./styles/Default.module.css";
 import { Navigate, Outlet } from "react-router-dom";
 import useSession from "@/hooks/useSession";
+import { MessagesSquare } from "lucide-react";
 
 export default function Default() {
   const isUserLogged = useSession(false);
@@ -11,6 +12,7 @@ export default function Default() {
       <header>
         <h1 onClick={() => location.assign("/")}>
           {import.meta.env.VITE_TITLE}
+          <MessagesSquare />
         </h1>
       </header>
       <main>

@@ -11,6 +11,7 @@ import Messages from "@/components/Messages/Messages";
 import MenuContext from "@/contexts/MenuContext";
 import loadChat from "@/utils/js/loadChat";
 import ProfileContext from "@/contexts/ProfileContext";
+import { Pencil, SendHorizonal, Trash } from "lucide-react";
 
 export default function Chat() {
   const data = useContext(ProfileContext).data;
@@ -46,10 +47,12 @@ export default function Chat() {
             {
               text: "Edit",
               handler: () => editDialog.current.showModal(),
+              icon: <Pencil />,
             },
             {
               text: "Delete",
               handler: () => removeDialog.current.showModal(),
+              icon: <Trash />,
             },
           ],
           render: (messageAuthorId) =>
@@ -90,7 +93,11 @@ export default function Chat() {
               authorId: messages.currentAuthorId,
               chatId: messages.chatId,
             }}
-            submit={{ text: "Send", handler: submitHandler, disable: true }}
+            submit={{
+              text: <SendHorizonal />,
+              handler: submitHandler,
+              disable: true,
+            }}
           />
         </div>
       )}

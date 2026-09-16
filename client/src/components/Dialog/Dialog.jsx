@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import styles from "./Dialog.module.css";
 
 export default function Dialog({ name, ref, children }) {
@@ -11,7 +12,7 @@ export default function Dialog({ name, ref, children }) {
             event.stopPropagation();
           }}
         >
-          X
+          <X />
         </button>
       </div>
       <div className={styles.bottom}>{children}</div>

@@ -1,3 +1,4 @@
+import { ImageUp } from "lucide-react";
 import styles from "./FormField.module.css";
 
 export default function FormField({
@@ -51,7 +52,6 @@ export default function FormField({
             <div
               id={`${properties.id}Container`}
               style={{
-                "--after-display": readOnly ? "none" : "initial",
                 backgroundImage: value ? `url(${value})` : "none",
               }}
               onClick={() => {
@@ -59,7 +59,15 @@ export default function FormField({
                 input.click();
               }}
               tabIndex={0}
-            ></div>
+            >
+              <div
+                className={styles.icon}
+                style={{ display: readOnly ? "none" : "flex" }}
+              >
+                <ImageUp />
+                Upload an image
+              </div>
+            </div>
           </>
         );
       default:

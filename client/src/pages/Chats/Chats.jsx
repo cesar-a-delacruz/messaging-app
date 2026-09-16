@@ -8,6 +8,7 @@ import Loader from "@/components/Loader/Loader";
 import Chat from "@/components/Chat/Chat";
 import ProfileList from "@/components/ProfileList/ProfileList";
 import ProfileContext from "@/contexts/ProfileContext";
+import { FileImage, MessageSquareText } from "lucide-react";
 
 export default function Chats() {
   document.title = `${import.meta.env.VITE_TITLE}: Chats`;
@@ -52,9 +53,13 @@ export default function Chats() {
                 id: chat.profile.id,
                 image: chat.profile.image,
                 title: !chat.group ? chat.profile.username : chat.profile.name,
-                content: chat.messages[0].content
-                  ? chat.messages[0].content
-                  : "attachment",
+                content: chat.messages[0].content ? (
+                  chat.messages[0].content
+                ) : (
+                  <>
+                    <FileImage /> image
+                  </>
+                ),
                 type: !chat.group ? "user" : "group",
               }
             : {
@@ -89,7 +94,10 @@ export default function Chats() {
         }}
       >
         {!Object.keys(chat).length ? (
-          <p>Select a chat to view it here</p>
+          <div className={styles.empty}>
+            <MessageSquareText />
+            <p>Select a chat to view it here</p>
+          </div>
         ) : (
           <Chat />
         )}

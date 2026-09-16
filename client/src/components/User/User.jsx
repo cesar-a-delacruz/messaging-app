@@ -2,6 +2,7 @@ import styles from "./User.module.css";
 import { useContext } from "react";
 import Profile from "@/components/Profile/Profile";
 import ProfileContext from "@/contexts/ProfileContext";
+import { MessageSquareShare } from "lucide-react";
 
 export default function User() {
   const user = useContext(ProfileContext).data;
@@ -24,6 +25,7 @@ export default function User() {
                 }),
               );
             },
+            icon: <MessageSquareShare />,
           },
         ]}
       />

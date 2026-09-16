@@ -1,3 +1,4 @@
+import styles from "./Profile.module.css";
 import { useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
@@ -8,6 +9,7 @@ import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
 import ProfileContext from "@/contexts/ProfileContext";
 import sessionHandler from "@/handlers/sessionHandler";
+import { UserKey, UserX } from "lucide-react";
 
 export default function UserProfile() {
   const [user, setUser] = useGet("user/profile");
@@ -39,10 +41,12 @@ export default function UserProfile() {
             {
               text: "Change credentials",
               handler: () => credentialsDialog.current.showModal(),
+              icon: <UserKey />,
             },
             {
               text: "Delete Account",
               handler: () => removeDialog.current.showModal(),
+              icon: <UserX />,
             },
           ]}
         />

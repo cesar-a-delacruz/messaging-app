@@ -25,7 +25,8 @@ export default function Menu({ selectionHandler }) {
                   setShowMenu(false);
                 }}
               >
-                {option.text}
+                {option.icon && option.icon}
+                <span>{option.text}</span>
               </div>
             ),
         )}

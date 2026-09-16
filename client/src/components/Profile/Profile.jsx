@@ -27,7 +27,12 @@ export default function Profile({
         {options.map(
           (option) =>
             !option.hide && (
-              <button key={option.text} onClick={() => option.handler()}>
+              <button
+                key={option.text}
+                className={styles.option}
+                onClick={() => option.handler()}
+              >
+                {option.icon && option.icon}
                 {option.text}
               </button>
             ),

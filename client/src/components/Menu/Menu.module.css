@@ -19,6 +19,10 @@
   position-area: center;
 
   .option {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: var(--gap);
     padding: var(--padding);
 
     &:hover {
@@ -26,6 +30,11 @@
     }
     &:active {
       background-color: var(--color-secondary-light-1);
+    }
+
+    & svg {
+      width: 24px;
+      height: 24px;
     }
   }
 }

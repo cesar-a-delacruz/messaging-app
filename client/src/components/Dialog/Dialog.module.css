@@ -22,7 +22,8 @@ dialog:open {
   }
 
   & button {
-    height: fit-content;
+    line-height: var(--font-size);
+    height: min-content;
   }
 }
 

@@ -37,6 +37,7 @@
     flex-direction: row;
     justify-content: start;
     align-items: center;
+    gap: 0;
 
     & fieldset {
       flex-direction: row;
@@ -49,10 +50,16 @@
         & > div {
           border-radius: var(--border-radius);
           height: 75px;
+          width: max-content;
+
+          & > div {
+            padding: var(--padding) !important;
+            max-width: 125px;
+          }
         }
         & > textarea {
-          width: 30vw;
-          max-width: 30vw;
+          width: 40vw;
+          max-width: 40vw;
           height: 75px;
           max-height: 75px;
         }
@@ -61,6 +68,7 @@
 
     & button {
       margin: 0;
+      margin-left: -24px;
     }
   }
 }

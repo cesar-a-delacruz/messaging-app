@@ -7,6 +7,7 @@ import ProfileList from "@/components/ProfileList/ProfileList";
 import User from "@/components/User/User";
 import ProfileContext from "@/contexts/ProfileContext";
 import { edit } from "@/fieldsets/userFieldsets";
+import { UserIcon } from "lucide-react";
 
 export default function Users() {
   document.title = `${import.meta.env.VITE_TITLE}: Users`;
@@ -58,7 +59,10 @@ export default function Users() {
 
       <ProfileContext value={{ data: user, fieldset: edit[0] }}>
         {!Object.keys(user).length ? (
-          <p>Select a user to view it here</p>
+          <div className={styles.empty}>
+            <UserIcon />
+            <p>Select a user to view it here</p>
+          </div>
         ) : user.error ? (
           <Loader text={user.error} />
         ) : (
