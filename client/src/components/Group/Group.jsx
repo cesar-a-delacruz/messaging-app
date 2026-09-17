@@ -1,5 +1,6 @@
 import styles from "./Group.module.css";
 import { useContext, useEffect, useReducer, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import requestHandler from "@/handlers/requestHandler";
 import { remove } from "@/fieldsets/chatMemberFieldsets";
 import { actions, dispatcher } from "@/reducers/chatMemberReducer";
@@ -20,6 +21,7 @@ import {
 } from "lucide-react";
 
 export default function Group() {
+  const navigate = useNavigate();
   const { data, setData } = useContext(ProfileContext);
   const [chatMembers, dispatchChatMembers] = useReducer(dispatcher, {});
   const [users, setUsers] = useState([]);
@@ -125,9 +127,7 @@ export default function Group() {
             {
               text: "See profile",
               handler: () =>
-                location.assign(
-                  `/profile/user/${chatMembers.selected.user.id}`,
-                ),
+                navigate("/users", { state: chatMembers.selected.user.id }),
               icon: <ExternalLink />,
             },
           ],

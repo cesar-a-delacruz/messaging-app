@@ -8,10 +8,12 @@ import User from "@/components/User/User";
 import ProfileContext from "@/contexts/ProfileContext";
 import { edit } from "@/fieldsets/userFieldsets";
 import { UserIcon } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 export default function Users() {
   document.title = `${import.meta.env.VITE_TITLE}: Users`;
 
+  const locationState = useLocation().state;
   const [users, dispatchUsers] = useReducer(dispatcher, {});
   const [user, setUser] = useState({});
 
@@ -23,6 +25,11 @@ export default function Users() {
         type: actions.load,
         payload: !response.error ? response.data : response,
       });
+
+      if (locationState) {
+        findUser(locationState);
+        window.history.replaceState({}, "");
+      }
     })();
   }, []);
 
@@ -38,12 +45,7 @@ export default function Users() {
           title: user.username,
           content: user.bio,
         }))}
-        clickHandler={async (item) => {
-          const response = await requestHandler.get(`user/${item.id}`);
-          const user = !response.error ? response.data : response;
-
-          setUser(user);
-        }}
+        clickHandler={async (item) => findUser(item.id)}
         scrollHandler={async () => {
           if (!users.page) return console.log("There are no more users.");
 
@@ -71,4 +73,10 @@ export default function Users() {
       </ProfileContext>
     </div>
   );
+
+  async function findUser(id) {
+    const response = await requestHandler.get(`user/${id}`);
+    const result = !response.error ? response.data : response;
+    setUser(result);
+  }
 }

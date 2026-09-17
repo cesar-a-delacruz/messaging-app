@@ -1,6 +1,5 @@
 import listPageStyles from "@/utils/css/modules/listPage.module.css";
 import styles from "./Groups.module.css";
-
 import { useEffect, useReducer, useState } from "react";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
@@ -10,10 +9,12 @@ import Group from "@/components/Group/Group";
 import ProfileContext from "@/contexts/ProfileContext";
 import { edit } from "@/fieldsets/groupFieldsets";
 import { UserGroup } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 export default function Groups() {
   document.title = `${import.meta.env.VITE_TITLE}: Groups`;
 
+  const locationState = useLocation().state;
   const [groups, dispatchGroups] = useReducer(dispatcher, {});
   const [group, setGroup] = useState({});
 
@@ -25,6 +26,11 @@ export default function Groups() {
         type: actions.load,
         payload: !response.error ? response.data : response,
       });
+
+      if (locationState) {
+        findGroup(locationState);
+        window.history.replaceState({}, "");
+      }
     })();
   }, []);
 
@@ -40,11 +46,7 @@ export default function Groups() {
           title: group.name,
           content: group.info,
         }))}
-        clickHandler={async (item) => {
-          const response = await requestHandler.get(`group/${item.id}`);
-          const result = !response.error ? response.data : response;
-          setGroup(result);
-        }}
+        clickHandler={async (item) => findGroup(item.id)}
         scrollHandler={async () => {
           if (!groups.page) return console.log("There are no more groups.");
 
@@ -72,4 +74,10 @@ export default function Groups() {
       </ProfileContext>
     </div>
   );
+
+  async function findGroup(id) {
+    const response = await requestHandler.get(`group/${id}`);
+    const result = !response.error ? response.data : response;
+    setGroup(result);
+  }
 }

@@ -1,0 +1,6 @@
+.profile {
+  & dialog form {
+    background-color: inherit;
+    padding: 0;
+  }
+}

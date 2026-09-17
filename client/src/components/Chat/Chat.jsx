@@ -1,5 +1,6 @@
 import styles from "./Chat.module.css";
 import { useContext, useEffect, useReducer, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import requestHandler from "@/handlers/requestHandler";
 import { create, edit, remove } from "@/fieldsets/messageFieldsets";
 import { actions, dispatcher } from "@/reducers/messageReducer";
@@ -14,6 +15,7 @@ import ProfileContext from "@/contexts/ProfileContext";
 import { Pencil, SendHorizonal, Trash } from "lucide-react";
 
 export default function Chat() {
+  const navigate = useNavigate();
   const data = useContext(ProfileContext).data;
   const [messages, dispatchMessages] = useReducer(dispatcher, {});
   const editDialog = useRef(null);
@@ -38,7 +40,9 @@ export default function Chat() {
     <div className={styles.chat}>
       <div className={styles.header}>
         <img src={data.image} alt={`${data.title} picture`} />
-        <h3>{data.title}</h3>
+        <h3 onClick={() => navigate(`/${data.type}s`, { state: data.id })}>
+          {data.title}
+        </h3>
       </div>
 
       <MenuContext

@@ -12,6 +12,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: rgba(128, 128, 128, 0.033);
 
     & svg {
       width: var(--svg-size-2);

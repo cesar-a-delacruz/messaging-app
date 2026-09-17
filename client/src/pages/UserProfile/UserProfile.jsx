@@ -1,4 +1,4 @@
-import styles from "./Profile.module.css";
+import styles from "./UserProfile.module.css";
 import { useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
@@ -22,7 +22,7 @@ export default function UserProfile() {
     return <Loader text={user.error || "Getting user..."} />;
 
   return (
-    <div className="page">
+    <div className={`page ${styles.profile}`}>
       <ProfileContext
         value={{
           data: {

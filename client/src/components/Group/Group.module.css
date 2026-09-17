@@ -2,7 +2,7 @@
   overflow-y: auto;
   scrollbar-width: 0;
   width: 66%;
-
+  background-color: rgba(128, 128, 128, 0.033);
   & dialog form {
     background-color: inherit;
     padding: 0;
