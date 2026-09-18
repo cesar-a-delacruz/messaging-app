@@ -23,7 +23,7 @@ export default function ChatMembers({
         {members.map((member) => {
           if (member.user)
             return (
-              <div key={member.id} className={styles.member}>
+              <div key={member.user.id} className={styles.member}>
                 <Image
                   src={member.user.image}
                   alt={`${member.user.username} picture`}
@@ -43,14 +43,30 @@ export default function ChatMembers({
       {addDialog.render && (
         <Dialog name={"Add members"} ref={addDialog.ref}>
           <ProfileList
-            profiles={addDialog.users.map((user) => ({
-              id: user.id,
-              image: user.image,
-              title: user.username,
-            }))}
-            clickHandler={async (user) =>
-              setSelectedUsers([...selectedUsers, user])
-            }
+            profiles={addDialog.users
+              .map((user) => {
+                if (!selectedUsers.length) return user;
+                for (const selected in selectedUsers) {
+                  if (selected.id !== user.id) return user;
+                }
+              })
+              .map((user) => ({
+                id: user.id,
+                image: user.image,
+                title: user.username,
+              }))}
+            selectable={true}
+            clickHandler={async (user) => {
+              switch (user.action) {
+                case undefined:
+                case "add":
+                  return setSelectedUsers([...selectedUsers, user.profile]);
+                case "remove":
+                  return setSelectedUsers((prev) => [
+                    ...prev.filter((p) => p.id !== user.profile.id),
+                  ]);
+              }
+            }}
           />
           <button
             onClick={() => {
