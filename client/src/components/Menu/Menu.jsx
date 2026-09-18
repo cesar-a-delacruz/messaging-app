@@ -1,19 +1,18 @@
-import MenuContext from "@/contexts/MenuContext";
 import styles from "./Menu.module.css";
-import { useContext, useState } from "react";
+import { useContext, useRef } from "react";
+import MenuContext from "@/contexts/MenuContext";
+import { CurrentMenuContext } from "@/contexts/CurrentMenuContext";
 
 export default function Menu({ selectionHandler }) {
   const { options, render } = useContext(MenuContext);
-  const [showMenu, setShowMenu] = useState(false);
+  const { current, setCurrent } = useContext(CurrentMenuContext);
+  const menuRef = useRef(null);
 
   if (!render) return <></>;
 
   return (
     <div className={styles.container}>
-      <div
-        className={styles.menu}
-        style={{ display: showMenu ? "block" : "none" }}
-      >
+      <div ref={menuRef} className={styles.menu} style={{ display: "none" }}>
         {options.map(
           (option) =>
             !option.hide && (
@@ -22,7 +21,7 @@ export default function Menu({ selectionHandler }) {
                 className={styles.option}
                 onClick={() => {
                   option.handler();
-                  setShowMenu(false);
+                  menuRef.current.style.display = "none";
                 }}
               >
                 {option.icon && option.icon}
@@ -35,7 +34,13 @@ export default function Menu({ selectionHandler }) {
         className={styles.button}
         onClick={(event) => {
           if (selectionHandler) selectionHandler();
-          setShowMenu(!showMenu);
+
+          if (current && current !== menuRef.current)
+            current.style.display = "none";
+          menuRef.current.style.display =
+            menuRef.current.style.display === "block" ? "none" : "block";
+          setCurrent(menuRef.current);
+
           event.stopPropagation();
         }}
       >
