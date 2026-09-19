@@ -73,7 +73,9 @@ export default function Chats() {
                 type: !chat.group ? "user" : "group",
               },
         )}
-        clickHandler={(item) => setChat(item)}
+        clickHandler={(item) => {
+          setChat(item);
+        }}
         scrollHandler={async () => {
           if (!chats.page) return console.log("There are no more chats.");
 
@@ -91,16 +93,19 @@ export default function Chats() {
         value={{
           data: chat,
           fieldset: chat.type === "user" ? userEdit[0] : groupEdit[0],
+          setData: setChat,
         }}
       >
-        {!Object.keys(chat).length ? (
-          <div className={listPagestyles.empty}>
-            <MessageSquareText />
-            <p>Select a chat to view it here</p>
-          </div>
-        ) : (
-          <Chat />
-        )}
+        <div className={listPagestyles.view}>
+          {!Object.keys(chat).length ? (
+            <>
+              <MessageSquareText />
+              <p>Select a chat to view it here</p>
+            </>
+          ) : (
+            <Chat />
+          )}
+        </div>
       </ProfileContext>
     </div>
   );

@@ -12,11 +12,11 @@ import Messages from "@/components/Messages/Messages";
 import MenuContext from "@/contexts/MenuContext";
 import loadChat from "@/utils/js/loadChat";
 import ProfileContext from "@/contexts/ProfileContext";
-import { Pencil, SendHorizonal, Trash } from "lucide-react";
+import { ArrowLeft, Pencil, SendHorizonal, Trash } from "lucide-react";
 
 export default function Chat() {
   const navigate = useNavigate();
-  const data = useContext(ProfileContext).data;
+  const { data, setData } = useContext(ProfileContext);
   const [messages, dispatchMessages] = useReducer(dispatcher, {});
   const editDialog = useRef(null);
   const removeDialog = useRef(null);
@@ -39,6 +39,15 @@ export default function Chat() {
   return (
     <div className={styles.chat}>
       <div className={styles.header}>
+        {screen.orientation.type.includes("portrait") && (
+          <div
+            onClick={() => {
+              setData({});
+            }}
+          >
+            <ArrowLeft />
+          </div>
+        )}
         <img src={data.image} alt={`${data.title} picture`} />
         <h3 onClick={() => navigate(`/${data.type}s`, { state: data.id })}>
           {data.title}

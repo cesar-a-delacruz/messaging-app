@@ -61,16 +61,18 @@ export default function Groups() {
       <ProfileContext
         value={{ data: group, fieldset: edit[0], setData: setGroup }}
       >
-        {!Object.keys(group).length ? (
-          <div className={listPageStyles.empty}>
-            <UserGroup />
-            <p>Select a group to view it here</p>
-          </div>
-        ) : group.error ? (
-          <Loader text={group.error} />
-        ) : (
-          <Group />
-        )}
+        <div className={listPageStyles.view}>
+          {!Object.keys(group).length ? (
+            <>
+              <UserGroup />
+              <p>Select a group to view it here</p>
+            </>
+          ) : group.error ? (
+            <Loader text={group.error} />
+          ) : (
+            <Group />
+          )}
+        </div>
       </ProfileContext>
     </div>
   );

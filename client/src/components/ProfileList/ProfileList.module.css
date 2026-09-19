@@ -4,7 +4,6 @@
   gap: var(--gap);
   padding: var(--padding);
   height: 98%;
-  width: 33%;
   overflow-y: auto;
   scrollbar-width: 0;
 }

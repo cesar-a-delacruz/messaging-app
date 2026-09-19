@@ -1,12 +1,12 @@
 .list {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
 
-  & .empty {
+  & .view {
     font-size: var(--font-size-3);
     text-align: center;
-    width: 66%;
     height: 100%;
+    max-height: 100%;
     align-self: center;
     display: flex;
     flex-direction: column;
@@ -14,9 +14,21 @@
     align-items: center;
     background-color: rgba(128, 128, 128, 0.033);
 
-    & svg {
+    & > svg {
       width: var(--svg-size-2);
       height: var(--svg-size-2);
+    }
+  }
+}
+
+@media (orientation: portrait) {
+  .list {
+    & > div:first-child {
+      width: 100vw;
+    }
+
+    & .view {
+      width: 100vw;
     }
   }
 }

@@ -53,7 +53,7 @@ export default function Group() {
     isMemberSelected && chatMembers.selected.role === "ADMIN";
 
   return (
-    <div className={styles.groupProfile}>
+    <div className={styles.group}>
       <Profile
         readOnly={!isCurrentMemberAdmin}
         editHandler={async (newData) => {

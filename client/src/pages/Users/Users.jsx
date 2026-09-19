@@ -60,16 +60,18 @@ export default function Users() {
       />
 
       <ProfileContext value={{ data: user, fieldset: edit[0] }}>
-        {!Object.keys(user).length ? (
-          <div className={listPageStyles.empty}>
-            <UserIcon />
-            <p>Select a user to view it here</p>
-          </div>
-        ) : user.error ? (
-          <Loader text={user.error} />
-        ) : (
-          <User />
-        )}
+        <div className={listPageStyles.view}>
+          {!Object.keys(user).length ? (
+            <>
+              <UserIcon />
+              <p>Select a user to view it here</p>
+            </>
+          ) : user.error ? (
+            <Loader text={user.error} />
+          ) : (
+            <User />
+          )}
+        </div>
       </ProfileContext>
     </div>
   );

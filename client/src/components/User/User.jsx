@@ -8,7 +8,7 @@ export default function User() {
   const user = useContext(ProfileContext).data;
 
   return (
-    <div className={styles.userProfile}>
+    <div className={styles.user}>
       <Profile
         options={[
           {

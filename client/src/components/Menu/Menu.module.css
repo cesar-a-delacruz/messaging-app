@@ -17,6 +17,7 @@
   position-anchor: --menu;
   bottom: anchor(top);
   position-area: center;
+  z-index: 1;
 
   .option {
     display: flex;
