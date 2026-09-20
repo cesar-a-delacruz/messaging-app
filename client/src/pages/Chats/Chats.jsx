@@ -1,5 +1,5 @@
 import listPagestyles from "@/utils/css/modules/listPage.module.css";
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import { edit as groupEdit } from "@/fieldsets/groupFieldsets";
 import { edit as userEdit } from "@/fieldsets/userFieldsets";
@@ -9,10 +9,12 @@ import Chat from "@/components/Chat/Chat";
 import ProfileList from "@/components/ProfileList/ProfileList";
 import ProfileContext from "@/contexts/ProfileContext";
 import { FileImage, MessageSquareText } from "lucide-react";
+import { DisplayContext } from "@/contexts/DisplayContext";
 
 export default function Chats() {
   document.title = `${import.meta.env.VITE_TITLE}: Chats`;
 
+  const { dispatchDisplay } = useContext(DisplayContext);
   const [chats, dispatchChats] = useReducer(dispatcher, {});
   const [chat, setChat] = useState({});
 
@@ -36,6 +38,7 @@ export default function Chats() {
       });
       if (localStorage.getItem("chat")) {
         setChat(JSON.parse(localStorage.getItem("chat")));
+        dispatchDisplay("none");
         localStorage.removeItem("chat");
       }
     })();
@@ -75,6 +78,7 @@ export default function Chats() {
         )}
         clickHandler={(item) => {
           setChat(item);
+          dispatchDisplay("none");
         }}
         scrollHandler={async () => {
           if (!chats.page) return console.log("There are no more chats.");
@@ -87,6 +91,13 @@ export default function Chats() {
             payload: !response.error ? response.data : response,
           });
         }}
+        display={
+          screen.orientation.type.includes("portrait")
+            ? Object.keys(chat).length
+              ? "none"
+              : ""
+            : ""
+        }
       />
 
       <ProfileContext
@@ -96,7 +107,16 @@ export default function Chats() {
           setData: setChat,
         }}
       >
-        <div className={listPagestyles.view}>
+        <div
+          className={listPagestyles.view}
+          style={{
+            display: screen.orientation.type.includes("portrait")
+              ? Object.keys(chat).length
+                ? ""
+                : "none"
+              : "",
+          }}
+        >
           {!Object.keys(chat).length ? (
             <>
               <MessageSquareText />

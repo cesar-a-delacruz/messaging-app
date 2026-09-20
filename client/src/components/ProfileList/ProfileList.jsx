@@ -8,11 +8,12 @@ export default function ProfileList({
   selectable = false,
   clickHandler,
   scrollHandler,
+  display = "",
 }) {
   const [selected, setSelected] = useState([]);
 
   return (
-    <div>
+    <div style={{ display: display }}>
       <div
         className={styles.list}
         onScroll={async (event) => {

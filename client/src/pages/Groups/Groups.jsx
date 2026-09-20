@@ -1,6 +1,6 @@
 import listPageStyles from "@/utils/css/modules/listPage.module.css";
 import styles from "./Groups.module.css";
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { actions, dispatcher } from "@/reducers/profileListReducer";
 import requestHandler from "@/handlers/requestHandler";
 import Loader from "@/components/Loader/Loader";
@@ -10,6 +10,7 @@ import ProfileContext from "@/contexts/ProfileContext";
 import { edit } from "@/fieldsets/groupFieldsets";
 import { UserGroup } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { DisplayContext } from "@/contexts/DisplayContext";
 
 export default function Groups() {
   document.title = `${import.meta.env.VITE_TITLE}: Groups`;
@@ -17,6 +18,7 @@ export default function Groups() {
   const locationState = useLocation().state;
   const [groups, dispatchGroups] = useReducer(dispatcher, {});
   const [group, setGroup] = useState({});
+  const { dispatchDisplay } = useContext(DisplayContext);
 
   useEffect(() => {
     (async () => {
@@ -29,6 +31,7 @@ export default function Groups() {
 
       if (locationState) {
         findGroup(locationState);
+        dispatchDisplay("none");
         window.history.replaceState({}, "");
       }
     })();
@@ -46,7 +49,10 @@ export default function Groups() {
           title: group.name,
           content: group.info,
         }))}
-        clickHandler={async (item) => findGroup(item.id)}
+        clickHandler={async (item) => {
+          findGroup(item.id);
+          dispatchDisplay("none");
+        }}
         scrollHandler={async () => {
           if (!groups.page) return console.log("There are no more groups.");
 
@@ -56,12 +62,28 @@ export default function Groups() {
             payload: !response.error ? response.data : response,
           });
         }}
+        display={
+          screen.orientation.type.includes("portrait")
+            ? Object.keys(group).length
+              ? "none"
+              : ""
+            : ""
+        }
       />
 
       <ProfileContext
         value={{ data: group, fieldset: edit[0], setData: setGroup }}
       >
-        <div className={listPageStyles.view}>
+        <div
+          className={listPageStyles.view}
+          style={{
+            display: screen.orientation.type.includes("portrait")
+              ? Object.keys(group).length
+                ? ""
+                : "none"
+              : "",
+          }}
+        >
           {!Object.keys(group).length ? (
             <>
               <UserGroup />

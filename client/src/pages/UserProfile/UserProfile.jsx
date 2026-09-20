@@ -1,5 +1,5 @@
 import styles from "./UserProfile.module.css";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import useGet from "@/hooks/useGet";
 import { edit, remove } from "@/fieldsets/userFieldsets";
@@ -9,20 +9,24 @@ import Form from "@/components/Form/Form";
 import Dialog from "@/components/Dialog/Dialog";
 import ProfileContext from "@/contexts/ProfileContext";
 import sessionHandler from "@/handlers/sessionHandler";
-import { UserKey, UserX } from "lucide-react";
+import { ArrowLeft, UserKey, UserX } from "lucide-react";
+import { DisplayContext } from "@/contexts/DisplayContext";
 
 export default function UserProfile() {
   const [user, setUser] = useGet("user/profile");
+  const { dispatchDisplay } = useContext(DisplayContext);
   const credentialsDialog = useRef(null);
   const removeDialog = useRef(null);
 
   document.title = `${import.meta.env.VITE_TITLE}: Profile`;
+  if (screen.orientation.type.includes("portrait")) dispatchDisplay("none");
 
   if (!Object.keys(user).length || user.error)
     return <Loader text={user.error || "Getting user..."} />;
 
   return (
     <div className={`page ${styles.profile}`}>
+      <h2>Profile</h2>
       <ProfileContext
         value={{
           data: {
@@ -38,6 +42,12 @@ export default function UserProfile() {
           readOnly={false}
           editHandler={profileEditHandler}
           options={[
+            {
+              text: "Return",
+              handler: async () => history.back(),
+              icon: <ArrowLeft />,
+              hide: !screen.orientation.type.includes("portrait"),
+            },
             {
               text: "Change credentials",
               handler: () => credentialsDialog.current.showModal(),

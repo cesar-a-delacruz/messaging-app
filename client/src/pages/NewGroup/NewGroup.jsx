@@ -1,12 +1,15 @@
 import styles from "./NewGroup.module.css";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import requestHandler from "@/handlers/requestHandler";
 import { create } from "@/fieldsets/groupFieldsets";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";
-import Form from "@/components/Form/Form";
 import ChatMembers from "@/components/ChatMembers/ChatMembers";
 import MenuContext from "@/contexts/MenuContext";
+import { ArrowLeft, UserLock, UserMinus, UserPlus } from "lucide-react";
+import { DisplayContext } from "@/contexts/DisplayContext";
+import Profile from "@/components/Profile/Profile";
+import ProfileContext from "@/contexts/ProfileContext";
 
 export default function NewGroup() {
   document.title = `${import.meta.env.VITE_TITLE}: New Group`;
@@ -17,25 +20,48 @@ export default function NewGroup() {
   });
   const [users, setUsers] = useState([]);
   const usersDialog = useRef(null);
+  const { dispatchDisplay } = useContext(DisplayContext);
+  dispatchDisplay("none");
+
   return (
     <div className={`page ${styles.newGroup}`}>
       <h2>New Group</h2>
-      <Form
-        fieldsets={create}
-        initialData={{}}
-        submit={{ text: "Create Group", handler: submitHandler, disable: true }}
-      />
-      <button
-        onClick={async () => {
-          const response = await requestHandler.get("user/not/logged");
-          if (response.data) setUsers(response.data);
-          else alert(response.error);
 
-          usersDialog.current.showModal();
+      <ProfileContext
+        value={{
+          data: {
+            image: "",
+            name: "",
+            info: "",
+          },
+          fieldset: create[0],
         }}
       >
-        Add members
-      </button>
+        <Profile
+          readOnly={false}
+          editHandler={submitHandler}
+          submitText="Create"
+          options={[
+            {
+              text: "Return",
+              handler: async () => history.back(),
+              icon: <ArrowLeft />,
+              hide: !screen.orientation.type.includes("portrait"),
+            },
+            {
+              text: "Add member",
+              handler: async () => {
+                const response = await requestHandler.get("user/not/logged");
+                if (response.data) setUsers(response.data);
+                else alert(response.error);
+
+                usersDialog.current.showModal();
+              },
+              icon: <UserPlus />,
+            },
+          ]}
+        />
+      </ProfileContext>
 
       <MenuContext
         value={{
@@ -43,27 +69,31 @@ export default function NewGroup() {
             {
               text: "Change role",
               handler: changeMemberRoleHandler,
+              icon: <UserLock />,
             },
             {
               text: "Remove member",
               handler: removeMemberHandler,
+              icon: <UserMinus />,
             },
           ],
           render: true,
         }}
       >
-        <ChatMembers
-          members={chatMembers.members}
-          selectionHandler={(member) =>
-            setChatMembers({ ...chatMembers, selected: member })
-          }
-          addDialog={{
-            render: true,
-            ref: usersDialog,
-            users: users,
-            handler: addMemberHandler,
-          }}
-        />
+        {chatMembers.members.length !== 0 && (
+          <ChatMembers
+            members={chatMembers.members}
+            selectionHandler={(member) =>
+              setChatMembers({ ...chatMembers, selected: member })
+            }
+            addDialog={{
+              render: true,
+              ref: usersDialog,
+              users: users,
+              handler: addMemberHandler,
+            }}
+          />
+        )}
       </MenuContext>
     </div>
   );

@@ -12,6 +12,7 @@ import Form from "@/components/Form/Form";
 import ProfileContext from "@/contexts/ProfileContext";
 import MenuContext from "@/contexts/MenuContext";
 import {
+  ArrowLeft,
   DoorOpen,
   ExternalLink,
   MessageSquareShare,
@@ -19,10 +20,12 @@ import {
   UserMinus,
   UserPlus,
 } from "lucide-react";
+import { DisplayContext } from "@/contexts/DisplayContext";
 
 export default function Group() {
   const navigate = useNavigate();
   const { data, setData } = useContext(ProfileContext);
+  const { dispatchDisplay } = useContext(DisplayContext);
   const [chatMembers, dispatchChatMembers] = useReducer(dispatcher, {});
   const [users, setUsers] = useState([]);
   const usersDialog = useRef(null);
@@ -62,6 +65,15 @@ export default function Group() {
           setData(newData);
         }}
         options={[
+          {
+            text: "Return",
+            handler: async () => {
+              setData({});
+              dispatchDisplay("");
+            },
+            icon: <ArrowLeft />,
+            hide: !screen.orientation.type.includes("portrait"),
+          },
           {
             text: "Add member",
             handler: async () => {

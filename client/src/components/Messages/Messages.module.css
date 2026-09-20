@@ -1,7 +1,5 @@
 .messagesContainer {
-  min-height: 70vh;
-  height: 70vh;
-  flex-grow: 1;
+  height: 76vh;
 
   & .messages {
     display: flex;
@@ -23,9 +21,16 @@
     background-color: var(--color-primary);
     border-radius: var(--border-radius);
     padding: var(--padding);
+    max-width: var(--input-width);
+    min-width: 0;
 
     & img {
+      width: 100%;
       border-radius: var(--border-radius);
+    }
+    & p {
+      text-align: start;
+      overflow-wrap: break-word;
     }
 
     & > div:first-of-type {
@@ -57,5 +62,10 @@
 @supports selector(::-webkit-scrollbar) {
   .messages::-webkit-scrollbar {
     width: 0;
+  }
+}
+@media (orientation: portrait) {
+  .messagesContainer {
+    height: 70vh;
   }
 }

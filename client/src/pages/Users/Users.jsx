@@ -57,10 +57,28 @@ export default function Users() {
             payload: !response.error ? response.data : response,
           });
         }}
+        display={
+          screen.orientation.type.includes("portrait")
+            ? Object.keys(user).length
+              ? "none"
+              : ""
+            : ""
+        }
       />
 
-      <ProfileContext value={{ data: user, fieldset: edit[0] }}>
-        <div className={listPageStyles.view}>
+      <ProfileContext
+        value={{ data: user, fieldset: edit[0], setData: setUser }}
+      >
+        <div
+          className={listPageStyles.view}
+          style={{
+            display: screen.orientation.type.includes("portrait")
+              ? Object.keys(user).length
+                ? ""
+                : "none"
+              : "",
+          }}
+        >
           {!Object.keys(user).length ? (
             <>
               <UserIcon />

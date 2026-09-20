@@ -1,13 +1,22 @@
 .newGroup {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  padding: var(--padding-2);
+  max-height: 100%;
+
+  & h2 {
+    margin-top: var(--margin-1);
+    margin-bottom: 0;
+  }
 
   & button {
     width: fit-content;
     align-self: center;
-    margin-top: var(--margin-2);
+    margin-top: var(--margin-1);
+
+    svg {
+      margin-right: var(--gap);
+      vertical-align: middle;
+    }
   }
 
   & dialog > div:last-child > div {

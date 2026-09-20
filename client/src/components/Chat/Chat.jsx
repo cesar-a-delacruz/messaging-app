@@ -13,10 +13,12 @@ import MenuContext from "@/contexts/MenuContext";
 import loadChat from "@/utils/js/loadChat";
 import ProfileContext from "@/contexts/ProfileContext";
 import { ArrowLeft, Pencil, SendHorizonal, Trash } from "lucide-react";
+import { DisplayContext } from "@/contexts/DisplayContext";
 
 export default function Chat() {
   const navigate = useNavigate();
   const { data, setData } = useContext(ProfileContext);
+  const { dispatchDisplay } = useContext(DisplayContext);
   const [messages, dispatchMessages] = useReducer(dispatcher, {});
   const editDialog = useRef(null);
   const removeDialog = useRef(null);
@@ -43,6 +45,7 @@ export default function Chat() {
           <div
             onClick={() => {
               setData({});
+              dispatchDisplay("");
             }}
           >
             <ArrowLeft />

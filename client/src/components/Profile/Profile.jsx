@@ -6,6 +6,7 @@ import ProfileContext from "@/contexts/ProfileContext";
 export default function Profile({
   readOnly = true,
   editHandler,
+  submitText = "Edit",
   options = [],
 }) {
   const context = useContext(ProfileContext);
@@ -17,7 +18,7 @@ export default function Profile({
         initialData={context.data}
         readOnly={readOnly}
         submit={{
-          text: "Edit",
+          text: submitText,
           handler: async (data) =>
             editHandler ? await editHandler(data) : null,
           disable: true,

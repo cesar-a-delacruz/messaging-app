@@ -7,7 +7,9 @@ export default function FormField({
   changeHandler,
   readOnly,
 }) {
-  return (
+  return properties.type === "hidden" ? (
+    <>{renderInput()}</>
+  ) : (
     <div className={styles.field}>
       {properties.label && (
         <label htmlFor={properties.id}>{properties.label}:</label>
@@ -65,7 +67,6 @@ export default function FormField({
                 style={{ display: readOnly ? "none" : "flex" }}
               >
                 <ImageUp />
-                Upload an image
               </div>
             </div>
           </>

@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   max-height: 100vh;
+  width: 100%;
   background-color: rgba(128, 128, 128, 0.033);
 
   & dialog form {
@@ -19,7 +20,7 @@
   display: flex;
   align-items: center;
   gap: var(--gap-3);
-  padding: var(--padding-1);
+  padding: var(--padding);
 
   & img {
     width: var(--image-size);
@@ -43,27 +44,32 @@
     align-items: center;
     gap: 0;
 
+    & > div {
+      width: 90%;
+    }
+
     & fieldset {
       flex-direction: row;
       align-items: center;
+      justify-content: start;
       gap: var(--gap-3);
+      width: 100%;
 
       & > div {
         max-height: 100%;
 
         & > div {
           border-radius: var(--border-radius);
-          height: 75px;
-          width: max-content;
+          height: fit-content;
+          width: fit-content;
 
           & > div {
             padding: var(--padding) !important;
-            max-width: 125px;
           }
         }
         & > textarea {
-          width: 40vw;
-          max-width: 40vw;
+          width: 42vw;
+          max-width: 42vw;
           height: 75px;
           max-height: 75px;
         }
@@ -72,7 +78,6 @@
 
     & button {
       margin: 0;
-      margin-left: -24px;
     }
   }
 }
@@ -80,5 +85,11 @@
 @media (orientation: portrait) {
   .chat {
     max-width: 100vw;
+
+    & form fieldset > div > div {
+      border-radius: var(--border-radius);
+      height: fit-content;
+      /* width: max-content; */
+    }
   }
 }

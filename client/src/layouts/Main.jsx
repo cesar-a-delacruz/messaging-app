@@ -14,15 +14,18 @@ import {
   UsersIcon,
 } from "lucide-react";
 import { CurrentMenuProvider } from "@/contexts/CurrentMenuContext";
+import { useContext } from "react";
+import { DisplayContext } from "@/contexts/DisplayContext";
 
 export default function Main() {
+  const { display } = useContext(DisplayContext);
   const isUserLogged = useSession(true);
   if (!isUserLogged) return <Navigate to={"/login"} />;
 
   return (
     <CurrentMenuProvider>
       <div className={`layout ${styles.main}`}>
-        <aside>
+        <aside style={{ display: display }}>
           <h1 onClick={() => location.assign("/")}>
             {import.meta.env.VITE_TITLE}
             <MessagesSquare />
