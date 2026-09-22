@@ -30,8 +30,8 @@ h4 {
   padding: var(--padding-1);
 
   & img {
-    width: var(--image-size);
-    height: var(--image-size);
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
   }
 }

@@ -6,6 +6,7 @@ form {
   padding: var(--padding-1);
   background-color: var(--color-primary-dark-1);
   border-radius: var(--border-radius);
+  min-width: fit-content;
 
   & .fieldsets {
     display: flex;

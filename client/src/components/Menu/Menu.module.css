@@ -44,7 +44,7 @@
   font-size: var(--font-size-2);
   font-weight: bold;
   border-radius: var(--border-radius-1);
-  padding: var(--padding-1);
+  padding: var(--padding);
   line-height: var(--font-size);
   text-align: center;
   anchor-name: --menu;

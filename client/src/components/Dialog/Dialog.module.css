@@ -16,8 +16,9 @@ dialog:open {
   gap: var(--gap-3);
   padding: var(--padding-1);
 
-  h2,
-  button {
+  & h2,
+  button,
+  svg {
     margin: 0 !important;
   }
 

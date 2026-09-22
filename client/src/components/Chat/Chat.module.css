@@ -86,10 +86,14 @@
   .chat {
     max-width: 100vw;
 
-    & form fieldset > div > div {
-      border-radius: var(--border-radius);
-      height: fit-content;
-      /* width: max-content; */
+    & form {
+      & fieldset {
+        gap: var(--gap-2);
+      }
+      & fieldset > div > div {
+        border-radius: var(--border-radius);
+        height: fit-content;
+      }
     }
   }
 }

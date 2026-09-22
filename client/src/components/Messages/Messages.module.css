@@ -21,7 +21,7 @@
     background-color: var(--color-primary);
     border-radius: var(--border-radius);
     padding: var(--padding);
-    max-width: var(--input-width);
+    max-width: 300px;
     min-width: 0;
 
     & img {
@@ -67,5 +67,9 @@
 @media (orientation: portrait) {
   .messagesContainer {
     height: 70vh;
+  }
+
+  .message {
+    max-width: 250px;
   }
 }

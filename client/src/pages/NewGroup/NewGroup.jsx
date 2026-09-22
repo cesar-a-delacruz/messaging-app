@@ -80,20 +80,18 @@ export default function NewGroup() {
           render: true,
         }}
       >
-        {chatMembers.members.length !== 0 && (
-          <ChatMembers
-            members={chatMembers.members}
-            selectionHandler={(member) =>
-              setChatMembers({ ...chatMembers, selected: member })
-            }
-            addDialog={{
-              render: true,
-              ref: usersDialog,
-              users: users,
-              handler: addMemberHandler,
-            }}
-          />
-        )}
+        <ChatMembers
+          members={chatMembers.members}
+          selectionHandler={(member) =>
+            setChatMembers({ ...chatMembers, selected: member })
+          }
+          addDialog={{
+            render: true,
+            ref: usersDialog,
+            users: users,
+            handler: addMemberHandler,
+          }}
+        />
       </MenuContext>
     </div>
   );
