@@ -20,7 +20,6 @@ export default function Form({
 
   return (
     <form onSubmit={submitHandler}>
-      {error && <span>{error}</span>}
       <div className={styles.fieldsets}>
         {fieldsets.map((fieldset) => (
           <fieldset key={fieldset.legend || ""}>
@@ -37,6 +36,7 @@ export default function Form({
           </fieldset>
         ))}
       </div>
+      {error && <span>{error}</span>}
       <button
         type="submit"
         style={{

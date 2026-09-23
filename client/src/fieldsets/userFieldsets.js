@@ -1,32 +1,27 @@
 const fields = [
   {
     id: "id",
-    value: "",
     type: "hidden",
   },
   {
     id: "username",
-    value: "",
     placeholder: "johnsmith",
     label: "Username",
     type: "text",
   },
   {
     id: "fullname",
-    value: "",
     placeholder: "John Smith",
     label: "Full name",
     type: "text",
   },
   {
     id: "password",
-    value: "",
     label: "Password",
     type: "password",
   },
   {
     id: "bio",
-    value: "",
     placeholder: "Hello everyone!",
     label: "Bio",
     type: "textarea",
@@ -46,7 +41,6 @@ export const create = [
       fields[3],
       {
         id: "confirm",
-        value: "",
         label: "Confirm password",
         type: "password",
       },

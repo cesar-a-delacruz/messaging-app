@@ -9,6 +9,7 @@ form {
   min-width: fit-content;
 
   span {
+    white-space: pre-line;
     background-color: var(--color-error-dark);
     border: 1px var(--color-error-light) solid;
     padding: var(--padding);

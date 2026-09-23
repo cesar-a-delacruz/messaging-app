@@ -1,12 +1,10 @@
 const fields = [
   {
     id: "id",
-    value: "",
     type: "hidden",
   },
   {
     id: "content",
-    value: "",
     type: "textarea",
   },
   {
@@ -15,12 +13,10 @@ const fields = [
   },
   {
     id: "authorId",
-    value: "",
     type: "hidden",
   },
   {
     id: "chatId",
-    value: "",
     type: "hidden",
   },
 ];

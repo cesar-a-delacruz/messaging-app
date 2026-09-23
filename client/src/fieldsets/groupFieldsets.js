@@ -5,13 +5,11 @@ const fields = [
   },
   {
     id: "name",
-    value: "",
     label: "Name",
     type: "text",
   },
   {
     id: "info",
-    value: "",
     label: "Info",
     type: "textarea",
   },

@@ -7,28 +7,27 @@ export default function FormField({
   changeHandler,
   readOnly,
 }) {
-  return properties.type === "hidden" ? (
+  const { label, ...props } = properties;
+
+  return props.type === "hidden" ? (
     <>{renderInput()}</>
   ) : (
     <div className={styles.field}>
-      {properties.label && (
-        <label htmlFor={properties.id}>{properties.label}:</label>
-      )}
+      {label && <label htmlFor={props.id}>{label}:</label>}
       {renderInput()}
     </div>
   );
 
   function renderInput() {
-    switch (properties.type) {
+    switch (props.type) {
       case "textarea":
         return (
           <textarea
-            id={properties.id}
+            {...props}
             value={value || ""}
             onChange={(e) =>
               changeHandler(e.currentTarget.id, e.currentTarget.value)
             }
-            placeholder={properties.placeholder || ""}
             disabled={readOnly}
           ></textarea>
         );
@@ -36,14 +35,13 @@ export default function FormField({
         return (
           <>
             <input
+              {...props}
               style={{ display: "none" }}
-              type={properties.type}
-              id={properties.id}
               onChange={(e) => {
                 const file = e.currentTarget.files[0];
 
                 const container = document.getElementById(
-                  properties.id + "Container",
+                  props.id + "Container",
                 );
                 container.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
                 changeHandler(e.currentTarget.id, e.currentTarget.files[0]);
@@ -52,12 +50,12 @@ export default function FormField({
               disabled={readOnly}
             />
             <div
-              id={`${properties.id}Container`}
+              id={`${props.id}Container`}
               style={{
                 backgroundImage: value ? `url(${value})` : "none",
               }}
               onClick={() => {
-                const input = document.getElementById(`${properties.id}`);
+                const input = document.getElementById(`${props.id}`);
                 input.click();
               }}
               tabIndex={0}
@@ -74,10 +72,8 @@ export default function FormField({
       default:
         return (
           <input
-            type={properties.type}
-            id={properties.id}
+            {...props}
             value={value || ""}
-            placeholder={properties.placeholder || ""}
             onChange={(e) =>
               changeHandler(e.currentTarget.id, e.currentTarget.value)
             }
