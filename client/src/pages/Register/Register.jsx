@@ -2,6 +2,7 @@ import defaultPageStyles from "@/utils/css/modules/defaultPage.module.css";
 import requestHandler from "@/handlers/requestHandler";
 import { create } from "@/fieldsets/userFieldsets";
 import Form from "@/components/Form/Form";
+import sessionHandler from "@/handlers/sessionHandler";
 
 export default function Register() {
   document.title = `${import.meta.env.VITE_TITLE}: Register`;
@@ -32,7 +33,12 @@ export default function Register() {
       return alert("The passwords don't match.");
 
     const register = await requestHandler.postFile(data, "user");
-    if (register.data) return location.replace("/login");
+    if (register.data) {
+      const credentials = { username: data.username, password: data.password };
+      const login = await sessionHandler.login(credentials);
+      if (!login) return location.replace("/");
+      return login;
+    }
     return register;
   }
 }
