@@ -1,5 +1,5 @@
 import styles from "./Form.module.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import FormField from "../FormField/FormField";
 import compareObjects from "@/utils/js/compareObjects";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
@@ -11,15 +11,16 @@ export default function Form({
   submit = { text, handler, disable },
 }) {
   const [data, setData] = useState(initialData);
+  const [error, setError] = useState();
   const [disableSubmit, setDisableSubmit] = useState(submit.disable);
-  const form = useRef(null);
 
   useEffect(() => {
     setData(initialData);
   }, [initialData]);
 
   return (
-    <form onSubmit={submitHandler} ref={form}>
+    <form onSubmit={submitHandler}>
+      {error && <span>{error}</span>}
       <div className={styles.fieldsets}>
         {fieldsets.map((fieldset) => (
           <fieldset key={fieldset.legend || ""}>
@@ -57,10 +58,11 @@ export default function Form({
 
     if (compareObjects(newData, initialData)) setDisableSubmit(true);
     else setDisableSubmit(false);
+    if (error) setError("");
   }
   async function submitHandler(event) {
     event.preventDefault();
-    submit.handler(data);
-    form.current.reset();
+    const result = await submit.handler(data);
+    if (result.error) setError(result.error);
   }
 }

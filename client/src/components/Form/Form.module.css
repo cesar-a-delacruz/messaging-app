@@ -8,13 +8,20 @@ form {
   border-radius: var(--border-radius);
   min-width: fit-content;
 
-  & .fieldsets {
+  span {
+    background-color: var(--color-error-dark);
+    border: 1px var(--color-error-light) solid;
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+  }
+
+  .fieldsets {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--gap-2);
 
-    & fieldset {
+    fieldset {
       border-style: none;
       margin: 0;
       padding: 0;
@@ -23,7 +30,7 @@ form {
       justify-content: center;
       gap: var(--gap);
 
-      & legend {
+      legend {
         float: left;
         font-size: var(--font-size-2);
         font-weight: bold;
