@@ -1,4 +1,4 @@
-import styles from "./Register.module.css";
+import defaultPageStyles from "@/utils/css/modules/defaultPage.module.css";
 import requestHandler from "@/handlers/requestHandler";
 import { create } from "@/fieldsets/userFieldsets";
 import Form from "@/components/Form/Form";
@@ -7,7 +7,7 @@ export default function Register() {
   document.title = `${import.meta.env.VITE_TITLE}: Register`;
 
   return (
-    <div className={`page ${styles.register}`}>
+    <div className={`page ${defaultPageStyles.default}`}>
       <h2>Register</h2>
       <Form
         fieldsets={create}
@@ -18,7 +18,7 @@ export default function Register() {
           disable: true,
         }}
       />
-      <p className={styles.textBottom}>
+      <p className={defaultPageStyles.textBottom}>
         Already have an account? Login{" "}
         <a href="/login" className="link">
           here
@@ -29,11 +29,10 @@ export default function Register() {
 
   async function submitHandler(data) {
     if (data.password !== data.confirm)
-      return alert("The passwords don't match");
+      return alert("The passwords don't match.");
 
     const register = await requestHandler.postFile(data, "user");
-    if (register.error) return alert(register.error);
-
-    location.replace("/login");
+    if (register.data) return location.replace("/login");
+    return register;
   }
 }

@@ -2,6 +2,8 @@
   max-width: 100vw;
   min-height: 100%;
   animation: load forwards 1000ms;
+  width: 100%;
+  height: 100%;
 }
 @keyframes load {
   0% {
