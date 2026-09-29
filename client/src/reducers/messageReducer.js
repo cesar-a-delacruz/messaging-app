@@ -8,7 +8,7 @@ export const actions = {
 };
 
 export function dispatcher(state, action) {
-  const prev = state;
+  const prev = structuredClone(state);
 
   switch (action.type) {
     case actions.load:
