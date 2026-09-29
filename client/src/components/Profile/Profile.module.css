@@ -11,10 +11,10 @@
   flex-wrap: wrap;
   gap: var(--gap-1);
 
-  & .option {
+  .option {
     margin: 0;
 
-    & svg {
+    svg {
       width: var(--svg-size-1);
       height: var(--svg-size-1);
       vertical-align: middle;

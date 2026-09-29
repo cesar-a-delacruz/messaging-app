@@ -15,11 +15,11 @@ import { DisplayContext } from "@/contexts/DisplayContext";
 export default function UserProfile() {
   const [user, setUser] = useGet("user/profile");
   const { dispatchDisplay } = useContext(DisplayContext);
-  const credentialsDialog = useRef(null);
-  const removeDialog = useRef(null);
+  const credentialsDialog = useRef();
+  const removeDialog = useRef();
 
   document.title = `${import.meta.env.VITE_TITLE}: Profile`;
-  if (screen.orientation.type.includes("portrait")) dispatchDisplay("none");
+  dispatchDisplay("none");
 
   if (!Object.keys(user).length || user.error)
     return <Loader text={user.error || "Getting user..."} />;
@@ -35,7 +35,6 @@ export default function UserProfile() {
             bio: user.bio,
           },
           fieldset: edit[0],
-          setData: setUser,
         }}
       >
         <Profile
@@ -54,7 +53,7 @@ export default function UserProfile() {
               icon: <UserKey />,
             },
             {
-              text: "Delete Account",
+              text: "Delete account",
               handler: () => removeDialog.current.showModal(),
               icon: <UserX />,
             },
@@ -90,14 +89,14 @@ export default function UserProfile() {
 
   async function profileEditHandler(data) {
     data = { ...user, ...data };
-    await requestHandler.put(data, "user");
-    setUser(data);
+    const edit = await requestHandler.put(data, "user");
+    if (!edit) setUser(data);
+    return edit;
   }
   async function dialogSubmitHandler(data) {
     const newCredentials = await requestHandler.put(data, "auth/credentials");
-    if (newCredentials) return alert(newCredentials.error);
-
-    credentialsDialog.current.close();
+    if (!newCredentials) credentialsDialog.current.close();
+    return newCredentials;
   }
   async function profileRemoveHandler(data) {
     await requestHandler.delete(data.id, "user");

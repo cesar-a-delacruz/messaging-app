@@ -1,6 +1,6 @@
 import styles from "./Form.module.css";
 import { useEffect, useState } from "react";
-import FormField from "../FormField/FormField";
+import FormField from "@/components/FormField/FormField";
 import compareObjects from "@/utils/js/compareObjects";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 

@@ -1,10 +1,12 @@
 .messagesContainer {
   height: 76vh;
+  max-height: 76vh;
 
   & .messages {
     display: flex;
     flex-direction: column;
     height: 98%;
+    max-height: 98%;
     overflow-y: auto;
     scrollbar-width: 0;
   }

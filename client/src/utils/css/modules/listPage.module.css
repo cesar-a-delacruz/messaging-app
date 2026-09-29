@@ -25,6 +25,8 @@
   .list {
     & > div:first-child {
       width: 100vw;
+      max-height: 100%;
+      overflow-y: scroll;
     }
 
     & .view {

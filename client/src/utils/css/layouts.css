@@ -6,38 +6,38 @@
   min-height: 100%;
   max-width: 100%;
 
-  & * {
+  * {
     color: var(--color-text-dark);
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
 
-  & h1 {
+  h1 {
     font-size: var(--font-size-4);
     cursor: pointer;
 
-    & svg {
+    svg {
       margin-left: var(--gap);
       vertical-align: middle;
     }
   }
 
-  & main {
+  main {
     background-color: var(--color-background-dark);
     display: flex;
     flex-direction: column;
     flex-grow: 1;
   }
 
-  & a:hover {
+  a:hover {
     text-decoration: none;
     color: var(--color-secondary-light);
   }
 
-  & footer p {
+  footer p {
     font-size: var(--font-size);
   }
 
-  & svg.lucide {
+  svg.lucide {
     stroke: white;
     width: 36px;
     height: 36px;

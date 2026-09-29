@@ -35,7 +35,6 @@ h3 {
 }
 
 button {
-  margin-top: var(--margin);
   background-color: var(--color-primary-light);
   font-size: var(--font-size-1);
   font-weight: bolder;
