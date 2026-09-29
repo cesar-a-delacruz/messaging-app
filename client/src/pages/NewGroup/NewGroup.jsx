@@ -1,27 +1,38 @@
 import styles from "./NewGroup.module.css";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import requestHandler from "@/handlers/requestHandler";
 import { create } from "@/fieldsets/groupFieldsets";
 import removeEmptyFields from "@/utils/js/removeEmptyFields";
 import prepareChatMembers from "@/utils/js/prepareChatMembers";
-import ChatMembers from "@/components/ChatMembers/ChatMembers";
 import MenuContext from "@/contexts/MenuContext";
-import { ArrowLeft, UserLock, UserMinus, UserPlus } from "lucide-react";
-import { DisplayContext } from "@/contexts/DisplayContext";
-import Profile from "@/components/Profile/Profile";
 import ProfileContext from "@/contexts/ProfileContext";
+import { DisplayContext } from "@/contexts/DisplayContext";
+import { ArrowLeft, UserLock, UserMinus, UserPlus } from "lucide-react";
+import ChatMembers from "@/components/ChatMembers/ChatMembers";
+import Profile from "@/components/Profile/Profile";
+import UsersDialog from "@/components/UsersDialog/UsersDialog";
 
 export default function NewGroup() {
   document.title = `${import.meta.env.VITE_TITLE}: New Group`;
 
+  const navigate = useNavigate();
   const [chatMembers, setChatMembers] = useState({
     members: [],
     selected: {},
   });
   const [users, setUsers] = useState([]);
-  const usersDialog = useRef(null);
+  const usersDialog = useRef();
   const { dispatchDisplay } = useContext(DisplayContext);
-  dispatchDisplay("none");
+
+  useEffect(() => {
+    (async () => {
+      dispatchDisplay("none");
+      const response = await requestHandler.get("user/not/logged");
+      if (response.data) setUsers(response.data);
+      else alert(response.error);
+    })();
+  }, []);
 
   return (
     <div className={`page ${styles.newGroup}`}>
@@ -29,11 +40,7 @@ export default function NewGroup() {
 
       <ProfileContext
         value={{
-          data: {
-            image: "",
-            name: "",
-            info: "",
-          },
+          data: {},
           fieldset: create[0],
         }}
       >
@@ -50,13 +57,7 @@ export default function NewGroup() {
             },
             {
               text: "Add member",
-              handler: async () => {
-                const response = await requestHandler.get("user/not/logged");
-                if (response.data) setUsers(response.data);
-                else alert(response.error);
-
-                usersDialog.current.showModal();
-              },
+              handler: async () => usersDialog.current.showModal(),
               icon: <UserPlus />,
             },
           ]}
@@ -85,14 +86,9 @@ export default function NewGroup() {
           selectionHandler={(member) =>
             setChatMembers({ ...chatMembers, selected: member })
           }
-          addDialog={{
-            render: true,
-            ref: usersDialog,
-            users: users,
-            handler: addMemberHandler,
-          }}
         />
       </MenuContext>
+      <UsersDialog ref={usersDialog} users={users} handler={addMemberHandler} />
     </div>
   );
 
@@ -107,20 +103,31 @@ export default function NewGroup() {
       },
       "group",
     );
-    if (newGroup.error) return alert(newGroup.error);
 
-    location.replace(`/profile/group/${newGroup.data.id}`);
+    if (newGroup.data) return navigate("/groups", { state: newGroup.data.id });
+
+    return newGroup;
   }
 
   async function addMemberHandler(newMembers) {
     setChatMembers((prev) => {
       const current = prev;
       newMembers = newMembers.map((member) => ({
-        user: { ...member, username: member.title },
+        user: member,
       }));
       current.members = [...prev.members, ...newMembers];
 
       return { ...current };
+    });
+
+    setUsers((prev) => {
+      const newUsers = prev.map((user) => {
+        for (const member of newMembers) {
+          if (user.id === member.user.user.id) user.hide = true;
+        }
+        return user;
+      });
+      return [...newUsers];
     });
   }
   async function changeMemberRoleHandler() {
@@ -141,14 +148,22 @@ export default function NewGroup() {
     });
   }
   async function removeMemberHandler() {
+    const selectedMember = chatMembers.selected;
+
     setChatMembers((prev) => {
       const current = prev;
       current.members = prev.members.filter(
-        (member) => member.user.id !== chatMembers.selected.user.id,
+        (member) => member.user.id !== selectedMember.user.id,
       );
       current.selected = {};
-
       return { ...current };
+    });
+    setUsers((prev) => {
+      const newUsers = prev.map((user) => {
+        if (user.id === selectedMember.user.id) user.hide = false;
+        return user;
+      });
+      return [...newUsers];
     });
   }
 }

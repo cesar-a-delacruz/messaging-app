@@ -1,21 +1,8 @@
 import styles from "./ChatMembers.module.css";
-import { useEffect, useState } from "react";
-import Dialog from "../Dialog/Dialog";
-import Menu from "../Menu/Menu";
-import ProfileList from "../ProfileList/ProfileList";
-import Image from "../Image/Image";
+import Menu from "@/components/Menu/Menu";
+import Image from "@/components/Image/Image";
 
-export default function ChatMembers({
-  members,
-  selectionHandler,
-  addDialog = { render, ref, users, handler },
-}) {
-  const [selectedUsers, setSelectedUsers] = useState([]);
-
-  useEffect(() => {
-    setSelectedUsers([]);
-  }, [members]);
-
+export default function ChatMembers({ members, selectionHandler }) {
   return (
     <>
       <h3>Members</h3>
@@ -39,45 +26,6 @@ export default function ChatMembers({
             );
         })}
       </div>
-
-      {addDialog.render && (
-        <Dialog name={"Add members"} ref={addDialog.ref}>
-          <ProfileList
-            profiles={addDialog.users
-              .map((user) => {
-                if (!selectedUsers.length) return user;
-                for (const selected in selectedUsers) {
-                  if (selected.id !== user.id) return user;
-                }
-              })
-              .map((user) => ({
-                id: user.id,
-                image: user.image,
-                title: user.username,
-              }))}
-            selectable={true}
-            clickHandler={async (user) => {
-              switch (user.action) {
-                case undefined:
-                case "add":
-                  return setSelectedUsers([...selectedUsers, user.profile]);
-                case "remove":
-                  return setSelectedUsers((prev) => [
-                    ...prev.filter((p) => p.id !== user.profile.id),
-                  ]);
-              }
-            }}
-          />
-          <button
-            onClick={() => {
-              addDialog.handler(selectedUsers);
-              addDialog.ref.current.close();
-            }}
-          >
-            Add all
-          </button>
-        </Dialog>
-      )}
     </>
   );
 }
