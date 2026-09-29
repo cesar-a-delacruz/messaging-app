@@ -22,6 +22,10 @@ module.exports = checkSchema({
     },
     isLength: {
       options: { min: 5, max: 40 },
+      errorMessage: formatValidationError("length", "fullname", {
+        min: 5,
+        max: 20,
+      }),
     },
   },
   bio: {
