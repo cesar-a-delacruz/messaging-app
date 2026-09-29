@@ -16,7 +16,7 @@
   border-radius: var(--border-radius);
   padding: var(--padding-1);
 
-  & > div > img {
+  > div > img {
     width: var(--image-size);
     height: var(--image-size);
     border-radius: 50%;
@@ -28,17 +28,17 @@
     justify-content: center;
     font-size: var(--font-size);
 
-    & h3 {
+    h3 {
       font-size: var(--font-size-1);
       margin-top: 0;
       text-align: start;
     }
 
-    & div {
-      & * {
+    div {
+      * {
         vertical-align: middle;
       }
-      & svg {
+      svg {
         width: var(--svg-size);
         height: var(--svg-size);
       }
