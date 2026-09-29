@@ -22,12 +22,19 @@ export function dispatcher(state, action) {
       return { ...prev };
 
     case actions.changeRole:
-      prev.members = prev.members.map((member) => {
-        if (member.id === state.selected.id)
-          member.role = action.payload.memberRole;
-        return member;
-      });
-      prev.selected = {};
+      if (action.payload.id)
+        prev.members = prev.members.map((member) => {
+          if (member.id === action.payload.id) member.role = "ADMIN";
+          return member;
+        });
+      else {
+        prev.members = prev.members.map((member) => {
+          if (member.id === state.selected.id)
+            member.role = action.payload.memberRole;
+          return member;
+        });
+        prev.selected = {};
+      }
       return { ...prev };
 
     case actions.remove:

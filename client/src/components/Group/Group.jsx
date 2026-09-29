@@ -21,6 +21,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import { DisplayContext } from "@/contexts/DisplayContext";
+import UsersDialog from "../UsersDialog/UsersDialog";
 
 export default function Group() {
   const navigate = useNavigate();
@@ -28,8 +29,8 @@ export default function Group() {
   const { dispatchDisplay } = useContext(DisplayContext);
   const [chatMembers, dispatchChatMembers] = useReducer(dispatcher, {});
   const [users, setUsers] = useState([]);
-  const usersDialog = useRef(null);
-  const removeDialog = useRef(null);
+  const usersDialog = useRef();
+  const removeDialog = useRef();
 
   useEffect(() => {
     (async () => {
@@ -154,14 +155,15 @@ export default function Group() {
               payload: { selectedMember: member },
             })
           }
-          addDialog={{
-            render: isCurrentMemberAdmin,
-            ref: usersDialog,
-            users: users,
-            handler: addMemberHandler,
-          }}
         />
       </MenuContext>
+      {isCurrentMemberAdmin && (
+        <UsersDialog
+          ref={usersDialog}
+          users={users}
+          handler={addMemberHandler}
+        />
+      )}
 
       {(!isSelectedMemberAdmin || isLoggedUserMember) && (
         <Dialog ref={removeDialog}>
@@ -225,7 +227,10 @@ export default function Group() {
         "chatMember",
       );
       if (lastMemberRoleChange) return alert(lastMemberRoleChange.error);
-      location.reload();
+      dispatchChatMembers({
+        type: actions.changeRole,
+        payload: { id: lastMember.id },
+      });
     }
 
     const removeMember = await requestHandler.delete(
