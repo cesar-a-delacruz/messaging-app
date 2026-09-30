@@ -50,32 +50,7 @@ export default function Chats() {
   return (
     <div className={`page ${listPagestyles.list}`}>
       <ProfileList
-        profiles={chats.profiles.map((chat) =>
-          chat.profile
-            ? {
-                id: chat.profile.id,
-                image: chat.profile.image,
-                title: !chat.group ? chat.profile.username : chat.profile.name,
-                content: chat.messages[0].content ? (
-                  chat.messages[0].content
-                ) : (
-                  <>
-                    <FileImage /> image
-                  </>
-                ),
-                type: !chat.group ? "user" : "group",
-              }
-            : {
-                id: null,
-                chatId: chat.id,
-                image: null,
-                title: "deleted",
-                content: chat.messages[0].content
-                  ? chat.messages[0].content
-                  : "attachment",
-                type: !chat.group ? "user" : "group",
-              },
-        )}
+        profiles={chats.profiles.map((chat) => prepareChatItem(chat))}
         clickHandler={(item) => {
           setChat(item);
           dispatchDisplay("none");
@@ -129,4 +104,28 @@ export default function Chats() {
       </ProfileContext>
     </div>
   );
+
+  function prepareChatItem(chat) {
+    let item = {
+      content: chat.messages[0].content ? (
+        chat.messages[0].content
+      ) : (
+        <>
+          <FileImage /> image
+        </>
+      ),
+    };
+
+    if (chat.profile) {
+      item = {
+        ...item,
+        id: chat.profile.id,
+        image: chat.profile.image,
+        title: !chat.group ? chat.profile.username : chat.profile.name,
+        type: !chat.group ? "user" : "group",
+      };
+    } else item = { ...item, id: chat.id, title: "unknown" };
+
+    return item;
+  }
 }

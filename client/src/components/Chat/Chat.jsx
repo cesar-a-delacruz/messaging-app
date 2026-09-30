@@ -25,9 +25,7 @@ export default function Chat() {
 
   useEffect(() => {
     (async () => {
-      const response = await (data.id
-        ? loadChat(data)
-        : loadChat({ id: data.chatId }));
+      const response = await loadChat(data);
 
       dispatchMessages({
         type: actions.load,
@@ -71,17 +69,16 @@ export default function Chat() {
               icon: <Trash />,
             },
           ],
-          render: (messageAuthorId) =>
-            messageAuthorId === messages.currentAuthorId,
+          isAuthor: (messageAuthorId) =>
+            messageAuthorId === messages.currentAuthorId ||
+            messages.currentAuthorId === undefined,
+          render: data.type !== undefined,
         }}
       >
         <Messages
           messages={messages.messages}
           all={messages.page === 0}
           scrollHandler={async () => {
-            if (!messages.page)
-              return console.log("There are no more messages.");
-
             const response = await requestHandler.get(
               `message/chat/${messages.chatId}?q=${messages.page}`,
             );
@@ -101,7 +98,7 @@ export default function Chat() {
           }
         />
       </MenuContext>
-      {data.id && (
+      {data.type && (
         <div className={styles.footer}>
           <Form
             fieldsets={create}
@@ -169,12 +166,14 @@ export default function Chat() {
       },
     });
   }
-  async function editHandler() {
-    const edited = await requestHandler.put(messages.selected, "message");
-    if (edited) return alert(edited.error);
+  async function editHandler(message) {
+    const newMessage = { ...messages.selected, content: message.content };
+    const edited = await requestHandler.put(newMessage, "message");
+    if (edited) return edited;
 
     dispatchMessages({
       type: actions.edit,
+      payload: { data: newMessage },
     });
     editDialog.current.close();
   }
@@ -183,7 +182,7 @@ export default function Chat() {
       messages.selected.id,
       "message",
     );
-    if (removed) return alert(removed.error);
+    if (removed) return removed;
 
     dispatchMessages({
       type: actions.remove,

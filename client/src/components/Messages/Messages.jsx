@@ -1,6 +1,6 @@
 import styles from "./Messages.module.css";
-import Image from "../Image/Image";
-import Menu from "../Menu/Menu";
+import Image from "@/components/Image/Image";
+import Menu from "@/components/Menu/Menu";
 import { useContext, useState } from "react";
 import MenuContext from "@/contexts/MenuContext";
 
@@ -10,7 +10,7 @@ export default function Messages({
   scrollHandler,
   selectionHandler,
 }) {
-  const render = useContext(MenuContext).render;
+  const { isAuthor, render } = useContext(MenuContext);
   const [scrollPosition, setScrollPosition] = useState(0);
 
   return (
@@ -43,11 +43,11 @@ export default function Messages({
               key={message.id}
               className={styles.messageContainer}
               style={{
-                justifyContent: render(message.authorId) ? "end" : "start",
+                justifyContent: isAuthor(message.authorId) ? "end" : "start",
               }}
             >
               <div className={styles.message}>
-                {render(message.authorId) && (
+                {isAuthor(message.authorId) && render && (
                   <Menu selectionHandler={() => selectionHandler(message)} />
                 )}
                 {message.content && <p>{message.content}</p>}

@@ -40,8 +40,8 @@ export function dispatcher(state, action) {
 
     case actions.edit:
       prev.messages = prev.messages.map((message) => {
-        if (message.id === state.selected.id)
-          message.content = state.selected.content;
+        if (message.id === action.payload.data.id)
+          message.content = action.payload.data.content;
         return message;
       });
       prev.selected = {};
