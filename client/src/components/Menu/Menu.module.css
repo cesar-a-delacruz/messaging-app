@@ -33,7 +33,7 @@
       background-color: var(--color-secondary-light-1);
     }
 
-    & svg {
+    svg {
       width: var(--svg-size);
       height: var(--svg-size);
     }

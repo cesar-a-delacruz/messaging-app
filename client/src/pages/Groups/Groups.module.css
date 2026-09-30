@@ -1,5 +1,5 @@
 .groups {
-  & dialog > div:last-child > div {
+  dialog > div:last-child > div {
     width: 100%;
   }
 }

@@ -1,8 +1,9 @@
 .messagesContainer {
   height: 76vh;
   max-height: 76vh;
+  box-shadow: inset 2px 0px 2px black;
 
-  & .messages {
+  .messages {
     display: flex;
     flex-direction: column;
     height: 98%;
@@ -26,31 +27,30 @@
     max-width: 300px;
     min-width: 0;
 
-    & img {
+    img {
       width: 100%;
       border-radius: var(--border-radius);
     }
-    & p {
+    p {
       text-align: start;
       overflow-wrap: break-word;
     }
 
-    & > div:first-of-type {
+    > div:first-of-type {
       align-self: end;
       height: min-content;
 
-      & > div:last-child {
+      > div:last-child {
         padding: 0;
-        margin-bottom: var(--gap);
       }
     }
 
-    & p {
+    p {
       font-size: var(--font-size-1);
       margin: 0;
     }
 
-    & .date {
+    .date {
       font-size: var(--font-size);
       text-align: end;
     }
