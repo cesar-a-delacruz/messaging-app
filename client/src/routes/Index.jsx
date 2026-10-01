@@ -12,11 +12,11 @@ import UserProfile from "@/pages/UserProfile/UserProfile";
 export default function Index() {
   return (
     <Routes>
-      <Route path="/" element={<Default />}>
+      <Route path="/*" element={<Default />}>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
       </Route>
-      <Route path="/" element={<Main />}>
+      <Route path="/*" element={<Main />}>
         <Route index element={<Chats />} />
         <Route path="users" element={<Users />} />
         <Route path="groups" element={<Groups />} />
