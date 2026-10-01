@@ -1,7 +1,13 @@
-const FileController = require("./FileController.js");
+const CRUDController = require("./CRUDController.js");
 const uploadMiddleware = require("../middlewares/uploadMiddleware.js");
+const FileService = require("../services/FileService.js");
 
-module.exports = class MessageController extends FileController {
+module.exports = class MessageController extends CRUDController {
+  constructor(itemName, repository, validator, fileField) {
+    super(itemName, repository, validator);
+    this.uploader = uploadMiddleware.bind(null, fileField);
+  }
+
   findAllByChat = async (req, res) => {
     try {
       const rows = await this.repository.findAllByChat(
@@ -41,10 +47,21 @@ module.exports = class MessageController extends FileController {
     async (req, res, next) => await this.validator(req, res, next),
     async (req, res) => {
       try {
-        const row = await this.repository.create({
+        let row = await this.repository.create({
           ...req.body,
           authorId: req.user.id,
         });
+        if (req.file) {
+          const fileUpload = await FileService.upload(
+            row.id,
+            req.file.buffer,
+            "message",
+          );
+          row = await this.repository.update(row.id, {
+            attachment: fileUpload.secure_url,
+          });
+        }
+
         console.info(row);
         return res.status(201).json({ data: row }).end();
       } catch (error) {
@@ -56,4 +73,25 @@ module.exports = class MessageController extends FileController {
       }
     },
   ];
+  delete = async (req, res) => {
+    try {
+      const row = await this.repository.delete(req.params.id);
+      if (row.attachment) await FileService.delete(row.attachment);
+      console.info(row);
+      return res.status(204).end();
+    } catch (error) {
+      console.error(error);
+
+      if (error.code === "P2025")
+        return res
+          .status(400)
+          .json({ error: `Can't find ${this.itemName} to delete.` })
+          .end();
+
+      return res
+        .status(500)
+        .json({ error: `Failed to delete ${this.itemName}.` })
+        .end();
+    }
+  };
 };

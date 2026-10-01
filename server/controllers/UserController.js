@@ -1,7 +1,13 @@
-const FileController = require("./FileController.js");
-const chatMemberRepository = require("../repositories/index.js").chatMember;
+const CRUDController = require("./CRUDController.js");
+const uploadMiddleware = require("../middlewares/uploadMiddleware.js");
+const FileService = require("../services/FileService.js");
 
-module.exports = class UserController extends FileController {
+module.exports = class UserController extends CRUDController {
+  constructor(itemName, repository, validator, fileField) {
+    super(itemName, repository, validator);
+    this.uploader = uploadMiddleware.bind(null, fileField);
+  }
+
   findAll = async (req, res) => {
     try {
       const rows = await this.repository.findAll(req.user.id, req.query.q);
@@ -63,10 +69,39 @@ module.exports = class UserController extends FileController {
         .end();
     }
   };
+  create = [
+    async (req, res, next) => await this.uploader(req, res, next),
+    async (req, res, next) => await this.validator(req, res, next),
+    async (req, res) => {
+      try {
+        let row = await this.repository.create(req.body);
+
+        if (req.file) {
+          const fileUpload = await FileService.upload(
+            row.id,
+            req.file.buffer,
+            "user",
+          );
+          row = await this.repository.update(row.id, {
+            image: fileUpload.secure_url,
+          });
+        }
+
+        console.info(row);
+        return res.status(201).json({ data: row }).end();
+      } catch (error) {
+        console.error(error);
+        return res
+          .status(500)
+          .json({ error: `Failed to create ${this.itemName}.` })
+          .end();
+      }
+    },
+  ];
   delete = async (req, res) => {
     try {
       const row = await this.repository.delete(req.params.id);
-      // await chatMemberRepository.deleteByUserId(req.params.id);
+      if (row.image) await FileService.delete(row.image);
       console.info(row);
       return res.status(204).end();
     } catch (error) {
