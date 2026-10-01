@@ -9,6 +9,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: process.env.CLIENT, credentials: true }));
 
+app.set("trust proxy", 1);
 app.use(
   cookieSession({
     name: "session",
