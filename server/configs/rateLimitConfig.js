@@ -1,8 +1,9 @@
 const rateLimit = require("express-rate-limit").rateLimit;
+
 module.exports = {
   baseLimit: rateLimit({
     windowMs: 1000 * 60 * 5,
-    limit: 60,
+    limit: process.env.REQUEST_LIMIT,
     standardHeaders: true,
     legacyHeaders: false,
     handler: (req, res, next) => {
@@ -14,7 +15,7 @@ module.exports = {
   }),
   authLimit: rateLimit({
     windowMs: 1000 * 60 * 5,
-    limit: 20,
+    limit: process.env.AUTH_LIMIT,
     standardHeaders: true,
     legacyHeaders: false,
     skipSuccessfulRequests: true,
