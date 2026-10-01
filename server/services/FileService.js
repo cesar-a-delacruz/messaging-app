@@ -9,6 +9,7 @@ module.exports = {
           {
             folder: `${process.env.CLOUDINARY_FOLDER}${path ? "/" + path : ""}`,
             display_name: name,
+            overwrite: true,
           },
           (error, result) => {
             if (error) return reject(error);

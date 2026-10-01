@@ -63,25 +63,37 @@ module.exports = class GroupController extends CRUDController {
       }
     },
   ];
-  delete = async (req, res) => {
-    try {
-      const row = await this.repository.delete(req.params.id);
-      if (row.image) await FileService.delete(row.image);
-      console.info(row);
-      return res.status(204).end();
-    } catch (error) {
-      console.error(error);
+  update = [
+    async (req, res, next) => await this.uploader(req, res, next),
+    async (req, res, next) => await this.validator(req, res, next),
+    async (req, res) => {
+      try {
+        if (req.file) {
+          const fileUpload = await FileService.upload(
+            req.params.id,
+            req.file.buffer,
+            "group",
+          );
+          req.body.image = fileUpload.secure_url;
+        }
 
-      if (error.code === "P2025")
+        const row = await this.repository.update(req.params.id, req.body);
+        console.info(row);
+        return res.status(204).end();
+      } catch (error) {
+        console.error(error);
+
+        if (error.code === "P2025")
+          return res
+            .status(400)
+            .json({ error: `Can't find ${this.itemName} to update.` })
+            .end();
+
         return res
-          .status(400)
-          .json({ error: `Can't find ${this.itemName} to delete.` })
+          .status(500)
+          .json({ error: `Failed to update ${this.itemName}.` })
           .end();
-
-      return res
-        .status(500)
-        .json({ error: `Failed to delete ${this.itemName}.` })
-        .end();
-    }
-  };
+      }
+    },
+  ];
 };

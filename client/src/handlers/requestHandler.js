@@ -50,6 +50,24 @@ export default {
     if (response.ok) return;
     return formatErrors(response);
   },
+  putFile: async (data, path) => {
+    const formData = new FormData();
+    for (const field in data) {
+      formData.append(field, data[field]);
+    }
+
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER}/${path}/${data.id}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        body: formData,
+      },
+    );
+
+    if (response.ok) return;
+    return formatErrors(response);
+  },
   delete: async (id, path) => {
     const response = await fetch(
       `${import.meta.env.VITE_SERVER}/${path}/${id}`,

@@ -89,7 +89,7 @@ export default function UserProfile() {
 
   async function profileEditHandler(data) {
     data = { ...user, ...data };
-    const edit = await requestHandler.put(data, "user");
+    const edit = await requestHandler.putFile(data, "user");
     if (!edit) setUser(data);
     return edit;
   }

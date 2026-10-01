@@ -98,6 +98,39 @@ module.exports = class UserController extends CRUDController {
       }
     },
   ];
+  update = [
+    async (req, res, next) => await this.uploader(req, res, next),
+    async (req, res, next) => await this.validator(req, res, next),
+    async (req, res) => {
+      try {
+        if (req.file) {
+          const fileUpload = await FileService.upload(
+            req.params.id,
+            req.file.buffer,
+            "user",
+          );
+          req.body.image = fileUpload.secure_url;
+        }
+
+        const row = await this.repository.update(req.params.id, req.body);
+        console.info(row);
+        return res.status(204).end();
+      } catch (error) {
+        console.error(error);
+
+        if (error.code === "P2025")
+          return res
+            .status(400)
+            .json({ error: `Can't find ${this.itemName} to update.` })
+            .end();
+
+        return res
+          .status(500)
+          .json({ error: `Failed to update ${this.itemName}.` })
+          .end();
+      }
+    },
+  ];
   delete = async (req, res) => {
     try {
       const row = await this.repository.delete(req.params.id);

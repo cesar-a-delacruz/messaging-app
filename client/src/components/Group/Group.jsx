@@ -62,8 +62,8 @@ export default function Group() {
         readOnly={!isCurrentMemberAdmin}
         editHandler={async (newData) => {
           newData = { ...data, ...newData };
-          await requestHandler.put(newData, "group");
-          setData(newData);
+          const edit = await requestHandler.putFile(newData, "group");
+          if (!edit) setData(newData);
         }}
         options={[
           {
