@@ -27,6 +27,8 @@
     width: var(--image-size);
     height: var(--image-size);
     border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 1 /1;
   }
 
   h3 {
