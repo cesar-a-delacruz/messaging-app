@@ -9,6 +9,7 @@ module.exports = checkSchema({
         min: 1,
         max: 200,
       }),
+      if: (value, { req }) => !req.file,
     },
   },
 });
