@@ -9,13 +9,13 @@ export default function Profile({
   submitText = "Edit",
   options = [],
 }) {
-  const context = useContext(ProfileContext);
+  const { data, fieldset } = useContext(ProfileContext);
 
   return (
     <div className={styles.profile}>
       <Form
-        fieldsets={[context.fieldset]}
-        initialData={context.data}
+        fieldsets={[fieldset]}
+        initialData={{ ...data, image: data.image || "/empty.webp" }}
         readOnly={readOnly}
         submit={{
           text: submitText,

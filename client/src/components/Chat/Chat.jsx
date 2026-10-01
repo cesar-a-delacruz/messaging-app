@@ -49,7 +49,7 @@ export default function Chat() {
             <ArrowLeft />
           </div>
         )}
-        <img src={data.image} alt={`${data.title} picture`} />
+        <img src={data.image || "/empty.webp"} alt={`${data.title} picture`} />
         <h3 onClick={() => navigate(`/${data.type}s`, { state: data.id })}>
           {data.title}
         </h3>

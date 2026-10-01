@@ -23,7 +23,10 @@ export default function ProfileList({
             onClick={() => clickHandler(profile)}
             className={styles.item}
           >
-            <Image src={profile.image} alt={`${profile.title} picture`} />
+            <Image
+              src={profile.image || "/empty.webp"}
+              alt={`${profile.title} picture`}
+            />
             <div className={styles.text}>
               <h3>{profile.title}</h3>
               {profile.content && <div>{profile.content}</div>}

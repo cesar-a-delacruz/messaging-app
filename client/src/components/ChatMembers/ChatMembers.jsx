@@ -12,7 +12,7 @@ export default function ChatMembers({ members, selectionHandler }) {
             return (
               <div key={member.user.id} className={styles.member}>
                 <Image
-                  src={member.user.image}
+                  src={member.user.image || "/empty.webp"}
                   alt={`${member.user.username} picture`}
                 />
                 <div>

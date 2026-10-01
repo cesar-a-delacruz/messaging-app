@@ -28,7 +28,10 @@ export default function AddMembers({
               opacity: !selected.find((s) => s.id === user.id) ? "1" : "0.5",
             }}
           >
-            <Image src={user.image} alt={`${user.username} picture`} />
+            <Image
+              src={user.image || "/empty.webp"}
+              alt={`${user.username} picture`}
+            />
             <div className={styles.text}>
               <h3>{user.username}</h3>
             </div>

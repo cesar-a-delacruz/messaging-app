@@ -30,7 +30,7 @@ export default function UserProfile() {
       <ProfileContext
         value={{
           data: {
-            image: user.image,
+            image: user.image || "/empty.webp",
             fullname: user.fullname,
             bio: user.bio,
           },

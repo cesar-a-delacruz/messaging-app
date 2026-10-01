@@ -123,7 +123,7 @@ export default function NewGroup() {
     setUsers((prev) => {
       const newUsers = prev.map((user) => {
         for (const member of newMembers) {
-          if (user.id === member.user.user.id) user.hide = true;
+          if (user.id === member.user.id) user.hide = true;
         }
         return user;
       });
