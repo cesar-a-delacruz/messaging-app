@@ -10,21 +10,28 @@ import ProfileList from "@/components/ProfileList/ProfileList";
 import ProfileContext from "@/contexts/ProfileContext";
 import { FileImage, MessageSquareText } from "lucide-react";
 import { DisplayContext } from "@/contexts/DisplayContext";
+import { useLocation } from "react-router-dom";
 
 export default function Chats() {
   document.title = `${import.meta.env.VITE_TITLE}: Chats`;
 
+  const locationState = useLocation().state;
   const { dispatchDisplay } = useContext(DisplayContext);
   const [chats, dispatchChats] = useReducer(dispatcher, {});
   const [chat, setChat] = useState({});
 
   useEffect(() => {
     (async () => {
+      if (locationState) {
+        setChat(locationState);
+        window.history.replaceState({}, "");
+        dispatchDisplay("none");
+      }
       const response = await requestHandler.get("chat/user/logged");
       if (response.error)
         return dispatchChats({
           type: actions.load,
-          payload: response,
+          payload: response.status === 404 ? [] : response,
         });
 
       response.data.sort(
@@ -36,11 +43,6 @@ export default function Chats() {
         type: actions.load,
         payload: response.data,
       });
-      if (localStorage.getItem("chat")) {
-        setChat(JSON.parse(localStorage.getItem("chat")));
-        dispatchDisplay("none");
-        localStorage.removeItem("chat");
-      }
     })();
   }, []);
 

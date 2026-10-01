@@ -13,6 +13,6 @@ export default async function formatErrors(response) {
     default:
       const json = await response.json();
       console.error(json.error);
-      return { error: json.error };
+      return { error: json.error, status: response.status };
   }
 }

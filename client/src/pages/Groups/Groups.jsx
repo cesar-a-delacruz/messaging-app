@@ -22,18 +22,22 @@ export default function Groups() {
 
   useEffect(() => {
     (async () => {
-      const response = await requestHandler.get("group");
-
-      dispatchGroups({
-        type: actions.load,
-        payload: !response.error ? response.data : response,
-      });
-
       if (locationState) {
         findGroup(locationState);
         dispatchDisplay("none");
         window.history.replaceState({}, "");
       }
+      const response = await requestHandler.get("group");
+      if (response.error)
+        return dispatchGroups({
+          type: actions.load,
+          payload: response.status === 404 ? [] : response,
+        });
+
+      dispatchGroups({
+        type: actions.load,
+        payload: response.data,
+      });
     })();
   }, []);
 

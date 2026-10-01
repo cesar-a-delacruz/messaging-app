@@ -103,18 +103,15 @@ export default function Group() {
           },
           {
             text: "View chat",
-            handler: async () => {
-              location.assign("/");
-              localStorage.setItem(
-                "chat",
-                JSON.stringify({
+            handler: async () =>
+              navigate("/", {
+                state: {
                   id: data.id,
                   image: data.image,
                   title: data.name,
                   type: "group",
-                }),
-              );
-            },
+                },
+              }),
             hide: !isLoggedUserMember,
             icon: <MessageSquareShare />,
           },

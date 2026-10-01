@@ -19,17 +19,16 @@ export default function Users() {
 
   useEffect(() => {
     (async () => {
+      if (locationState) {
+        findUser(locationState);
+        window.history.replaceState({}, "");
+      }
       const response = await requestHandler.get("user/not/logged");
 
       dispatchUsers({
         type: actions.load,
         payload: !response.error ? response.data : response,
       });
-
-      if (locationState) {
-        findUser(locationState);
-        window.history.replaceState({}, "");
-      }
     })();
   }, []);
 

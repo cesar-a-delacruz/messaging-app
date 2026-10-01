@@ -131,13 +131,15 @@ export default function NewGroup() {
     });
   }
   async function changeMemberRoleHandler() {
+    const selectedMember = chatMembers.selected;
+
     setChatMembers((prev) => {
       const current = prev;
       current.members = prev.members.map((member) => {
-        if (member.user.id === chatMembers.selected.user.id)
+        if (member.user.id === selectedMember.user.id)
           return {
-            ...chatMembers.selected,
-            role: chatMembers.selected.role === "ADMIN" ? "NONE" : "ADMIN",
+            ...selectedMember,
+            role: selectedMember.role === "ADMIN" ? "NONE" : "ADMIN",
           };
 
         return member;

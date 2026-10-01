@@ -8,6 +8,7 @@ export default function prepareChatMembers(users, chatId) {
   const chatMembers = users.map((user) => {
     const member = { userId: !user.user ? user.id : user.user.id };
     if (chatId) member.chatId = chatId;
+    if (user.role) member.role = user.role;
     return member;
   });
   return JSON.stringify(chatMembers);
